@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigateToHome(){
     Future.delayed(Duration(seconds: 4) , () {
-      Modular.to.pushNamed('/home');
+      Modular.to.pushReplacementNamed('/main');
     });
   }
 

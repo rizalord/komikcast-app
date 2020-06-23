@@ -23,7 +23,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_bloc: ^4.0.1
 
+  # Font Awesome
+  font_awesome_flutter: ^8.8.1
   # Cupertino Icons
   cupertino_icons: ^0.1.3
   # Flutter Modular
