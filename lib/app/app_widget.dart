@@ -7,11 +7,10 @@ import 'package:komikcast/bloc/theme_bloc.dart';
 class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final themeBloc = Modular.get<ThemeBloc>();
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ThemeBloc>(create: (context) => themeBloc),
+        BlocProvider<ThemeBloc>(create: (context) => Modular.get<ThemeBloc>()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeMode>(
         builder: (context, currentTheme) => MaterialApp(

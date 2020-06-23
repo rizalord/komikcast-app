@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
-import 'package:komikcast/pages/main_pages.dart';
-import 'package:komikcast/pages/splash_screen.dart';
+import 'package:komikcast/ui/main_pages.dart';
+import 'package:komikcast/ui/splash_screen.dart';
 
 import 'app_widget.dart';
 

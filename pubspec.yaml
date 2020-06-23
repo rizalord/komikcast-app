@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^4.0.1
+  flappy_search_bar: ^1.7.2
 
   # Font Awesome
   font_awesome_flutter: ^8.8.1
@@ -33,8 +34,9 @@ dependencies:
   flutter_modular: any
   # Bottom Navy Bar
   bottom_navy_bar: ^5.4.0
-  # Floating Search Bar
-  floating_search_bar: ^0.3.0
+  # Simple Search Bar
+  simple_search_bar: ^0.1.7
+
 
 dev_dependencies:
   flutter_test:

@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.blue[700],
+      backgroundColor: Colors.blue,
       body: Center(
         child: Container(
           decoration: BoxDecoration(
