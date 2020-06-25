@@ -68,98 +68,120 @@ class ItemLatest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: (width * .35) + 10,
-      padding: EdgeInsets.only(bottom: 10.0),
-      margin: EdgeInsets.only(bottom: 10.0),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: 1,
-            color: Theme.of(context).textSelectionHandleColor.withOpacity(.05),
-          ),
-        ),
-      ),
-      child: Row(
+      child: Column(
         children: [
           Container(
-            width: width * .225,
+            width: width,
             height: (width * .35) + 10,
-            child: Stack(
-              children: [
-                Image.network(
-                  'https://komikcast.com/wp-content/uploads/2017/07/177617-4-211x300.jpg',
-                  fit: BoxFit.cover,
-                  width: width * .32,
-                  height: width * .44,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: Theme.of(context)
+                      .textSelectionHandleColor
+                      .withOpacity(.04),
                 ),
-                isHot
-                    ? Positioned(
-                        top: 6,
-                        left: -12.5,
-                        child: Transform.rotate(
-                          angle: -math.pi / 4,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 1,
-                            ),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(.2),
-                                  blurRadius: 1,
-                                  offset: Offset(0, 1),
-                                  spreadRadius: 1,
-                                )
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: width * .225,
+                            height: (width * .35) + 10,
+                            child: Stack(
+                              children: [
+                                Image.network(
+                                  'https://komikcast.com/wp-content/uploads/2017/07/177617-4-211x300.jpg',
+                                  fit: BoxFit.cover,
+                                  width: width * .32,
+                                  height: width * .44,
+                                ),
+                                isHot
+                                    ? Positioned(
+                                        top: 6,
+                                        left: -12.5,
+                                        child: Transform.rotate(
+                                          angle: -math.pi / 4,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                              vertical: 1,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(.2),
+                                                  blurRadius: 1,
+                                                  offset: Offset(0, 1),
+                                                  spreadRadius: 1,
+                                                )
+                                              ],
+                                              color: Colors.red,
+                                            ),
+                                            child: Text(
+                                              'HOT',
+                                              style: GoogleFonts.heebo(
+                                                fontSize: 8,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
                               ],
-                              color: Colors.red,
                             ),
-                            child: Text(
-                              'HOT',
-                              style: GoogleFonts.heebo(
-                                fontSize: 8,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 8.0),
+                                    child: Text(
+                                      'Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e',
+                                      style: GoogleFonts.heebo(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        SingleChapterLink(),
+                                        SingleChapterLink(),
+                                        SingleChapterLink(),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : Container(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.0),
               ],
             ),
           ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(left: 8.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      'Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e',
-                      style: GoogleFonts.heebo(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        SingleChapterLink(),
-                        SingleChapterLink(),
-                        SingleChapterLink(),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+          SizedBox(height: 10.0),
         ],
       ),
     );
