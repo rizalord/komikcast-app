@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/components/appbar/download_appbar.dart';
 import 'package:komikcast/components/appbar/favorite_appbar.dart';
 import 'package:komikcast/components/appbar/home_appbar.dart';
@@ -106,9 +107,10 @@ class _MainPageState extends State<MainPage> {
                   decoration: BoxDecoration(
                     border: Border(
                       top: BorderSide(
-                        width: 1,
-                        color: Theme.of(context).textSelectionHandleColor.withOpacity(.08)
-                      ),
+                          width: 1,
+                          color: Theme.of(context)
+                              .textSelectionHandleColor
+                              .withOpacity(.08)),
                     ),
                   ),
                   child: Container(
@@ -119,16 +121,30 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         IconButton(
                           icon: FaIcon(
-                            FontAwesomeIcons.lightbulb,
-                            color: Theme.of(context).textSelectionHandleColor.withOpacity(.4)
+                            Theme.of(context).brightness == Brightness.dark
+                                ? FontAwesomeIcons.solidMoon
+                                : FontAwesomeIcons.moon,
+                            color: Theme.of(context)
+                                .textSelectionHandleColor
+                                .withOpacity(
+                                  Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? 1
+                                      : .4,
+                                ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Modular.get<ThemeBloc>().add(
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? ThemeMode.light
+                                    : ThemeMode.dark);
+                          },
                         ),
                         IconButton(
-                          icon: FaIcon(
-                            FontAwesomeIcons.chrome,
-                            color: Theme.of(context).textSelectionHandleColor.withOpacity(.4)
-                          ),
+                          icon: FaIcon(FontAwesomeIcons.chrome,
+                              color: Theme.of(context)
+                                  .textSelectionHandleColor
+                                  .withOpacity(.4)),
                           onPressed: () {},
                         ),
                       ],

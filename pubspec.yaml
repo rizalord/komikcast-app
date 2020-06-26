@@ -26,6 +26,7 @@ dependencies:
   flutter_bloc: ^4.0.1
   flappy_search_bar: ^1.7.2
   google_fonts: ^1.1.0
+  cached_network_image: ^2.2.0+1
 
   # Font Awesome
   font_awesome_flutter: ^8.8.1

@@ -4,7 +4,7 @@ class CustomTheme {
   static ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
         // splashColor: Colors.black,
-        textSelectionHandleColor: Colors.black,
+      textSelectionHandleColor: Colors.black,
       );
 
   static ThemeData get darkTheme => ThemeData(

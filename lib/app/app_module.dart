@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/ui/main_pages.dart';
+import 'package:komikcast/ui/search_page.dart';
 import 'package:komikcast/ui/splash_screen.dart';
 
 import 'app_widget.dart';
@@ -17,9 +18,16 @@ class AppModule extends MainModule {
   @override
   List<Router> get routers => [
         Router('/', child: (_, args) => SplashScreen()),
-        Router('/main',
-            child: (_, args) => MainPage(),
-            transition: TransitionType.rightToLeftWithFade)
+        Router(
+          '/main',
+          child: (_, args) => MainPage(),
+          transition: TransitionType.rightToLeftWithFade,
+        ),
+        Router(
+          '/search/:query',
+          child: (_, args) => SearchPage(query: args.params['query']),
+          transition: TransitionType.rightToLeftWithFade,
+        )
       ];
 
   // Provide the root widget associated with your module

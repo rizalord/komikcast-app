@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:simple_search_bar/simple_search_bar.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:komikcast/components/custom/search_bar/app_bar_controller.dart';
+import 'package:komikcast/components/custom/search_bar/search_app_bar.dart';
 
 class SearchingAppBar extends StatefulWidget implements PreferredSizeWidget {
   SearchingAppBar({Key key})
@@ -21,14 +23,13 @@ class _SearchingAppBarState extends State<SearchingAppBar> {
     return SearchAppBar(
       primary: Theme.of(context).primaryColor,
       appBarController: appBarController,
-      // You could load the bar with search already active
       autoSelected: false,
       searchHint: "Cari komik...",
       mainTextColor: Colors.white,
-      onChange: (String value) {
-        //Your function to filter list. It should interact with
-        //the Stream that generate the final list
+      onSubmitted: (String query) {
+        Modular.to.pushNamed('/search/$query');
       },
+      onChange: (String text) {},
       //Will show when SEARCH MODE wasn't active
       mainAppBar: AppBar(
         title: Text("Search"),

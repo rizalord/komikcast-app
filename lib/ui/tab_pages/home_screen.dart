@@ -1,12 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
+
+import 'package:komikcast/components/card/comictype.dart';
 
 class HomeTabPage extends StatefulWidget {
   @override
   _HomeTabPageState createState() => _HomeTabPageState();
 }
 
+// MAIN HOME PAGE
 class _HomeTabPageState extends State<HomeTabPage> {
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   }
 }
 
+// LATEST CHAPTER [SECTION 3]
 class ComicLatestChapter extends StatelessWidget {
   ComicLatestChapter({this.width});
 
@@ -55,6 +60,7 @@ class ComicLatestChapter extends StatelessWidget {
   }
 }
 
+// ITEM FOR LATEST SECTION
 class ItemLatest extends StatelessWidget {
   const ItemLatest({
     Key key,
@@ -98,8 +104,9 @@ class ItemLatest extends StatelessWidget {
                             height: (width * .35) + 10,
                             child: Stack(
                               children: [
-                                Image.network(
-                                  'https://komikcast.com/wp-content/uploads/2017/07/177617-4-211x300.jpg',
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      'https://komikcast.com/wp-content/uploads/2017/07/177617-4-211x300.jpg',
                                   fit: BoxFit.cover,
                                   width: width * .32,
                                   height: width * .44,
@@ -188,6 +195,7 @@ class ItemLatest extends StatelessWidget {
   }
 }
 
+// SINGLE CHAPTER OF LATEST ITEM
 class SingleChapterLink extends StatelessWidget {
   const SingleChapterLink({
     Key key,
@@ -221,6 +229,8 @@ class SingleChapterLink extends StatelessWidget {
                       .textSelectionHandleColor
                       .withOpacity(.65),
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
@@ -238,6 +248,7 @@ class SingleChapterLink extends StatelessWidget {
   }
 }
 
+// UPDATE PROJECT [SECTION 2]
 class ComicUpdateProject extends StatelessWidget {
   ComicUpdateProject({this.width});
 
@@ -300,6 +311,7 @@ class ComicUpdateProject extends StatelessWidget {
   }
 }
 
+// SINGLE ITEM FOR UPDATE PROJECT SECTION
 class SingleProject extends StatelessWidget {
   const SingleProject({
     Key key,
@@ -327,8 +339,8 @@ class SingleProject extends StatelessWidget {
           children: [
             Stack(
               children: [
-                Image.network(
-                  image,
+                CachedNetworkImage(
+                  imageUrl: image,
                   fit: BoxFit.cover,
                   width: width * .32,
                   height: width * .44,
@@ -397,6 +409,7 @@ class SingleProject extends StatelessWidget {
   }
 }
 
+// SUB HEADER
 class SubHeader extends StatelessWidget {
   const SubHeader({
     Key key,
@@ -438,6 +451,7 @@ class SubHeader extends StatelessWidget {
   }
 }
 
+// COMIC SLIDER [SECTION 1]
 class ComicSlider extends StatelessWidget {
   const ComicSlider({
     Key key,
@@ -523,6 +537,7 @@ class ComicSlider extends StatelessWidget {
   }
 }
 
+// ITEM FOR SLIDER
 class SingleSlider extends StatelessWidget {
   const SingleSlider(
       {Key key,
@@ -550,8 +565,8 @@ class SingleSlider extends StatelessWidget {
           children: [
             Stack(
               children: [
-                Image.network(
-                  image,
+                CachedNetworkImage(
+                  imageUrl: image,
                   fit: BoxFit.cover,
                   width: width * .4,
                   height: width * .55,
@@ -619,33 +634,3 @@ class SingleSlider extends StatelessWidget {
   }
 }
 
-class ComicTypeCard extends StatelessWidget {
-  const ComicTypeCard({
-    Key key,
-    this.text,
-  }) : super(key: key);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: text.toLowerCase() == 'manhua'
-            ? Colors.green
-            : text.toLowerCase() == 'manhwa' ? Colors.brown : Colors.blue[400],
-        borderRadius: BorderRadius.circular(3),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        text.toUpperCase(),
-        style: GoogleFonts.heebo(
-          fontSize: 10,
-          color: Colors.white,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}

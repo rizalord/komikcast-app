@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:komikcast/bloc/theme_bloc.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   HomeAppBar({Key key})
@@ -18,19 +16,21 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
-
     return AppBar(
       elevation: 0,
       title: Text('Komikcast'),
       actions: [
         IconButton(
-          icon: FaIcon(FontAwesomeIcons.moon),
+          icon: FaIcon(
+            FontAwesomeIcons.crown,
+            size: 20,
+          ),
           onPressed: () {
-            Modular.get<ThemeBloc>().add(
-              Theme.of(context).brightness == Brightness.light
-                  ? ThemeMode.dark
-                  : ThemeMode.light,
-            );
+            // Modular.get<ThemeBloc>().add(
+            //   Theme.of(context).brightness == Brightness.light
+            //       ? ThemeMode.dark
+            //       : ThemeMode.light,
+            // );
           },
         ),
       ],
