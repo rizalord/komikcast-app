@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/components/custom/search_bar/app_bar_controller.dart';
-import 'package:komikcast/components/custom/search_bar/search_app_bar.dart';
 import 'package:komikcast/ui/tab_pages/search_screen.dart';
 
 class SearchPage extends StatefulWidget {

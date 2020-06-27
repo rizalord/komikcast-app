@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 
 import 'package:komikcast/components/card/comictype.dart';
+import 'package:komikcast/components/text/sub_header_text.dart';
 
 class HomeTabPage extends StatefulWidget {
   @override
@@ -409,47 +410,6 @@ class SingleProject extends StatelessWidget {
   }
 }
 
-// SUB HEADER
-class SubHeader extends StatelessWidget {
-  const SubHeader({
-    Key key,
-    this.text,
-    this.width,
-  }) : super(key: key);
-
-  final String text;
-  final double width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: 50,
-      // color: Colors.blue[50],
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            text.toUpperCase(),
-            style: GoogleFonts.heebo(
-              fontSize: 17,
-              fontWeight: FontWeight.w500,
-              color: Colors.blue,
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.arrow_forward,
-              color: Colors.blue,
-            ),
-            onPressed: () {},
-          )
-        ],
-      ),
-    );
-  }
-}
 
 // COMIC SLIDER [SECTION 1]
 class ComicSlider extends StatelessWidget {

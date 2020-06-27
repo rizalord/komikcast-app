@@ -7,6 +7,7 @@ import 'package:komikcast/components/appbar/download_appbar.dart';
 import 'package:komikcast/components/appbar/favorite_appbar.dart';
 import 'package:komikcast/components/appbar/home_appbar.dart';
 import 'package:komikcast/components/appbar/search_appbar.dart';
+import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
 import 'package:komikcast/ui/tab_pages/home_screen.dart';
 import 'package:komikcast/ui/tab_pages/search_screen.dart';
 
@@ -19,7 +20,7 @@ class _MainPageState extends State<MainPage> {
   final _pages = [
     HomeTabPage(),
     SearchTabPage(),
-    HomeTabPage(),
+    FavoriteTabPage(),
     HomeTabPage(),
   ];
 
