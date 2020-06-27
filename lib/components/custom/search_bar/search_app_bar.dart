@@ -56,7 +56,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
           _show = snap.data;
         }
 
-        if (_show) {
+        if (_show || widget.mainAppBar == null) {
           return searchAppBar(
             context: context,
           );

@@ -18,10 +18,6 @@ class _FavoriteAppBarState extends State<FavoriteAppBar> {
     return AppBar(
       title: Text("Favorite"),
       actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {},
-        ),
         PopupMenuButton(
           icon: Icon(Icons.sort),
           itemBuilder: (BuildContext context) => [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/components/custom/search_bar/app_bar_controller.dart';
 import 'package:komikcast/components/custom/search_bar/search_app_bar.dart';
 import 'package:komikcast/ui/tab_pages/search_screen.dart';
@@ -17,11 +18,13 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final AppBarController appBarController = AppBarController();
   ScrollController _controller = ScrollController();
-  bool _isLoading = false,_isGettingData = true;
+  bool _isLoading = false, _isGettingData = true;
   int _count = 10;
+  TextEditingController _textController;
 
   @override
   void initState() {
+    _textController = TextEditingController(text: widget.query);
     listenScroll();
     getData();
     super.initState();
@@ -40,19 +43,21 @@ class _SearchPageState extends State<SearchPage> {
       _isLoading = true;
       _controller.jumpTo(_controller.position.maxScrollExtent);
       Future.delayed(Duration(seconds: 3), () {
-        setState(() {
-          _count += 10;
-          _isLoading = false;
-        });
+        if (this.mounted)
+          setState(() {
+            _count += 10;
+            _isLoading = false;
+          });
       });
     });
   }
 
   void getData() {
     Future.delayed(Duration(seconds: 3), () {
-      setState(() {
-        _isGettingData = false;
-      });
+      if (this.mounted)
+        setState(() {
+          _isGettingData = false;
+        });
     });
   }
 
@@ -60,14 +65,39 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: SearchAppBar(
-        primary: Theme.of(context).primaryColor,
-        appBarController: appBarController,
-        autoSelected: true,
-        searchHint: "Cari komik...",
-        mainTextColor: Colors.white,
-        initialQuery: widget.query,
-        onChange: (String value) {},
+      appBar: AppBar(
+        leading: InkWell(
+          child: Icon(
+            Icons.close,
+            color: Colors.white,
+          ),
+          onTap: () {
+            Modular.to.pop();
+          },
+        ),
+        title: Container(
+          child: TextField(
+            controller: _textController,
+            autofocus: true,
+            onSubmitted: (val) {},
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+            cursorColor: Colors.white,
+            decoration: InputDecoration(
+              hintText: 'Cari komik...',
+              border: InputBorder.none,
+              hintStyle: TextStyle(
+                color: Colors.white.withAlpha(100),
+              ),
+              suffixIcon: Icon(
+                Icons.search,
+                color: Colors.white.withAlpha(100),
+              ),
+            ),
+          ),
+        ),
       ),
       body: _isGettingData
           ? Center(
