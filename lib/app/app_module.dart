@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
+import 'package:komikcast/ui/download_setting.dart';
 import 'package:komikcast/ui/main_pages.dart';
 import 'package:komikcast/ui/search_page.dart';
 import 'package:komikcast/ui/splash_screen.dart';
@@ -27,7 +28,12 @@ class AppModule extends MainModule {
           '/search/:query',
           child: (_, args) => SearchPage(query: args.params['query']),
           transition: TransitionType.rightToLeftWithFade,
-        )
+        ),
+        Router(
+          '/downset',
+          child: (_, args) => DownloadSetting(),
+          // transition: TransitionType.rightToLeft,
+        ),
       ];
 
   // Provide the root widget associated with your module

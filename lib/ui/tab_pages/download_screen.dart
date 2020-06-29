@@ -3,28 +3,70 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DownloadTabPage extends StatelessWidget {
+  final int _itemCount = 0;
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ListView(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: [
-              ListItem(width: width),
-              ListItem(width: width),
-              ListItem(width: width),
-              ListItem(width: width),
-              ListItem(width: width),
-              ListItem(width: width),
-              ListItem(width: width),
-            ],
-          ),
-        ],
-      ),
-    );
+    return _itemCount != 0
+        ? SingleChildScrollView(
+            child: Column(
+              children: [
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: _itemCount,
+                  itemBuilder: (context, index) => ListItem(width: width),
+                ),
+              ],
+            ),
+          )
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/images/empty-download.png'),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 22.0),
+                  child: Text(
+                    'Belum ada yang Didownload',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+                Text(
+                  'Kamu belum download apapun.',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.5,
+                  ),
+                ),
+                Text(
+                  'Baca manga sekarang, dan',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.5,
+                  ),
+                ),
+                Text(
+                  'download manga yang menarik',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.5,
+                  ),
+                ),
+                Text(
+                  'bagimu.',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.5,
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 }
 

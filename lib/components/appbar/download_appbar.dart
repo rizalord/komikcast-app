@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class DownloadAppBar extends StatefulWidget implements PreferredSizeWidget {
   DownloadAppBar({Key key})
@@ -13,7 +14,6 @@ class DownloadAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _DownloadAppBarState extends State<DownloadAppBar> {
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -21,8 +21,7 @@ class _DownloadAppBarState extends State<DownloadAppBar> {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.settings),
-          onPressed: () {
-          },
+          onPressed: () => Modular.to.pushNamed('/downset'),
         )
       ],
     );
