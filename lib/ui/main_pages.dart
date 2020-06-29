@@ -72,9 +72,12 @@ class _MainPageState extends State<MainPage> {
 
   void navigateToSetting() {
     Modular.to.pop(context);
-    Future.delayed(Duration(milliseconds: 0), () {
-      Modular.to.pushNamed('/setting');
-    });
+    Modular.to.pushNamed('/setting');
+  }
+
+  void navigateToQna() {
+    Modular.to.pop(context);
+    Modular.to.pushNamed('/qna');
   }
 
   @override
@@ -130,9 +133,7 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.blue,
               ),
               title: Text('Tanya Jawab'),
-              onTap: () {
-                Modular.to.pop(context);
-              },
+              onTap: navigateToQna,
             ),
             Expanded(
               child: Align(
