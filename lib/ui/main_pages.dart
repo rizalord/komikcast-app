@@ -1,16 +1,21 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/components/appbar/download_appbar.dart';
 import 'package:komikcast/components/appbar/favorite_appbar.dart';
 import 'package:komikcast/components/appbar/home_appbar.dart';
 import 'package:komikcast/components/appbar/search_appbar.dart';
+import 'package:komikcast/env.dart';
+import 'package:komikcast/models/email_feedback.dart';
 import 'package:komikcast/ui/tab_pages/download_screen.dart';
 import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
 import 'package:komikcast/ui/tab_pages/home_screen.dart';
 import 'package:komikcast/ui/tab_pages/search_screen.dart';
+import 'package:share/share.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -47,6 +52,31 @@ class _MainPageState extends State<MainPage> {
             duration: Duration(milliseconds: 300), curve: Curves.ease);
       });
 
+  void sendFeedback() async {
+    await FlutterEmailSender.send(emailModel);
+    Modular.to.pop(context);
+  }
+
+  void likeFanpage() {
+    FlutterWebBrowser.openWebPage(
+        url: Env.fanpage, androidToolbarColor: Theme.of(context).primaryColor);
+    Modular.to.pop(context);
+  }
+
+  void shareFriend() {
+    Share.share(
+        'Komikcast - Tempatnya Baca Komik Online Bahasa Indonesia ${Env.webpage}',
+        subject: 'Download Aplikasi Komikcast Gratis');
+    Modular.to.pop(context);
+  }
+
+  void navigateToSetting() {
+    Modular.to.pop(context);
+    Future.delayed(Duration(milliseconds: 0), () {
+      Modular.to.pushNamed('/setting');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,9 +98,7 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.blue,
               ),
               title: Text('Masukan'),
-              onTap: () {
-                Modular.to.pop(context);
-              },
+              onTap: sendFeedback,
             ),
             ListTile(
               leading: FaIcon(
@@ -78,9 +106,7 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.blue,
               ),
               title: Text('Sukai kami'),
-              onTap: () {
-                Modular.to.pop(context);
-              },
+              onTap: likeFanpage,
             ),
             ListTile(
               leading: FaIcon(
@@ -88,9 +114,7 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.blue,
               ),
               title: Text('Beri tahu teman anda'),
-              onTap: () {
-                Modular.to.pop(context);
-              },
+              onTap: shareFriend,
             ),
             ListTile(
               leading: FaIcon(
@@ -98,6 +122,14 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.blue,
               ),
               title: Text('Pengaturan'),
+              onTap: navigateToSetting,
+            ),
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.solidQuestionCircle,
+                color: Colors.blue,
+              ),
+              title: Text('Tanya Jawab'),
               onTap: () {
                 Modular.to.pop(context);
               },

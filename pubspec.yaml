@@ -27,6 +27,9 @@ dependencies:
   flappy_search_bar: ^1.7.2
   google_fonts: ^1.1.0
   cached_network_image: ^2.2.0+1
+  flutter_email_sender: ^3.0.1
+  flutter_web_browser: ^0.11.0
+  share: ^0.6.4+3
 
   # Font Awesome
   font_awesome_flutter: ^8.8.1
