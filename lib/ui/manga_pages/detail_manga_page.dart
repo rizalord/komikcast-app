@@ -8,6 +8,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
+import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
 import 'package:komikcast/ui/manga_pages/tab_chapters.dart';
 import 'package:komikcast/ui/manga_pages/tab_overview.dart';
@@ -32,76 +33,63 @@ class _DetailMangaState extends State<DetailManga> {
     final blurBloc = Modular.get<BlurBloc>();
 
     return Scaffold(
-      body: CustomScrollView(
-        shrinkWrap: true,
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: width,
-            backgroundColor: Theme.of(context).textSelectionColor,
-            flexibleSpace: LayoutBuilder(
-              builder: (context, constraints) {
-                top = constraints.biggest.height;
-                blur = ((width / constraints.biggest.height) - 1) * 4;
+      body: DefaultTabController(
+        length: 2,
+        child: CustomScrollView(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: width,
+              backgroundColor: Theme.of(context).textSelectionColor,
+              flexibleSpace: LayoutBuilder(
+                builder: (context, constraints) {
+                  top = constraints.biggest.height;
+                  blur = ((width / constraints.biggest.height) - 1) * 4;
 
-                // BLOC DISPATCH
-                blurBloc.add(blur);
-                sliverBloc.add(
-                  top == MediaQuery.of(context).padding.top + kToolbarHeight
-                      ? true
-                      : false,
-                );
+                  // BLOC DISPATCH
+                  blurBloc.add(blur);
+                  sliverBloc.add(
+                    top == MediaQuery.of(context).padding.top + kToolbarHeight
+                        ? true
+                        : false,
+                  );
 
-                return FlexibleSpaceBar(
-                  title: AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: top ==
-                            MediaQuery.of(context).padding.top + kToolbarHeight
-                        ? 1.0
-                        : 0.0,
-                    child: BlocBuilder<SliverBloc, bool>(
-                      builder: (context, state) => Text(
-                        'My Beautiful Fiance',
-                        style: TextStyle(
-                          color: state == true
-                              ? Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black
-                              : Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black,
+                  return FlexibleSpaceBar(
+                    title: AnimatedOpacity(
+                      duration: Duration(milliseconds: 300),
+                      opacity: top ==
+                              MediaQuery.of(context).padding.top +
+                                  kToolbarHeight
+                          ? 1.0
+                          : 0.0,
+                      child: BlocBuilder<SliverBloc, bool>(
+                        builder: (context, state) => Text(
+                          'My Beautiful Fiance',
+                          style: TextStyle(
+                            color: state == true
+                                ? Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black
+                                : Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  background: PageHeader(widget: widget, width: width),
-                );
-              },
-            ),
-            leading: BlocBuilder<SliverBloc, bool>(
-              bloc: sliverBloc,
-              builder: (context, state) => IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Theme.of(context).brightness == Brightness.dark &&
-                          state == true
-                      ? Colors.white
-                      : Theme.of(context).brightness == Brightness.dark &&
-                              state == false
-                          ? Colors.white
-                          : Theme.of(context).brightness == Brightness.light &&
-                                  state == true
-                              ? Colors.black
-                              : Colors.white,
-                ),
-                onPressed: () {},
+                    background: PageHeader(widget: widget, width: width),
+                  );
+                },
               ),
-            ),
-            actions: [
-              BlocBuilder<SliverBloc, bool>(
+              leading: BlocBuilder<SliverBloc, bool>(
+                bloc: sliverBloc,
                 builder: (context, state) => IconButton(
                   icon: Icon(
-                    Icons.cloud_download,
+                    Icons.arrow_back,
                     color: Theme.of(context).brightness == Brightness.dark &&
                             state == true
                         ? Colors.white
@@ -117,46 +105,56 @@ class _DetailMangaState extends State<DetailManga> {
                   onPressed: () {},
                 ),
               ),
-            ],
-          ),
-          SliverContent(width: width),
-        ],
+              actions: [
+                BlocBuilder<SliverBloc, bool>(
+                  builder: (context, state) => IconButton(
+                    icon: Icon(
+                      Icons.cloud_download,
+                      color: Theme.of(context).brightness == Brightness.dark &&
+                              state == true
+                          ? Colors.white
+                          : Theme.of(context).brightness == Brightness.dark &&
+                                  state == false
+                              ? Colors.white
+                              : Theme.of(context).brightness ==
+                                          Brightness.light &&
+                                      state == true
+                                  ? Colors.black
+                                  : Colors.white,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+            SliverContent(width: width, setState: this.setState),
+          ],
+        ),
       ),
     );
   }
 }
 
-class SliverContent extends StatefulWidget {
+class SliverContent extends StatelessWidget {
   const SliverContent({
     Key key,
     @required this.width,
+    this.setState,
   }) : super(key: key);
+
+  final Function setState;
 
   final double width;
 
   @override
-  _SliverContentState createState() => _SliverContentState();
-}
-
-class _SliverContentState extends State<SliverContent>
-    with SingleTickerProviderStateMixin {
-  TabController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TabController(vsync: this, length: 2);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SliverStickyHeader(
-      header: TabContainer(
-        width: widget.width,
-        controller: _controller,
-      ),
-      sliver: SliverFillRemaining(
-        child: ContentManga(width: widget.width, controller: _controller),
+      header: TabContainer(width: width, setState: setState),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, i) => ContentManga(width: width),
+          childCount: 1,
+        ),
       ),
     );
   }
@@ -227,26 +225,27 @@ class PageHeader extends StatelessWidget {
 }
 
 class ContentManga extends StatelessWidget {
-  const ContentManga({
+  ContentManga({
     Key key,
     @required this.width,
-    this.controller,
   }) : super(key: key);
 
   final double width;
-  final TabController controller;
+  var index = 0;
+  var widgetList = [
+    TabOverview(),
+    TabChapters(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // color: Colors.red,
-      child: TabBarView(
-        children: [
-          TabOverview(),
-          TabChapters(),
-        ],
-        controller: controller,
-      ),
+    return LayoutBuilder(
+      builder: (context, state) {
+        index = DefaultTabController.of(context).index;
+        Modular.get<ScrollBloc>()
+            .add(state.biggest.height >= MediaQuery.of(context).size.height);
+        return widgetList[index];
+      },
     );
   }
 }
@@ -255,11 +254,11 @@ class TabContainer extends StatelessWidget {
   const TabContainer({
     Key key,
     @required this.width,
-    @required this.controller,
+    this.setState,
   }) : super(key: key);
 
   final double width;
-  final TabController controller;
+  final Function setState;
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +276,9 @@ class TabContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TabBar(
-            controller: controller,
+            onTap: (state) {
+              setState(() {});
+            },
             isScrollable: true,
             indicatorColor: Theme.of(context).textSelectionHandleColor,
             labelPadding: EdgeInsets.only(

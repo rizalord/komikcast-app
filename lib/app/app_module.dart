@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
+import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/ui/main_pages.dart';
@@ -19,6 +20,7 @@ class AppModule extends MainModule {
         Bind((_) => ThemeBloc()),
         Bind((_) => SliverBloc()),
         Bind((_) => BlurBloc()),
+        Bind((_) => ScrollBloc()),
       ];
 
   @override
