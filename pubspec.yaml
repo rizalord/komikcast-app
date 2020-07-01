@@ -30,6 +30,7 @@ dependencies:
   flutter_email_sender: ^3.0.1
   flutter_web_browser: ^0.11.0
   share: ^0.6.4+3
+  flutter_sticky_header: ^0.4.2
 
   # Font Awesome
   font_awesome_flutter: ^8.8.1

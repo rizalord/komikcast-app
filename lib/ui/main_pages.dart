@@ -157,8 +157,8 @@ class _MainPageState extends State<MainPage> {
                         IconButton(
                           icon: FaIcon(
                             Theme.of(context).brightness == Brightness.dark
-                                ? FontAwesomeIcons.solidMoon
-                                : FontAwesomeIcons.moon,
+                                ? FontAwesomeIcons.solidSun
+                                : FontAwesomeIcons.sun,
                             color: Theme.of(context)
                                 .textSelectionHandleColor
                                 .withOpacity(

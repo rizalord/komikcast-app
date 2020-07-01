@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:komikcast/bloc/blur_bloc.dart';
+import 'package:komikcast/bloc/sliver_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
-import 'package:komikcast/ui/download_setting.dart';
 import 'package:komikcast/ui/main_pages.dart';
 import 'package:komikcast/ui/main_setting.dart';
-import 'package:komikcast/ui/qna_page.dart';
-import 'package:komikcast/ui/search_page.dart';
+import 'package:komikcast/ui/manga_pages/detail_manga_page.dart';
+import 'package:komikcast/ui/other_pages/download_setting.dart';
+import 'package:komikcast/ui/other_pages/qna_page.dart';
+import 'package:komikcast/ui/other_pages/search_page.dart';
 import 'package:komikcast/ui/splash_screen.dart';
 
 import 'app_widget.dart';
@@ -14,6 +17,8 @@ class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
         Bind((_) => ThemeBloc()),
+        Bind((_) => SliverBloc()),
+        Bind((_) => BlurBloc()),
       ];
 
   @override
@@ -32,6 +37,11 @@ class AppModule extends MainModule {
         Router('/downset', child: (_, args) => DownloadSetting()),
         Router('/setting', child: (_, args) => MainSettingPage()),
         Router('/qna', child: (_, args) => QnAPage()),
+        Router(
+          '/detailmanga',
+          child: (_, args) => DetailManga(tag: args.data),
+          transition: TransitionType.downToUp,
+        ),
       ];
 
   @override

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 
@@ -410,7 +411,6 @@ class SingleProject extends StatelessWidget {
   }
 }
 
-
 // COMIC SLIDER [SECTION 1]
 class ComicSlider extends StatelessWidget {
   const ComicSlider({
@@ -514,7 +514,7 @@ class SingleSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Modular.to.pushNamed('/detailmanga', arguments: image),
       child: Container(
         margin: EdgeInsets.only(left: 5.0, right: 5.0),
         width: width * .4,
@@ -525,11 +525,14 @@ class SingleSlider extends StatelessWidget {
           children: [
             Stack(
               children: [
-                CachedNetworkImage(
-                  imageUrl: image,
-                  fit: BoxFit.cover,
-                  width: width * .4,
-                  height: width * .55,
+                Hero(
+                  tag: image,
+                  child: CachedNetworkImage(
+                    imageUrl: image,
+                    fit: BoxFit.cover,
+                    width: width * .4,
+                    height: width * .55,
+                  ),
                 ),
                 Positioned(
                   bottom: 8.0,
@@ -593,4 +596,3 @@ class SingleSlider extends StatelessWidget {
     );
   }
 }
-
