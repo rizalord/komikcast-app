@@ -36,13 +36,11 @@ class _TabOverviewState extends State<TabOverview> {
         Modular.get<ScrollBloc>().add(false);
       });
     }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-
     return BlocBuilder<ScrollBloc, ScrollPhysics>(
       builder: (context, state) {
         return NotificationListener(

@@ -27,6 +27,18 @@ class _DetailMangaState extends State<DetailManga> {
   var blur = 0.0;
 
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     final sliverBloc = Modular.get<SliverBloc>();
@@ -35,77 +47,107 @@ class _DetailMangaState extends State<DetailManga> {
     return Scaffold(
       body: DefaultTabController(
         length: 2,
-        child: CustomScrollView(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              expandedHeight: width,
-              backgroundColor: Theme.of(context).textSelectionColor,
-              flexibleSpace: LayoutBuilder(
-                builder: (context, constraints) {
-                  top = constraints.biggest.height;
-                  blur = ((width / constraints.biggest.height) - 1) * 4;
+        child: Stack(
+          children: [
+            CustomScrollView(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              slivers: [
+                SliverAppBar(
+                  pinned: true,
+                  expandedHeight: width,
+                  backgroundColor: Theme.of(context).textSelectionColor,
+                  flexibleSpace: LayoutBuilder(
+                    builder: (context, constraints) {
+                      top = constraints.biggest.height;
+                      blur = ((width / constraints.biggest.height) - 1) * 4;
 
-                  // BLOC DISPATCH
-                  blurBloc.add(blur);
-                  sliverBloc.add(
-                    top == MediaQuery.of(context).padding.top + kToolbarHeight
-                        ? true
-                        : false,
-                  );
+                      // BLOC DISPATCH
+                      blurBloc.add(blur);
+                      sliverBloc.add(
+                        top ==
+                                MediaQuery.of(context).padding.top +
+                                    kToolbarHeight
+                            ? true
+                            : false,
+                      );
 
-                  return FlexibleSpaceBar(
-                    title: AnimatedOpacity(
-                      duration: Duration(milliseconds: 300),
-                      opacity: top ==
-                              MediaQuery.of(context).padding.top +
-                                  kToolbarHeight
-                          ? 1.0
-                          : 0.0,
-                      child: BlocBuilder<SliverBloc, bool>(
-                        builder: (context, state) => Text(
-                          'My Beautiful Fiance',
-                          style: TextStyle(
-                            color: state == true
-                                ? Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black
+                      return FlexibleSpaceBar(
+                        title: Container(),
+                        background: PageHeader(widget: widget, width: width),
+                      );
+                    },
+                  ),
+                  leading: Container(),
+                  actions: [Container()],
+                ),
+                SliverContent(width: width, setState: this.setState),
+              ],
+            ),
+            CustomAppBar(sliverBloc: sliverBloc, width: width),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomAppBar extends StatelessWidget {
+  const CustomAppBar({
+    Key key,
+    @required this.sliverBloc,
+    @required this.width,
+  }) : super(key: key);
+
+  final SliverBloc sliverBloc;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0,
+      child: BlocBuilder<SliverBloc, bool>(
+        builder: (context, state) => Container(
+          child: Material(
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      BlocBuilder<SliverBloc, bool>(
+                        bloc: sliverBloc,
+                        builder: (context, state) => IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Theme.of(context).brightness ==
+                                        Brightness.dark &&
+                                    state == true
+                                ? Colors.white
                                 : Theme.of(context).brightness ==
-                                        Brightness.dark
+                                            Brightness.dark &&
+                                        state == false
                                     ? Colors.white
-                                    : Colors.black,
+                                    : Theme.of(context).brightness ==
+                                                Brightness.light &&
+                                            state == true
+                                        ? Colors.black
+                                        : Colors.white,
                           ),
+                          onPressed: () => Modular.to.pop(),
                         ),
                       ),
-                    ),
-                    background: PageHeader(widget: widget, width: width),
-                  );
-                },
-              ),
-              leading: BlocBuilder<SliverBloc, bool>(
-                bloc: sliverBloc,
-                builder: (context, state) => IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Theme.of(context).brightness == Brightness.dark &&
-                            state == true
-                        ? Colors.white
-                        : Theme.of(context).brightness == Brightness.dark &&
-                                state == false
-                            ? Colors.white
-                            : Theme.of(context).brightness ==
-                                        Brightness.light &&
-                                    state == true
-                                ? Colors.black
-                                : Colors.white,
+                      SizedBox(width: 8.0),
+                      state
+                          ? Text(
+                              'My Beautiful Fiance',
+                              style: Theme.of(context).textTheme.headline6,
+                            )
+                          : Container(),
+                    ],
                   ),
-                  onPressed: () {},
                 ),
-              ),
-              actions: [
                 BlocBuilder<SliverBloc, bool>(
                   builder: (context, state) => IconButton(
                     icon: Icon(
@@ -127,8 +169,25 @@ class _DetailMangaState extends State<DetailManga> {
                 ),
               ],
             ),
-            SliverContent(width: width, setState: this.setState),
-          ],
+          ),
+          width: width,
+          height: kToolbarHeight,
+          margin: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top,
+            bottom: 8.0,
+          ),
+          decoration: BoxDecoration(
+            color: state
+                ? Theme.of(context).textSelectionColor
+                : Colors.transparent,
+            boxShadow: [
+              BoxShadow(
+                color: state ? Colors.grey : Colors.transparent,
+                offset: Offset(0.0, 1.0), //(x,y)
+                blurRadius: 6.0,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -212,8 +271,8 @@ class PageHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 StatusManga(text: 'Tamat'),
-                TitleManga(text: 'My Beautiful Fiance '),
-                AuthorManga(text: 'Hana Yashuhisa'),
+                TitleManga(text: 'Kukuh Nolep'),
+                AuthorManga(text: 'Wibu Nolep'),
                 RatingManga(value: '4.7'),
               ],
             ),
@@ -271,6 +330,9 @@ class TabContainer extends StatelessWidget {
             color: Theme.of(context).textSelectionHandleColor.withOpacity(.2),
           ),
         ),
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Theme.of(context).primaryColor
+            : Colors.grey[100],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
