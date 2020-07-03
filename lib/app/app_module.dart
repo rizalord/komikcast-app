@@ -8,6 +8,7 @@ import 'package:komikcast/ui/main_pages.dart';
 import 'package:komikcast/ui/main_setting.dart';
 import 'package:komikcast/ui/manga_pages/detail_manga_page.dart';
 import 'package:komikcast/ui/manga_pages/download_manga_page.dart';
+import 'package:komikcast/ui/manga_pages/read_manga_page.dart';
 import 'package:komikcast/ui/other_pages/download_setting.dart';
 import 'package:komikcast/ui/other_pages/qna_page.dart';
 import 'package:komikcast/ui/other_pages/search_page.dart';
@@ -61,6 +62,11 @@ class AppModule extends MainModule {
           '/downloadmanga',
           child: (_, args) => DownloadMangaPage(image: args.data['image']),
           // transition: TransitionType.rightToLeft,
+        ),
+        Router(
+          '/readmanga',
+          child: (_, args) => ReadMangaPage(),
+          transition: TransitionType.rightToLeft,
         ),
       ];
 

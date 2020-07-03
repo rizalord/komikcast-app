@@ -107,7 +107,7 @@ class _TabChaptersState extends State<TabChapters> {
                       itemCount: 10,
                       itemBuilder: (context, idx) {
                         return InkWell(
-                          onTap: () {},
+                          onTap: () => Modular.to.pushNamed('/readmanga'),
                           child: Container(
                             width: width,
                             height: kToolbarHeight + 10,
