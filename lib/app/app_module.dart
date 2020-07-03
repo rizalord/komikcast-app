@@ -7,6 +7,7 @@ import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/ui/main_pages.dart';
 import 'package:komikcast/ui/main_setting.dart';
 import 'package:komikcast/ui/manga_pages/detail_manga_page.dart';
+import 'package:komikcast/ui/manga_pages/download_manga_page.dart';
 import 'package:komikcast/ui/other_pages/download_setting.dart';
 import 'package:komikcast/ui/other_pages/qna_page.dart';
 import 'package:komikcast/ui/other_pages/search_page.dart';
@@ -25,7 +26,10 @@ class AppModule extends MainModule {
 
   @override
   List<Router> get routers => [
-        Router('/', child: (_, args) => SplashScreen()),
+        Router(
+          '/',
+          child: (_, args) => SplashScreen(),
+        ),
         Router(
           '/main',
           child: (_, args) => MainPage(),
@@ -36,13 +40,27 @@ class AppModule extends MainModule {
           child: (_, args) => SearchPage(query: args.params['query']),
           transition: TransitionType.rightToLeftWithFade,
         ),
-        Router('/downset', child: (_, args) => DownloadSetting()),
-        Router('/setting', child: (_, args) => MainSettingPage()),
-        Router('/qna', child: (_, args) => QnAPage()),
+        Router(
+          '/downset',
+          child: (_, args) => DownloadSetting(),
+        ),
+        Router(
+          '/setting',
+          child: (_, args) => MainSettingPage(),
+        ),
+        Router(
+          '/qna',
+          child: (_, args) => QnAPage(),
+        ),
         Router(
           '/detailmanga',
           child: (_, args) => DetailManga(tag: args.data),
-          transition: TransitionType.downToUp,
+          // transition: TransitionType.downToUp,
+        ),
+        Router(
+          '/downloadmanga',
+          child: (_, args) => DownloadMangaPage(image: args.data['image']),
+          // transition: TransitionType.rightToLeft,
         ),
       ];
 

@@ -84,7 +84,8 @@ class _DetailMangaState extends State<DetailManga> {
                 SliverContent(width: width, setState: this.setState),
               ],
             ),
-            CustomAppBar(sliverBloc: sliverBloc, width: width),
+            CustomAppBar(
+                sliverBloc: sliverBloc, width: width, image: widget.tag),
           ],
         ),
       ),
@@ -97,10 +98,12 @@ class CustomAppBar extends StatelessWidget {
     Key key,
     @required this.sliverBloc,
     @required this.width,
+    this.image,
   }) : super(key: key);
 
   final SliverBloc sliverBloc;
   final double width;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +167,12 @@ class CustomAppBar extends StatelessWidget {
                                   ? Colors.black
                                   : Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () => Modular.to.pushNamed(
+                      '/downloadmanga',
+                      arguments: {
+                        "image": image,
+                      },
+                    ),
                   ),
                 ),
               ],
