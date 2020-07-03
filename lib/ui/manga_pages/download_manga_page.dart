@@ -114,25 +114,31 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                trailing: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 14.0, vertical: 7.0),
+                trailing: Material(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Ink(
                     decoration: BoxDecoration(
                       color: Theme.of(context).brightness == Brightness.light
                           ? Colors.white
                           : Colors.blue,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      'Unduh',
-                      style: GoogleFonts.heebo(
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? Theme.of(context).primaryColor
-                            : Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 14.0, vertical: 7.0),
+                        child: Text(
+                          'Unduh',
+                          style: GoogleFonts.heebo(
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Theme.of(context).primaryColor
+                                    : Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ),
                   ),
