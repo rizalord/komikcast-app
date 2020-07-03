@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
@@ -86,6 +87,93 @@ class _DetailMangaState extends State<DetailManga> {
             ),
             CustomAppBar(
                 sliverBloc: sliverBloc, width: width, image: widget.tag),
+            FloatingMenu(width: width),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FloatingMenu extends StatelessWidget {
+  const FloatingMenu({
+    Key key,
+    @required this.width,
+  }) : super(key: key);
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        width: width,
+        height: kToolbarHeight,
+        padding: EdgeInsets.only(right: 10.0, left: 2.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).textSelectionColor,
+          border: Border(
+            top: BorderSide(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Theme.of(context).textSelectionHandleColor.withOpacity(.2)
+                  : Colors.grey[700],
+            ),
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(kToolbarHeight),
+              child: Material(
+                borderRadius: BorderRadius.circular(kToolbarHeight),
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    width: kToolbarHeight,
+                    height: kToolbarHeight,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: FaIcon(
+                      FontAwesomeIcons.commentAlt,
+                      color: Theme.of(context)
+                          .textSelectionHandleColor
+                          .withOpacity(.5),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(width),
+                child: Material(
+                  borderRadius: BorderRadius.circular(width),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(width),
+                    ),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        height: kToolbarHeight - 10,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Baca Chapter Pertama',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -311,7 +399,12 @@ class ContentManga extends StatelessWidget {
         index = DefaultTabController.of(context).index;
         Modular.get<ScrollBloc>()
             .add(state.biggest.height >= MediaQuery.of(context).size.height);
-        return widgetList[index];
+        return Column(
+          children: [
+            widgetList[index],
+            SizedBox(height: kToolbarHeight),
+          ],
+        );
       },
     );
   }

@@ -52,7 +52,8 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
       body: Stack(
         children: [
           ListView.builder(
-            itemCount: 5,
+            itemCount: 15,
+            padding: EdgeInsets.only(bottom: width * .21),
             itemBuilder: (context, idx) => InkWell(
               onTap: () {},
               child: CheckboxListTile(
@@ -65,88 +66,103 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              width: width,
-              height: width * .21,
-              color: Theme.of(context).primaryColor,
-              alignment: Alignment.center,
-              child: ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.image,
-                      fit: BoxFit.cover,
-                      width: width * .145,
-                      height: width * .145,
-                    ),
-                  ),
-                ),
-                title: Text(
-                  'Unduh 0 Chapter dari',
-                  style: GoogleFonts.heebo(
-                    color: Colors.grey[300],
-                    fontSize: 11,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Padding(
-                  padding: EdgeInsets.only(top: 5.0),
+          DownloadButton(width: width, widget: widget),
+        ],
+      ),
+    );
+  }
+}
+
+class DownloadButton extends StatelessWidget {
+  const DownloadButton({
+    Key key,
+    @required this.width,
+    @required this.widget,
+  }) : super(key: key);
+
+  final double width;
+  final DownloadMangaPage widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        width: width,
+        height: width * .21,
+        color: Theme.of(context).primaryColor,
+        alignment: Alignment.center,
+        child: ListTile(
+          leading: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(9),
+              child: CachedNetworkImage(
+                imageUrl: widget.image,
+                fit: BoxFit.cover,
+                width: width * .145,
+                height: width * .145,
+              ),
+            ),
+          ),
+          title: Text(
+            'Unduh 0 Chapter dari',
+            style: GoogleFonts.heebo(
+              color: Colors.grey[300],
+              fontSize: 11,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Padding(
+            padding: EdgeInsets.only(top: 5.0),
+            child: Text(
+              'The Savior\'s book cafe in another world',
+              style: GoogleFonts.heebo(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                height: 1.2,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          trailing: Material(
+            borderRadius: BorderRadius.circular(10),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.white
+                    : Colors.blue,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: InkWell(
+                onTap: () {},
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 14.0, vertical: 7.0),
                   child: Text(
-                    'The Savior\'s book cafe in another world',
+                    'Unduh',
                     style: GoogleFonts.heebo(
-                      color: Colors.white,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Theme.of(context).primaryColor
+                          : Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
-                      height: 1.2,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                trailing: Material(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.white
-                          : Colors.blue,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 14.0, vertical: 7.0),
-                        child: Text(
-                          'Unduh',
-                          style: GoogleFonts.heebo(
-                            color:
-                                Theme.of(context).brightness == Brightness.light
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
