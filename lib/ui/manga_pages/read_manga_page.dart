@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
+import 'package:zoom_widget/zoom_widget.dart';
 
 class ReadMangaPage extends StatefulWidget {
   @override
@@ -53,6 +55,8 @@ class Content extends StatefulWidget {
 
 class _ContentState extends State<Content> {
   final ScrollController _controller = ScrollController();
+  double _scaleFactor = 1.0;
+  double _baseScaleFactor = 1.0;
 
   @override
   void initState() {
@@ -74,26 +78,62 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return Positioned.fill(
-      child: Container(
-        child: SingleChildScrollView(
-          controller: _controller,
-          child: GestureDetector(
-            onTap: () {
-              widget.setShowMenu(!widget.showMenu);
-            },
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 5,
-              itemBuilder: (ctx, idx) => CachedNetworkImage(
-                imageUrl:
-                    'https://cdn.komikcast.com/wp-content/img/H/Haikyuu!!/399/00${idx + 1}.jpg',
+      child: Zoom(
+        width: width + (width * .6),
+        height: height + (height * .6),
+        backgroundColor: Colors.orange,
+        opacityScrollBars: 0.9,
+        scrollWeight: 10.0,
+        centerOnScale: false,
+        enableScroll: false,
+        doubleTapZoom: false,
+        zoomSensibility: 1.3,
+        initZoom: 0.0,
+        onPositionUpdate: (position) {},
+        onScaleUpdate: (scale, zoom) {},
+        child: Container(
+          height: height,
+          child: SingleChildScrollView(
+            controller: _controller,
+            child: GestureDetector(
+              onTap: () {
+                widget.setShowMenu(!widget.showMenu);
+              },
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 8,
+                itemBuilder: (ctx, idx) => CachedNetworkImage(
+                  imageUrl:
+                      'https://cdn.komikcast.com/wp-content/img/H/Haikyuu!!/399/00${idx + 1}.jpg',
+                ),
               ),
             ),
           ),
         ),
       ),
+      // child: Container(
+      //   child: SingleChildScrollView(
+      //     controller: _controller,
+      //     child: GestureDetector(
+      //       onTap: () {
+      //         widget.setShowMenu(!widget.showMenu);
+      //       },
+      //       child: ListView.builder(
+      //         shrinkWrap: true,
+      //         physics: NeverScrollableScrollPhysics(),
+      //         itemCount: 5,
+      //         itemBuilder: (ctx, idx) => CachedNetworkImage(
+      //           imageUrl:
+      //               'https://cdn.komikcast.com/wp-content/img/H/Haikyuu!!/399/00${idx + 1}.jpg',
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
