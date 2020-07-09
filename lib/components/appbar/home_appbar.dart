@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -25,13 +26,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
             FontAwesomeIcons.crown,
             size: 20,
           ),
-          onPressed: () {
-            // Modular.get<ThemeBloc>().add(
-            //   Theme.of(context).brightness == Brightness.light
-            //       ? ThemeMode.dark
-            //       : ThemeMode.light,
-            // );
-          },
+          onPressed: () => Modular.to.pushNamed('/pro'),
         ),
       ],
     );

@@ -31,25 +31,26 @@ dependencies:
   flutter_web_browser: ^0.11.0
   share: ^0.6.4+3
   flutter_sticky_header: ^0.4.2
-  
   zoom_widget: ^0.1.3
   matrix_gesture_detector: ^0.1.0
-
-  # Font Awesome
+  hive: ^1.4.1+1
+  hive_flutter: ^0.3.0+2
+  path_provider: ^1.6.11
   font_awesome_flutter: ^8.8.1
-  # Cupertino Icons
   cupertino_icons: ^0.1.3
-  # Flutter Modular
   flutter_modular: any
-  # Bottom Navy Bar
   bottom_navy_bar: ^5.4.0
-  # Simple Search Bar
   simple_search_bar: ^0.1.7
 
+dependency_overrides:
+  path: ^1.6.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  hive_generator: ^0.7.0+2
+  build_runner: ^1.10.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
