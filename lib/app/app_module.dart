@@ -56,13 +56,17 @@ class AppModule extends MainModule {
         ),
         Router(
           '/detailmanga',
-          child: (_, args) => DetailManga(tag: args.data),
-          // transition: TransitionType.downToUp,
+          child: (_, args) => DetailManga(
+            image: args.data['image'],
+            title: args.data['title'],
+            linkId: args.data['linkId'],
+          ),
         ),
         Router(
           '/downloadmanga',
-          child: (_, args) => DownloadMangaPage(image: args.data['image']),
-          // transition: TransitionType.rightToLeft,
+          child: (_, args) => DownloadMangaPage(
+            image: args.data['image'],
+          ),
         ),
         Router(
           '/readmanga',

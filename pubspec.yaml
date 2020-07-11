@@ -41,6 +41,7 @@ dependencies:
   flutter_modular: any
   bottom_navy_bar: ^5.4.0
   simple_search_bar: ^0.1.7
+  http: ^0.12.1
 
 dependency_overrides:
   path: ^1.6.4

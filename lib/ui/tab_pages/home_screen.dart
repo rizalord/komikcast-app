@@ -6,39 +6,82 @@ import 'dart:math' as math;
 
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
+import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/models/comic_v1.dart';
+import 'package:komikcast/models/comic_v2.dart';
+import 'package:komikcast/models/comic_v3.dart';
 
 class HomeTabPage extends StatefulWidget {
   @override
   _HomeTabPageState createState() => _HomeTabPageState();
 }
 
-// MAIN HOME PAGE
-class _HomeTabPageState extends State<HomeTabPage> {
+class _HomeTabPageState extends State<HomeTabPage>
+    with AutomaticKeepAliveClientMixin {
+  var _isLoaded = false;
+  List<ComicV1> _listV1 = [];
+  List<ComicV2> _listV2 = [];
+  List<ComicV3> _listV3 = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  // Get Data on Start Screen
+  void getData() async {
+    final resData = await ComicData.getHomeData();
+    _listV1 = resData['hotComic'];
+    _listV2 = resData['projectComic'];
+    _listV3 = resData['latestChapter'];
+    setState(() {
+      _isLoaded = true;
+    });
+  }
+
+  // Pull To Refresh Feature
+  Future<void> onRefresh() async => getData();
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ComicSlider(width: width),
-            SubHeader(text: 'update project komikcast', width: width),
-            ComicUpdateProject(width: width),
-            SubHeader(text: 'chapter terbaru', width: width),
-            ComicLatestChapter(width: width),
-          ],
-        ),
-      ),
+      body: _isLoaded
+          ? RefreshIndicator(
+              onRefresh: onRefresh,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ComicSlider(width: width, data: _listV1),
+                    SubHeader(text: 'update project komikcast', width: width),
+                    ComicUpdateProject(width: width, data: _listV2),
+                    SubHeader(text: 'chapter terbaru', width: width),
+                    ComicLatestChapter(width: width, data: _listV3),
+                  ],
+                ),
+              ),
+            )
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 // LATEST CHAPTER [SECTION 3]
 class ComicLatestChapter extends StatelessWidget {
-  ComicLatestChapter({this.width});
+  ComicLatestChapter({
+    this.width,
+    this.data,
+  });
 
   final double width;
+  final List<ComicV3> data;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +92,15 @@ class ComicLatestChapter extends StatelessWidget {
         child: ListView(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          children: [
-            ItemLatest(width: width),
-            ItemLatest(width: width),
-            ItemLatest(width: width),
-            ItemLatest(width: width),
-            ItemLatest(width: width),
-          ],
+          children: data.map((e) {
+            return ItemLatest(
+              width: width,
+              isHot: e.isHot,
+              title: e.title,
+              image: e.image,
+              listChapter: e.chapters,
+            );
+          }).toList(),
         ),
       ),
     );
@@ -67,11 +112,16 @@ class ItemLatest extends StatelessWidget {
   const ItemLatest({
     Key key,
     @required this.width,
-    this.isHot = true,
+    this.isHot = false,
+    this.title,
+    this.image,
+    this.listChapter,
   }) : super(key: key);
 
   final double width;
   final bool isHot;
+  final String title, image;
+  final List<SingleChapter> listChapter;
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +157,7 @@ class ItemLatest extends StatelessWidget {
                             child: Stack(
                               children: [
                                 CachedNetworkImage(
-                                  imageUrl:
-                                      'https://komikcast.com/wp-content/uploads/2017/07/177617-4-211x300.jpg',
+                                  imageUrl: image,
                                   fit: BoxFit.cover,
                                   width: width * .32,
                                   height: width * .44,
@@ -155,11 +204,12 @@ class ItemLatest extends StatelessWidget {
                             child: Container(
                               padding: EdgeInsets.only(left: 8.0),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.only(bottom: 8.0),
                                     child: Text(
-                                      'Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e',
+                                      title,
                                       style: GoogleFonts.heebo(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -170,11 +220,14 @@ class ItemLatest extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Column(
-                                      children: [
-                                        SingleChapterLink(),
-                                        SingleChapterLink(),
-                                        SingleChapterLink(),
-                                      ],
+                                      children: listChapter
+                                          .map(
+                                            (e) => SingleChapterLink(
+                                              title: e.title,
+                                              time: e.timeUploaded,
+                                            ),
+                                          )
+                                          .toList(),
                                     ),
                                   )
                                 ],
@@ -201,7 +254,11 @@ class ItemLatest extends StatelessWidget {
 class SingleChapterLink extends StatelessWidget {
   const SingleChapterLink({
     Key key,
+    this.title,
+    this.time,
   }) : super(key: key);
+
+  final String title, time;
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +280,7 @@ class SingleChapterLink extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                'Chapter 29',
+                title,
                 style: GoogleFonts.heebo(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
@@ -237,7 +294,7 @@ class SingleChapterLink extends StatelessWidget {
             ),
           ),
           Text(
-            '26 mins ago',
+            time,
             style: GoogleFonts.heebo(
               fontSize: 13,
               fontStyle: FontStyle.italic,
@@ -252,9 +309,13 @@ class SingleChapterLink extends StatelessWidget {
 
 // UPDATE PROJECT [SECTION 2]
 class ComicUpdateProject extends StatelessWidget {
-  ComicUpdateProject({this.width});
+  ComicUpdateProject({
+    this.width,
+    this.data,
+  });
 
   final double width;
+  final List<ComicV2> data;
 
   @override
   Widget build(BuildContext context) {
@@ -262,52 +323,41 @@ class ComicUpdateProject extends StatelessWidget {
       margin: EdgeInsets.only(top: 10.0),
       width: width,
       height: (width * .7),
-      // alignment: Alignment.center,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 5.0),
-            child: SingleProject(
+        children: data.map((e) {
+          if (data.indexOf(e) == 0) {
+            return Container(
+              margin: EdgeInsets.only(left: 5.0),
+              child: SingleProject(
+                width: width,
+                image: e.image,
+                title: e.title,
+                chapterNum: e.chapter.toString(),
+                isHot: e.isHot,
+              ),
+            );
+          } else if (data.indexOf(e) == data.length - 1) {
+            return Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: SingleProject(
+                width: width,
+                image: e.image,
+                title: e.title,
+                chapterNum: e.chapter.toString(),
+                isHot: e.isHot,
+              ),
+            );
+          } else {
+            return SingleProject(
               width: width,
-              image:
-                  'https://komikcast.com/wp-content/uploads/2020/03/killthero-e1585211534116.png',
-              title: 'Metropolitan Supremacy System',
-              chapterNum: '19',
-            ),
-          ),
-          SingleProject(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2018/06/ride-king.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-          ),
-          SingleProject(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2020/06/oopartsd-e1591053498578.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-          ),
-          SingleProject(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2019/12/mwrtrpsystem.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 5.0),
-            child: SingleProject(
-              width: width,
-              image:
-                  'https://komikcast.com/wp-content/uploads/2019/05/jr290rjkasgmn-e1566741890856.jpg',
-              title: 'Metropolitan Supremacy System',
-              chapterNum: '19',
-            ),
-          ),
-        ],
+              image: e.image,
+              title: e.title,
+              chapterNum: e.chapter.toString(),
+              isHot: e.isHot,
+            );
+          }
+        }).toList(),
       ),
     );
   }
@@ -394,7 +444,7 @@ class SingleProject extends StatelessWidget {
               ),
             ),
             Text(
-              'Chapter $chapterNum',
+              '$chapterNum',
               style: GoogleFonts.heebo(
                 fontSize: 15,
                 height: 1.5,
@@ -416,9 +466,11 @@ class ComicSlider extends StatelessWidget {
   const ComicSlider({
     Key key,
     @required this.width,
+    this.data,
   }) : super(key: key);
 
   final double width;
+  final List<ComicV1> data;
 
   @override
   Widget build(BuildContext context) {
@@ -426,72 +478,44 @@ class ComicSlider extends StatelessWidget {
       margin: EdgeInsets.only(top: 10.0),
       width: width,
       height: (width * .83),
-      // alignment: Alignment.center,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 5.0),
-            child: SingleSlider(
+        children: data.map((e) {
+          if (data.indexOf(e) == 0) {
+            return Container(
+              margin: EdgeInsets.only(left: 5.0),
+              child: SingleSlider(
+                width: width,
+                image: e.image,
+                title: e.title,
+                chapterNum: e.chapter.toString(),
+                type: e.type,
+                linkId: e.linkId,
+              ),
+            );
+          } else if (data.indexOf(e) == data.length - 1) {
+            return Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: SingleSlider(
+                width: width,
+                image: e.image,
+                title: e.title,
+                chapterNum: e.chapter.toString(),
+                type: e.type,
+                linkId: e.linkId,
+              ),
+            );
+          } else {
+            return SingleSlider(
               width: width,
-              image:
-                  'https://komikcast.com/wp-content/uploads/2019/08/394643123213da-e1565782699221.jpg',
-              title: 'Metropolitan Supremacy System',
-              chapterNum: '19',
-              type: 'Manhua',
-            ),
-          ),
-          SingleSlider(
-            width: width,
-            image: 'https://komikcast.com/wp-content/uploads/2017/08/180-1.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manga',
-          ),
-          SingleSlider(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2020/02/adlasofalnoe.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manhwa',
-          ),
-          SingleSlider(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2020/06/IMG_20200624_174041-e1592995348216.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manhwa',
-          ),
-          SingleSlider(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2020/06/22fsg1sa5w3rt1agv15-e1591782065864.jpeg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manga',
-          ),
-          SingleSlider(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2020/06/4fd2saf2725wtv1-e1592991232714.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manga',
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 5.0),
-            child: SingleSlider(
-              width: width,
-              image:
-                  'https://komikcast.com/wp-content/uploads/2019/01/binetsu.jpg',
-              title: 'Metropolitan Supremacy System',
-              chapterNum: '19',
-              type: 'Manga',
-            ),
-          ),
-        ],
+              image: e.image,
+              title: e.title,
+              chapterNum: e.chapter.toString(),
+              type: e.type,
+              linkId: e.linkId,
+            );
+          }
+        }).toList(),
       ),
     );
   }
@@ -499,22 +523,27 @@ class ComicSlider extends StatelessWidget {
 
 // ITEM FOR SLIDER
 class SingleSlider extends StatelessWidget {
-  const SingleSlider(
-      {Key key,
-      @required this.width,
-      this.chapterNum,
-      this.image,
-      this.title,
-      this.type})
-      : super(key: key);
+  const SingleSlider({
+    Key key,
+    @required this.width,
+    this.chapterNum,
+    this.image,
+    this.title,
+    this.type,
+    this.linkId,
+  }) : super(key: key);
 
   final double width;
-  final String image, title, chapterNum, type;
+  final String image, title, chapterNum, type, linkId;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Modular.to.pushNamed('/detailmanga', arguments: image),
+      onTap: () => Modular.to.pushNamed('/detailmanga', arguments: {
+        'image': image,
+        'title': title,
+        'linkId': linkId,
+      }),
       child: Container(
         margin: EdgeInsets.only(left: 5.0, right: 5.0),
         width: width * .4,

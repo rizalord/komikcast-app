@@ -15,9 +15,9 @@ import 'package:komikcast/ui/manga_pages/tab_chapters.dart';
 import 'package:komikcast/ui/manga_pages/tab_overview.dart';
 
 class DetailManga extends StatefulWidget {
-  DetailManga({this.tag});
+  DetailManga({this.image, this.title, this.linkId});
 
-  final String tag;
+  final String image, title, linkId;
 
   @override
   _DetailMangaState createState() => _DetailMangaState();
@@ -86,7 +86,7 @@ class _DetailMangaState extends State<DetailManga> {
               ],
             ),
             CustomAppBar(
-                sliverBloc: sliverBloc, width: width, image: widget.tag),
+                sliverBloc: sliverBloc, width: width, image: widget.image),
             FloatingMenu(width: width),
           ],
         ),
@@ -335,7 +335,7 @@ class PageHeader extends StatelessWidget {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: CachedNetworkImageProvider(
-                  widget.tag,
+                  widget.image,
                 ),
               ),
             ),
