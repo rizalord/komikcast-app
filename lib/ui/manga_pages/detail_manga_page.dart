@@ -11,8 +11,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
+import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/models/detail_comic.dart';
 import 'package:komikcast/ui/manga_pages/tab_chapters.dart';
 import 'package:komikcast/ui/manga_pages/tab_overview.dart';
+
+/**
+ * PARAMETER
+ * - image  ex: https://komikcast.com/wp-content/uploads/2018/06/00a-e1529951476666.jpg
+ * - title  ex: Chuuko demo Koi ga Shitai!
+ * - linkId ex: chuuko-demo-koi-ga-shitai/
+ */
 
 class DetailManga extends StatefulWidget {
   DetailManga({this.image, this.title, this.linkId});
@@ -26,11 +35,21 @@ class DetailManga extends StatefulWidget {
 class _DetailMangaState extends State<DetailManga> {
   var top = 0.0;
   var blur = 0.0;
+  bool isLoaded = false;
+  DetailComic detail = DetailComic();
 
   @override
   void initState() {
     super.initState();
+    getData();
     SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+  void getData() async {
+    detail = await ComicData.getDetailKomik(id: widget.linkId);
+    setState(() {
+      isLoaded = true;
+    });
   }
 
   @override
@@ -62,7 +81,6 @@ class _DetailMangaState extends State<DetailManga> {
                     builder: (context, constraints) {
                       top = constraints.biggest.height;
                       blur = ((width / constraints.biggest.height) - 1) * 4;
-
                       // BLOC DISPATCH
                       blurBloc.add(blur);
                       sliverBloc.add(
@@ -72,22 +90,35 @@ class _DetailMangaState extends State<DetailManga> {
                             ? true
                             : false,
                       );
-
                       return FlexibleSpaceBar(
                         title: Container(),
-                        background: PageHeader(widget: widget, width: width),
+                        background: PageHeader(
+                            image: widget.image,
+                            title: widget.title,
+                            isLoaded: isLoaded,
+                            width: width,
+                            detail: detail),
                       );
                     },
                   ),
                   leading: Container(),
                   actions: [Container()],
                 ),
-                SliverContent(width: width, setState: this.setState),
+                SliverContent(
+                  width: width,
+                  setState: this.setState,
+                  isLoaded: isLoaded,
+                  detail: detail,
+                ),
               ],
             ),
             CustomAppBar(
-                sliverBloc: sliverBloc, width: width, image: widget.image),
-            FloatingMenu(width: width),
+              sliverBloc: sliverBloc,
+              width: width,
+              image: widget.image,
+              title: widget.title,
+            ),
+            isLoaded ? FloatingMenu(width: width) : Container(),
           ],
         ),
       ),
@@ -187,11 +218,12 @@ class CustomAppBar extends StatelessWidget {
     @required this.sliverBloc,
     @required this.width,
     this.image,
+    this.title,
   }) : super(key: key);
 
   final SliverBloc sliverBloc;
   final double width;
-  final String image;
+  final String image, title;
 
   @override
   Widget build(BuildContext context) {
@@ -231,9 +263,13 @@ class CustomAppBar extends StatelessWidget {
                       ),
                       SizedBox(width: 8.0),
                       state
-                          ? Text(
-                              'My Beautiful Fiance',
-                              style: Theme.of(context).textTheme.headline6,
+                          ? Expanded(
+                              child: Text(
+                                title,
+                                style: Theme.of(context).textTheme.headline6,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             )
                           : Container(),
                     ],
@@ -295,19 +331,35 @@ class SliverContent extends StatelessWidget {
     Key key,
     @required this.width,
     this.setState,
+    this.isLoaded,
+    this.detail,
   }) : super(key: key);
 
   final Function setState;
-
+  final bool isLoaded;
   final double width;
+  final DetailComic detail;
 
   @override
   Widget build(BuildContext context) {
     return SliverStickyHeader(
-      header: TabContainer(width: width, setState: setState),
+      header: TabContainer(
+        width: width,
+        setState: setState,
+        isLoaded: isLoaded,
+      ),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          (context, i) => ContentManga(width: width),
+          (context, i) => isLoaded
+              ? ContentManga(
+                  width: width,
+                  detail: detail,
+                )
+              : Container(
+                  width: width,
+                  height: kToolbarHeight * 4,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
           childCount: 1,
         ),
       ),
@@ -318,12 +370,17 @@ class SliverContent extends StatelessWidget {
 class PageHeader extends StatelessWidget {
   const PageHeader({
     Key key,
-    @required this.widget,
     @required this.width,
+    @required this.title,
+    @required this.image,
+    this.isLoaded,
+    this.detail,
   }) : super(key: key);
 
-  final DetailManga widget;
   final double width;
+  final String image, title;
+  final bool isLoaded;
+  final DetailComic detail;
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +392,7 @@ class PageHeader extends StatelessWidget {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: CachedNetworkImageProvider(
-                  widget.image,
+                  image,
                 ),
               ),
             ),
@@ -366,10 +423,10 @@ class PageHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                StatusManga(text: 'Tamat'),
-                TitleManga(text: 'Kukuh Nolep'),
-                AuthorManga(text: 'Wibu Nolep'),
-                RatingManga(value: '4.7'),
+                isLoaded ? StatusManga(text: detail.status) : Container(),
+                TitleManga(text: title),
+                AuthorManga(text: isLoaded ? detail.author : '-'),
+                isLoaded ? RatingManga(value: detail.rating) : Container(),
               ],
             ),
           ),
@@ -379,18 +436,33 @@ class PageHeader extends StatelessWidget {
   }
 }
 
-class ContentManga extends StatelessWidget {
+class ContentManga extends StatefulWidget {
   ContentManga({
     Key key,
     @required this.width,
+    this.detail,
   }) : super(key: key);
 
   final double width;
+  final DetailComic detail;
+
+  @override
+  _ContentMangaState createState() => _ContentMangaState();
+}
+
+class _ContentMangaState extends State<ContentManga> {
   var index = 0;
-  var widgetList = [
-    TabOverview(),
-    TabChapters(),
-  ];
+
+  var widgetList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    widgetList = [
+      TabOverview(detail: widget.detail),
+      TabChapters(detail: widget.detail),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -415,10 +487,12 @@ class TabContainer extends StatelessWidget {
     Key key,
     @required this.width,
     this.setState,
+    this.isLoaded,
   }) : super(key: key);
 
   final double width;
   final Function setState;
+  final bool isLoaded;
 
   @override
   Widget build(BuildContext context) {
@@ -469,18 +543,20 @@ class TabContainer extends StatelessWidget {
               ),
             ],
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 5.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(width),
-              child: Material(
-                child: IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
+          isLoaded
+              ? Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(width),
+                    child: Material(
+                      child: IconButton(
+                        icon: Icon(Icons.favorite_border),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

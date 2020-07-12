@@ -37,7 +37,7 @@ class SingleChapter {
   factory SingleChapter.fromJson(Map<String, dynamic> json) {
     return SingleChapter(
       link: json['link'],
-      title: json['title'],
+      title: json['title'] ,
       linkId: json['linkId'],
       timeUploaded: json['time_uploaded'],
     );

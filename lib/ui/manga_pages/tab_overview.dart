@@ -3,8 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
+import 'package:komikcast/models/detail_comic.dart';
 
 class TabOverview extends StatefulWidget {
+  final DetailComic detail;
+
+  TabOverview({this.detail});
+
   @override
   _TabOverviewState createState() => _TabOverviewState();
 }
@@ -62,7 +67,7 @@ class _TabOverviewState extends State<TabOverview> {
                     ),
                   ),
                   Text(
-                    'Action, Military, Comedy, Drama, Historycal',
+                    widget.detail.genres.join(', '),
                     style: GoogleFonts.heebo(
                       fontSize: 15.0,
                       fontWeight: FontWeight.w300,
@@ -80,7 +85,7 @@ class _TabOverviewState extends State<TabOverview> {
                     ),
                   ),
                   Text(
-                    'Kinoshita Kazuya baru saja dicampakkan pacarnya, karna patah hati dia mencoba aplikasi “rental girlfriend” (pacar sewaan) untuk mengobati gundah gulana dalam hatinya. Bagaimanakah kisah Kazuya tersebut, mari kita simak bersama mimin Komikcast',
+                    widget.detail.sinopsis,
                     style: GoogleFonts.heebo(
                       fontSize: 15.0,
                       fontWeight: FontWeight.w300,
@@ -114,7 +119,7 @@ class _TabOverviewState extends State<TabOverview> {
                               ),
                             ),
                             Text(
-                              'July 1, 2020',
+                              widget.detail.updatedOn,
                               style: GoogleFonts.heebo(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w300,
@@ -135,7 +140,7 @@ class _TabOverviewState extends State<TabOverview> {
                               ),
                             ),
                             Text(
-                              'July 12, 2017',
+                              widget.detail.released,
                               style: GoogleFonts.heebo(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w300,

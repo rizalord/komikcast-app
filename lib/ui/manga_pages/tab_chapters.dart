@@ -3,8 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
+import 'package:komikcast/models/detail_comic.dart';
 
 class TabChapters extends StatefulWidget {
+  final DetailComic detail;
+
+  TabChapters({this.detail});
+
   @override
   _TabChaptersState createState() => _TabChaptersState();
 }
@@ -72,7 +77,7 @@ class _TabChaptersState extends State<TabChapters> {
                       Container(
                         margin: EdgeInsets.only(left: 20.0),
                         child: Text(
-                          '22 Chapters',
+                          '${widget.detail.listChapters.length} Chapters',
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             color: Theme.of(context)
@@ -104,7 +109,7 @@ class _TabChaptersState extends State<TabChapters> {
                     child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 10,
+                      itemCount: widget.detail.listChapters.length,
                       itemBuilder: (context, idx) {
                         return InkWell(
                           onTap: () => Modular.to.pushNamed('/readmanga'),
@@ -126,14 +131,17 @@ class _TabChaptersState extends State<TabChapters> {
                                 Container(
                                   margin: EdgeInsets.only(left: 20.0),
                                   child: Text(
-                                    'Chapter $idx',
+                                    'Chapter ' +
+                                        widget.detail.listChapters[idx].chapter
+                                            .toString(),
                                     style: GoogleFonts.poppins(fontSize: 14.0),
                                   ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(right: 20.0),
                                   child: Text(
-                                    '3 hours ago',
+                                    widget.detail.listChapters[idx].timeRelease
+                                        .toString(),
                                     style: GoogleFonts.poppins(fontSize: 14.0),
                                   ),
                                 ),
