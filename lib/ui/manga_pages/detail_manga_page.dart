@@ -37,6 +37,7 @@ class _DetailMangaState extends State<DetailManga> {
   var blur = 0.0;
   bool isLoaded = false;
   DetailComic detail = DetailComic();
+  SingleChapterDetail idFirstChapter;
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _DetailMangaState extends State<DetailManga> {
 
   void getData() async {
     detail = await ComicData.getDetailKomik(id: widget.linkId);
+    idFirstChapter = detail.listChapters.last;
     if (this.mounted)
       setState(() {
         isLoaded = true;
@@ -123,7 +125,13 @@ class _DetailMangaState extends State<DetailManga> {
                 image: widget.image,
                 title: widget.title,
               ),
-              isLoaded ? FloatingMenu(width: width) : Container(),
+              isLoaded
+                  ? FloatingMenu(
+                      width: width,
+                      mangaId: widget.linkId,
+                      chapter: detail.listChapters.last,
+                    )
+                  : Container(),
             ],
           ),
         ),
@@ -136,9 +144,13 @@ class FloatingMenu extends StatelessWidget {
   const FloatingMenu({
     Key key,
     @required this.width,
+    this.chapter,
+    this.mangaId,
   }) : super(key: key);
 
   final double width;
+  final SingleChapterDetail chapter;
+  final String mangaId;
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +207,13 @@ class FloatingMenu extends StatelessWidget {
                       borderRadius: BorderRadius.circular(width),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () => Modular.to.pushNamed(
+                        '/readmanga',
+                        arguments: {
+                          'mangaId': mangaId,
+                          'currentId': chapter.linkId,
+                        },
+                      ),
                       child: Container(
                         height: kToolbarHeight - 10,
                         alignment: Alignment.center,

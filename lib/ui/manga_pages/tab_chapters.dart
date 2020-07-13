@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/bloc/reverse_chapter_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/models/detail_comic.dart';
 
@@ -51,6 +52,7 @@ class _TabChaptersState extends State<TabChapters> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+
     return BlocBuilder<ScrollBloc, ScrollPhysics>(
       builder: (context, state) {
         return NotificationListener(
@@ -58,113 +60,122 @@ class _TabChaptersState extends State<TabChapters> {
           child: SingleChildScrollView(
             controller: controller,
             physics: state,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  width: width,
-                  height: kToolbarHeight - 10,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Theme.of(context)
-                            .textSelectionHandleColor
-                            .withOpacity(.2),
+            child: BlocBuilder<ReverseChapterBloc, bool>(
+              builder: (ctx, reverse) => Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: width,
+                    height: kToolbarHeight - 10,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context)
+                              .textSelectionHandleColor
+                              .withOpacity(.2),
+                        ),
                       ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          '${widget.detail.listChapters.length} Chapters',
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: Theme.of(context)
-                                .textSelectionHandleColor
-                                .withOpacity(.6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 20.0),
+                          child: Text(
+                            '${widget.detail.listChapters.length} Chapters',
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: Theme.of(context)
+                                  .textSelectionHandleColor
+                                  .withOpacity(.6),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 6.0),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.swap_vert,
-                            color: Theme.of(context)
-                                .textSelectionHandleColor
-                                .withOpacity(.6),
+                        Container(
+                          margin: EdgeInsets.only(right: 6.0),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.swap_vert,
+                              color: Theme.of(context)
+                                  .textSelectionHandleColor
+                                  .withOpacity(.6),
+                            ),
+                            onPressed: () =>
+                                Modular.get<ReverseChapterBloc>().add(!reverse),
                           ),
-                          onPressed: () {},
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: MediaQuery.removePadding(
-                    removeTop: true,
-                    context: context,
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: widget.detail.listChapters.length,
-                      itemBuilder: (context, idx) {
-                        return InkWell(
-                          onTap: () => Modular.to.pushNamed(
-                            '/readmanga',
-                            arguments: {
-                              'mangaId': widget.mangaId,
-                              'currentId':
-                                  widget.detail.listChapters[idx].linkId,
-                            },
-                          ),
-                          child: Container(
-                            width: width,
-                            height: kToolbarHeight + 10,
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Theme.of(context)
-                                      .textSelectionHandleColor
-                                      .withOpacity(.1),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: MediaQuery.removePadding(
+                      removeTop: true,
+                      context: context,
+                      child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        reverse: reverse,
+                        itemCount: widget.detail.listChapters.length,
+                        itemBuilder: (context, idx) {
+                          return InkWell(
+                            onTap: () => Modular.to.pushNamed(
+                              '/readmanga',
+                              arguments: {
+                                'mangaId': widget.mangaId,
+                                'currentId':
+                                    widget.detail.listChapters[idx].linkId,
+                              },
+                            ),
+                            child: Container(
+                              width: width,
+                              height: kToolbarHeight + 10,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Theme.of(context)
+                                        .textSelectionHandleColor
+                                        .withOpacity(.1),
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 20.0),
-                                  child: Text(
-                                    'Chapter ' +
-                                        widget.detail.listChapters[idx].chapter
-                                            .toString(),
-                                    style: GoogleFonts.poppins(fontSize: 14.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(left: 20.0),
+                                    child: Text(
+                                      'Chapter ' +
+                                          widget
+                                              .detail.listChapters[idx].chapter
+                                              .toString(),
+                                      style:
+                                          GoogleFonts.poppins(fontSize: 14.0),
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(right: 20.0),
-                                  child: Text(
-                                    widget.detail.listChapters[idx].timeRelease
-                                        .toString(),
-                                    style: GoogleFonts.poppins(fontSize: 14.0),
+                                  Container(
+                                    margin: EdgeInsets.only(right: 20.0),
+                                    child: Text(
+                                      widget
+                                          .detail.listChapters[idx].timeRelease
+                                          .toString(),
+                                      style:
+                                          GoogleFonts.poppins(fontSize: 14.0),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         );
