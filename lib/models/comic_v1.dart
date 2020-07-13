@@ -1,6 +1,5 @@
 class ComicV1 {
-  final String chapter, image, link, linkId, title, type;
-  final double rating;
+  final String chapter, image, link, linkId, title, type,rating;
 
   ComicV1({
     this.chapter,
@@ -18,7 +17,7 @@ class ComicV1 {
       image: json['image'],
       link: json['link'],
       linkId: json['linkId'],
-      rating: double.parse(json['rating']),
+      rating: json['rating'],
       title: json['title'],
       type: json['type'],
     );

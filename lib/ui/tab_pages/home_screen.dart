@@ -99,6 +99,7 @@ class ComicLatestChapter extends StatelessWidget {
               title: e.title,
               image: e.image,
               listChapter: e.chapters,
+              linkId: e.linkId,
             );
           }).toList(),
         ),
@@ -115,12 +116,13 @@ class ItemLatest extends StatelessWidget {
     this.isHot = false,
     this.title,
     this.image,
+    this.linkId,
     this.listChapter,
   }) : super(key: key);
 
   final double width;
   final bool isHot;
-  final String title, image;
+  final String title, image, linkId;
   final List<SingleChapter> listChapter;
 
   @override
@@ -147,7 +149,12 @@ class ItemLatest extends StatelessWidget {
                 Flexible(
                   fit: FlexFit.loose,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () =>
+                        Modular.to.pushNamed('/detailmanga', arguments: {
+                      'image': image,
+                      'title': title,
+                      'linkId': linkId,
+                    }),
                     child: Container(
                       child: Row(
                         children: [
@@ -225,6 +232,8 @@ class ItemLatest extends StatelessWidget {
                                             (e) => SingleChapterLink(
                                               title: e.title,
                                               time: e.timeUploaded,
+                                              mangaId: linkId,
+                                              currentId: e.linkId,
                                             ),
                                           )
                                           .toList(),
@@ -256,9 +265,11 @@ class SingleChapterLink extends StatelessWidget {
     Key key,
     this.title,
     this.time,
+    this.mangaId,
+    this.currentId,
   }) : super(key: key);
 
-  final String title, time;
+  final String title, time, mangaId, currentId;
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +279,13 @@ class SingleChapterLink extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () => Modular.to.pushNamed(
+              '/readmanga',
+              arguments: {
+                'mangaId': mangaId,
+                'currentId': currentId,
+              },
+            ),
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: 5,
@@ -335,6 +352,7 @@ class ComicUpdateProject extends StatelessWidget {
                 title: e.title,
                 chapterNum: e.chapter.toString(),
                 isHot: e.isHot,
+                linkId: e.linkId,
               ),
             );
           } else if (data.indexOf(e) == data.length - 1) {
@@ -346,6 +364,7 @@ class ComicUpdateProject extends StatelessWidget {
                 title: e.title,
                 chapterNum: e.chapter.toString(),
                 isHot: e.isHot,
+                linkId: e.linkId,
               ),
             );
           } else {
@@ -355,6 +374,7 @@ class ComicUpdateProject extends StatelessWidget {
               title: e.title,
               chapterNum: e.chapter.toString(),
               isHot: e.isHot,
+              linkId: e.linkId,
             );
           }
         }).toList(),
@@ -373,16 +393,21 @@ class SingleProject extends StatelessWidget {
     this.title,
     this.type,
     this.isHot = true,
+    this.linkId,
   }) : super(key: key);
 
   final double width;
-  final String image, title, chapterNum, type;
+  final String image, title, chapterNum, type, linkId;
   final bool isHot;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Modular.to.pushNamed('/detailmanga', arguments: {
+        'image': image,
+        'title': title,
+        'linkId': linkId,
+      }),
       child: Container(
         margin: EdgeInsets.only(left: 5.0, right: 5.0),
         width: width * .32,

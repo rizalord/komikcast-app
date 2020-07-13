@@ -1,16 +1,61 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
+import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/models/detail_chapter.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
 class ReadMangaPage extends StatefulWidget {
+  final String mangaId, currentId;
+
+  ReadMangaPage({this.mangaId, this.currentId});
+
   @override
   _ReadMangaPageState createState() => _ReadMangaPageState();
 }
 
 class _ReadMangaPageState extends State<ReadMangaPage> {
   var showMenu = false;
+  var mangaId, currentId;
+  var isLoaded = false;
+  String nextId, prevId, currentChapter;
+  List<SelectChapter> listChapter = [];
+  List<ImageChapter> listImage = [];
+
+  @override
+  void initState() {
+    super.initState();
+    mangaId = widget.mangaId;
+    currentId = widget.currentId;
+
+    getListData();
+  }
+
+  void getListData() async {
+    final res = await ComicData.getChapterKomik(id: currentId);
+    listChapter = res.selectChapter;
+    listImage = res.images;
+
+    prevId = res.prevLinkId;
+    nextId = res.nextLinkId;
+    currentChapter = res.chapter;
+
+    if (this.mounted)
+      setState(() {
+        isLoaded = true;
+      });
+  }
+
+  void changeChapter({id}) {
+    if (this.mounted) {
+      setState(() {
+        currentId = id;
+        isLoaded = false;
+
+        getListData();
+      });
+    }
+  }
 
   void setShowMenu(bool state) {
     setState(() {
@@ -29,9 +74,30 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
         height: height,
         child: Stack(
           children: [
-            Content(setShowMenu: setShowMenu, showMenu: showMenu),
-            HeaderMenu(width: width, showMenu: showMenu),
-            BottomMenu(width: width, showMenu: showMenu),
+            isLoaded
+                ? Content(
+                    setShowMenu: setShowMenu,
+                    showMenu: showMenu,
+                    images: listImage,
+                  )
+                : Positioned.fill(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+            HeaderMenu(
+              width: width,
+              showMenu: showMenu,
+              currentChapter: currentChapter,
+            ),
+            BottomMenu(
+              width: width,
+              showMenu: showMenu,
+              nextId: nextId,
+              prevId: prevId,
+              changeChapter: changeChapter,
+              isLoaded: isLoaded,
+            ),
           ],
         ),
       ),
@@ -44,10 +110,12 @@ class Content extends StatefulWidget {
     Key key,
     this.setShowMenu,
     this.showMenu,
+    this.images,
   }) : super(key: key);
 
   final Function setShowMenu;
   final bool showMenu;
+  final List<ImageChapter> images;
 
   @override
   _ContentState createState() => _ContentState();
@@ -55,8 +123,6 @@ class Content extends StatefulWidget {
 
 class _ContentState extends State<Content> {
   final ScrollController _controller = ScrollController();
-  double _scaleFactor = 1.0;
-  double _baseScaleFactor = 1.0;
 
   @override
   void initState() {
@@ -84,7 +150,7 @@ class _ContentState extends State<Content> {
       child: Zoom(
         width: width + (width * .6),
         height: height + (height * .6),
-        backgroundColor: Colors.orange,
+        backgroundColor: Theme.of(context).primaryColor,
         opacityScrollBars: 0.9,
         scrollWeight: 10.0,
         centerOnScale: false,
@@ -105,35 +171,15 @@ class _ContentState extends State<Content> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: 8,
+                itemCount: widget.images.length,
                 itemBuilder: (ctx, idx) => CachedNetworkImage(
-                  imageUrl:
-                      'https://cdn.komikcast.com/wp-content/img/H/Haikyuu!!/399/00${idx + 1}.jpg',
+                  imageUrl: widget.images[idx].link,
                 ),
               ),
             ),
           ),
         ),
       ),
-      // child: Container(
-      //   child: SingleChildScrollView(
-      //     controller: _controller,
-      //     child: GestureDetector(
-      //       onTap: () {
-      //         widget.setShowMenu(!widget.showMenu);
-      //       },
-      //       child: ListView.builder(
-      //         shrinkWrap: true,
-      //         physics: NeverScrollableScrollPhysics(),
-      //         itemCount: 5,
-      //         itemBuilder: (ctx, idx) => CachedNetworkImage(
-      //           imageUrl:
-      //               'https://cdn.komikcast.com/wp-content/img/H/Haikyuu!!/399/00${idx + 1}.jpg',
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
@@ -143,10 +189,16 @@ class BottomMenu extends StatelessWidget {
     Key key,
     @required this.width,
     this.showMenu,
+    this.nextId,
+    this.prevId,
+    this.changeChapter,
+    this.isLoaded,
   }) : super(key: key);
 
   final double width;
-  final bool showMenu;
+  final bool showMenu, isLoaded;
+  final String prevId, nextId;
+  final Function changeChapter;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +210,7 @@ class BottomMenu extends StatelessWidget {
         height: kToolbarHeight,
         padding: EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor.withOpacity(.75),
+          color: Theme.of(context).primaryColor.withOpacity(.85),
           border: Border(
             top: BorderSide(
               color: Theme.of(context).brightness == Brightness.dark
@@ -178,9 +230,13 @@ class BottomMenu extends StatelessWidget {
               child: IconButton(
                 icon: Icon(
                   Icons.chevron_left,
-                  color: Colors.white,
+                  color: prevId != null
+                      ? Colors.white
+                      : Colors.white.withOpacity(.5),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (prevId != null && isLoaded) changeChapter(id: prevId);
+                },
               ),
             ),
             Material(
@@ -211,9 +267,13 @@ class BottomMenu extends StatelessWidget {
               child: IconButton(
                 icon: Icon(
                   Icons.chevron_right,
-                  color: Colors.white,
+                  color: nextId != null
+                      ? Colors.white
+                      : Colors.white.withOpacity(.5),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (nextId != null && isLoaded) changeChapter(id: nextId);
+                },
               ),
             ),
           ],
@@ -228,10 +288,12 @@ class HeaderMenu extends StatelessWidget {
     Key key,
     @required this.width,
     this.showMenu,
+    this.currentChapter,
   }) : super(key: key);
 
   final double width;
   final bool showMenu;
+  final String currentChapter;
 
   @override
   Widget build(BuildContext context) {
@@ -243,7 +305,7 @@ class HeaderMenu extends StatelessWidget {
         padding: EdgeInsets.only(top: 20),
         height: kToolbarHeight + 20,
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor.withOpacity(.75),
+          color: Theme.of(context).primaryColor.withOpacity(.85),
           border: Border(
             bottom: BorderSide(
               color: Theme.of(context).brightness == Brightness.dark
@@ -274,7 +336,7 @@ class HeaderMenu extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Text(
-                    'Chapter 1',
+                    'Chapter $currentChapter',
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       color: Colors.white,

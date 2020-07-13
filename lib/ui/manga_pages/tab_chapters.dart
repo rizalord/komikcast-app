@@ -7,8 +7,12 @@ import 'package:komikcast/models/detail_comic.dart';
 
 class TabChapters extends StatefulWidget {
   final DetailComic detail;
+  final String mangaId;
 
-  TabChapters({this.detail});
+  TabChapters({
+    this.detail,
+    this.mangaId,
+  });
 
   @override
   _TabChaptersState createState() => _TabChaptersState();
@@ -112,7 +116,14 @@ class _TabChaptersState extends State<TabChapters> {
                       itemCount: widget.detail.listChapters.length,
                       itemBuilder: (context, idx) {
                         return InkWell(
-                          onTap: () => Modular.to.pushNamed('/readmanga'),
+                          onTap: () => Modular.to.pushNamed(
+                            '/readmanga',
+                            arguments: {
+                              'mangaId': widget.mangaId,
+                              'currentId':
+                                  widget.detail.listChapters[idx].linkId,
+                            },
+                          ),
                           child: Container(
                             width: width,
                             height: kToolbarHeight + 10,
@@ -155,19 +166,6 @@ class _TabChaptersState extends State<TabChapters> {
                 )
               ],
             ),
-            // child: ListView.builder(
-            //   physics: NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   itemCount: 5,
-            //   itemBuilder: (context, idx) {
-            // return Container(
-            //   width: width,
-            //   height: width * .5,
-            //   color: Colors.white,
-            //   margin: EdgeInsets.only(bottom: 10),
-            // );
-            //   },
-            // ),
           ),
         );
       },

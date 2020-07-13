@@ -70,7 +70,10 @@ class AppModule extends MainModule {
         ),
         Router(
           '/readmanga',
-          child: (_, args) => ReadMangaPage(),
+          child: (_, args) => ReadMangaPage(
+            mangaId: args.data['mangaId'],
+            currentId: args.data['currentId'],
+          ),
           transition: TransitionType.rightToLeft,
         ),
         Router(

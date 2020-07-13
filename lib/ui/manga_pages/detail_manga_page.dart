@@ -47,9 +47,10 @@ class _DetailMangaState extends State<DetailManga> {
 
   void getData() async {
     detail = await ComicData.getDetailKomik(id: widget.linkId);
-    setState(() {
-      isLoaded = true;
-    });
+    if (this.mounted)
+      setState(() {
+        isLoaded = true;
+      });
   }
 
   @override
@@ -61,65 +62,70 @@ class _DetailMangaState extends State<DetailManga> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     final sliverBloc = Modular.get<SliverBloc>();
     final blurBloc = Modular.get<BlurBloc>();
 
     return Scaffold(
       body: DefaultTabController(
         length: 2,
-        child: Stack(
-          children: [
-            CustomScrollView(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              slivers: [
-                SliverAppBar(
-                  pinned: true,
-                  expandedHeight: width,
-                  backgroundColor: Theme.of(context).textSelectionColor,
-                  flexibleSpace: LayoutBuilder(
-                    builder: (context, constraints) {
-                      top = constraints.biggest.height;
-                      blur = ((width / constraints.biggest.height) - 1) * 4;
-                      // BLOC DISPATCH
-                      blurBloc.add(blur);
-                      sliverBloc.add(
-                        top ==
-                                MediaQuery.of(context).padding.top +
-                                    kToolbarHeight
-                            ? true
-                            : false,
-                      );
-                      return FlexibleSpaceBar(
-                        title: Container(),
-                        background: PageHeader(
-                            image: widget.image,
-                            title: widget.title,
-                            isLoaded: isLoaded,
-                            width: width,
-                            detail: detail),
-                      );
-                    },
+        child: Container(
+          width: width,
+          height: height,
+          child: Stack(
+            children: [
+              CustomScrollView(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                slivers: [
+                  SliverAppBar(
+                    pinned: true,
+                    expandedHeight: width,
+                    backgroundColor: Theme.of(context).textSelectionColor,
+                    flexibleSpace: LayoutBuilder(
+                      builder: (context, constraints) {
+                        top = constraints.biggest.height;
+                        blur = ((width / constraints.biggest.height) - 1) * 4;
+                        // BLOC DISPATCH
+                        blurBloc.add(blur);
+                        sliverBloc.add(
+                          top ==
+                                  MediaQuery.of(context).padding.top +
+                                      kToolbarHeight
+                              ? true
+                              : false,
+                        );
+                        return FlexibleSpaceBar(
+                          title: Container(),
+                          background: PageHeader(
+                              image: widget.image,
+                              title: widget.title,
+                              isLoaded: isLoaded,
+                              width: width,
+                              detail: detail),
+                        );
+                      },
+                    ),
+                    leading: Container(),
+                    actions: [Container()],
                   ),
-                  leading: Container(),
-                  actions: [Container()],
-                ),
-                SliverContent(
-                  width: width,
-                  setState: this.setState,
-                  isLoaded: isLoaded,
-                  detail: detail,
-                ),
-              ],
-            ),
-            CustomAppBar(
-              sliverBloc: sliverBloc,
-              width: width,
-              image: widget.image,
-              title: widget.title,
-            ),
-            isLoaded ? FloatingMenu(width: width) : Container(),
-          ],
+                  SliverContent(
+                      width: width,
+                      setState: this.setState,
+                      isLoaded: isLoaded,
+                      detail: detail,
+                      mangaId: widget.linkId),
+                ],
+              ),
+              CustomAppBar(
+                sliverBloc: sliverBloc,
+                width: width,
+                image: widget.image,
+                title: widget.title,
+              ),
+              isLoaded ? FloatingMenu(width: width) : Container(),
+            ],
+          ),
         ),
       ),
     );
@@ -333,12 +339,14 @@ class SliverContent extends StatelessWidget {
     this.setState,
     this.isLoaded,
     this.detail,
+    this.mangaId,
   }) : super(key: key);
 
   final Function setState;
   final bool isLoaded;
   final double width;
   final DetailComic detail;
+  final String mangaId;
 
   @override
   Widget build(BuildContext context) {
@@ -354,6 +362,7 @@ class SliverContent extends StatelessWidget {
               ? ContentManga(
                   width: width,
                   detail: detail,
+                  mangaId: mangaId,
                 )
               : Container(
                   width: width,
@@ -441,10 +450,12 @@ class ContentManga extends StatefulWidget {
     Key key,
     @required this.width,
     this.detail,
+    this.mangaId,
   }) : super(key: key);
 
   final double width;
   final DetailComic detail;
+  final String mangaId;
 
   @override
   _ContentMangaState createState() => _ContentMangaState();
@@ -460,7 +471,10 @@ class _ContentMangaState extends State<ContentManga> {
     super.initState();
     widgetList = [
       TabOverview(detail: widget.detail),
-      TabChapters(detail: widget.detail),
+      TabChapters(
+        detail: widget.detail,
+        mangaId: widget.mangaId,
+      ),
     ];
   }
 

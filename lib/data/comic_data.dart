@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:komikcast/models/comic_v1.dart';
 import 'package:komikcast/models/comic_v2.dart';
 import 'package:komikcast/models/comic_v3.dart';
+import 'package:komikcast/models/detail_chapter.dart';
 import 'package:komikcast/models/detail_comic.dart';
 
 class ComicData {
@@ -32,9 +33,16 @@ class ComicData {
   }
 
   // USED TO GET DETAIL KOMIK BY ID PARAMS
-  static getDetailKomik({id}) async {
+  static Future<DetailComic> getDetailKomik({id}) async {
     final response =
         json.decode((await http.get('${Env.apiUrl}komik?id=$id')).body)['data'];
     return DetailComic.fromJson(response);
+  }
+
+  // USED TO GET IMAGES BY ID CHAPTER
+  static Future<DetailChapter> getChapterKomik({id}) async {
+    final response =
+        json.decode((await http.get('${Env.apiUrl}chapter?id=$id')).body)['data'];
+    return DetailChapter.fromJson(response);
   }
 }
