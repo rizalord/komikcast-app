@@ -174,6 +174,7 @@ class _ContentState extends State<Content> {
                 itemCount: widget.images.length,
                 itemBuilder: (ctx, idx) => CachedNetworkImage(
                   imageUrl: widget.images[idx].link,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
