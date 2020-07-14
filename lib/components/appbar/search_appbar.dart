@@ -27,7 +27,9 @@ class _SearchingAppBarState extends State<SearchingAppBar> {
       searchHint: "Cari komik...",
       mainTextColor: Colors.white,
       onSubmitted: (String query) {
+        FocusScope.of(context).unfocus();
         Modular.to.pushNamed('/search/$query');
+        FocusScope.of(context).unfocus();
       },
       onChange: (String text) {},
       //Will show when SEARCH MODE wasn't active

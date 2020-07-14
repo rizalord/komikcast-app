@@ -7,6 +7,7 @@ import 'package:komikcast/models/comic_v2.dart';
 import 'package:komikcast/models/comic_v3.dart';
 import 'package:komikcast/models/detail_chapter.dart';
 import 'package:komikcast/models/detail_comic.dart';
+import 'package:komikcast/models/search_result.dart';
 
 class ComicData {
   // USED TO GET DATA FROM HOMEPAGE
@@ -41,8 +42,29 @@ class ComicData {
 
   // USED TO GET IMAGES BY ID CHAPTER
   static Future<DetailChapter> getChapterKomik({id}) async {
-    final response =
-        json.decode((await http.get('${Env.apiUrl}chapter?id=$id')).body)['data'];
+    final response = json
+        .decode((await http.get('${Env.apiUrl}chapter?id=$id')).body)['data'];
     return DetailChapter.fromJson(response);
+  }
+
+  // USED TO GET ALL COMIC
+  static getAllKomik({int page}) async {
+    final List response = json.decode(
+        (await http.get('${Env.apiUrl}daftar-komik?page=$page'))
+            .body)['daftar_komik'];
+
+    return response.map<SearchResult>((e) => SearchResult.fromJson(e)).toList();
+  }
+
+  // USED TO GET SPECIFIC COMIC
+  static getSpecificComic({String keyword, int page}) async {
+    List response = [];
+    try {
+      response = json.decode(
+          (await http.get('${Env.apiUrl}search?keyword=$keyword&page=$page'))
+              .body)['results'];
+    } catch (e) {}
+
+    return response.map<SearchResult>((e) => SearchResult.fromJson(e)).toList();
   }
 }

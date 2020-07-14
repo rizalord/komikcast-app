@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/components/custom/search_bar/app_bar_controller.dart';
+import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/models/search_result.dart';
 import 'package:komikcast/ui/tab_pages/search_screen.dart';
 
 class SearchPage extends StatefulWidget {
@@ -18,8 +20,10 @@ class _SearchPageState extends State<SearchPage> {
   final AppBarController appBarController = AppBarController();
   ScrollController _controller = ScrollController();
   bool _isLoading = false, _isGettingData = true;
-  int _count = 10;
+  int page = 1;
   TextEditingController _textController;
+  List<SearchResult> results = [];
+  String currentSearchKeyword = '';
 
   @override
   void initState() {
@@ -27,37 +31,61 @@ class _SearchPageState extends State<SearchPage> {
     listenScroll();
     getData();
     super.initState();
+    Future.delayed(Duration.zero, hideKeyboard);
+  }
+
+  void hideKeyboard() {
+    FocusScope.of(context).unfocus();
   }
 
   void listenScroll() {
     _controller.addListener(() {
       if (_controller.position.atEdge && _controller.position.pixels != 0) {
-        onBottomReached();
+        loadMore();
       }
     });
   }
 
-  void onBottomReached() {
+  void loadMore() {
     setState(() {
       _isLoading = true;
-      _controller.jumpTo(_controller.position.maxScrollExtent);
-      Future.delayed(Duration(seconds: 3), () {
+      page++;
+      Future.delayed(Duration.zero, () async {
+        results.addAll(await ComicData.getSpecificComic(
+            keyword: currentSearchKeyword, page: page));
         if (this.mounted)
           setState(() {
-            _count += 10;
             _isLoading = false;
           });
       });
     });
   }
 
-  void getData() {
-    Future.delayed(Duration(seconds: 3), () {
-      if (this.mounted)
-        setState(() {
-          _isGettingData = false;
+  void getData() async {
+    results =
+        await ComicData.getSpecificComic(keyword: widget.query, page: page);
+    if (this.mounted)
+      setState(() {
+        currentSearchKeyword = widget.query;
+        _isGettingData = false;
+      });
+  }
+
+  void getDataAgain(String keyword) async {
+    if (this.mounted) {
+      setState(() {
+        page = 1;
+        _isGettingData = true;
+        currentSearchKeyword = keyword;
+        Future.delayed(Duration.zero, () async {
+          results =
+              await ComicData.getSpecificComic(keyword: keyword, page: page);
+          setState(() {
+            _isGettingData = false;
+          });
         });
-    });
+      });
+    }
   }
 
   @override
@@ -78,7 +106,7 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             controller: _textController,
             autofocus: true,
-            onSubmitted: (val) {},
+            onSubmitted: getDataAgain,
             style: TextStyle(
               fontSize: 20,
               color: Colors.white,
@@ -102,37 +130,40 @@ class _SearchPageState extends State<SearchPage> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : SingleChildScrollView(
-              controller: _controller,
-              child: Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding:
-                        EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                    itemCount: _count,
-                    itemBuilder: (context, index) => ItemCard(
-                      width: width,
-                      chapter: '04',
-                      type: 'manga',
-                      rating: '7.00',
-                      image:
-                          'https://komikcast.com/wp-content/uploads/2020/05/presicau2.jpg',
-                      isCompleted: false,
-                      title:
-                          'It’s too precious and hard to read !!” 4P Short Stories',
-                    ),
+          : results.length != 0
+              ? SingleChildScrollView(
+                  controller: _controller,
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding:
+                            EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                        itemCount: results.length,
+                        itemBuilder: (context, index) => ItemCard(
+                          width: width,
+                          chapter: results[index].chapter,
+                          type: results[index].type,
+                          rating: results[index].rating,
+                          image: results[index].image,
+                          isCompleted: results[index].isCompleted,
+                          title: results[index].title,
+                          linkId: results[index].linkId,
+                        ),
+                      ),
+                      _isLoading
+                          ? Container(
+                              margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
+                              child: CircularProgressIndicator(),
+                            )
+                          : Container(),
+                    ],
                   ),
-                  _isLoading
-                      ? Container(
-                          margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
-                          child: CircularProgressIndicator(),
-                        )
-                      : Container(),
-                ],
-              ),
-            ),
+                )
+              : Center(
+                  child: Text('Comic Not Found'),
+                ),
     );
   }
 }

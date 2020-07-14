@@ -1,23 +1,37 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'dart:math' as math;
+
+import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/models/search_result.dart';
 
 class SearchTabPage extends StatefulWidget {
   @override
   _SearchTabPageState createState() => _SearchTabPageState();
 }
 
-class _SearchTabPageState extends State<SearchTabPage> {
+class _SearchTabPageState extends State<SearchTabPage>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _controller = ScrollController();
-  bool _isLoading = false;
-  int _count = 10;
+  bool _isLoading = false, _isLoaded = false;
+  int _count = 10, page = 1;
+  List<SearchResult> results = [];
 
   @override
   void initState() {
     listenScroll();
+    getData();
     super.initState();
+  }
+
+  void getData() async {
+    results = await ComicData.getAllKomik(page: page);
+    setState(() {
+      _isLoaded = true;
+    });
   }
 
   void listenScroll() {
@@ -31,10 +45,10 @@ class _SearchTabPageState extends State<SearchTabPage> {
   void onBottomReached() {
     setState(() {
       _isLoading = true;
-      _controller.jumpTo(_controller.position.maxScrollExtent);
-      Future.delayed(Duration(seconds: 3), () {
+      page++;
+      Future.delayed(Duration(seconds: 0), () async {
+        results.addAll(await ComicData.getAllKomik(page: page));
         setState(() {
-          _count += 10;
           _isLoading = false;
         });
       });
@@ -45,54 +59,62 @@ class _SearchTabPageState extends State<SearchTabPage> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SingleChildScrollView(
-        controller: _controller,
-        child: Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-              itemCount: _count,
-              itemBuilder: (context, index) => ItemCard(
-                width: width,
-                chapter: '04',
-                type: 'manga',
-                rating: '7.00',
-                image:
-                    'https://komikcast.com/wp-content/uploads/2020/05/presicau2.jpg',
-                isCompleted: false,
-                title:
-                    'It’s too precious and hard to read !!” 4P Short Stories',
+      body: _isLoaded
+          ? SingleChildScrollView(
+              controller: _controller,
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding:
+                        EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                    itemCount: results.length,
+                    itemBuilder: (context, index) => ItemCard(
+                      width: width,
+                      chapter: results[index].chapter,
+                      type: results[index].type,
+                      rating: results[index].rating,
+                      image: results[index].image,
+                      isCompleted: results[index].isCompleted,
+                      title: results[index].title,
+                      linkId: results[index].linkId,
+                    ),
+                  ),
+                  _isLoading
+                      ? Container(
+                          margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
+                          child: CircularProgressIndicator(),
+                        )
+                      : Container(),
+                ],
               ),
+            )
+          : Center(
+              child: CircularProgressIndicator(),
             ),
-            _isLoading
-                ? Container(
-                    margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
-                    child: CircularProgressIndicator(),
-                  )
-                : Container(),
-          ],
-        ),
-      ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ItemCard extends StatelessWidget {
-  const ItemCard(
-      {Key key,
-      @required this.width,
-      this.image,
-      this.chapter,
-      this.rating,
-      this.type,
-      this.isCompleted = false,
-      this.title})
-      : super(key: key);
+  const ItemCard({
+    Key key,
+    @required this.width,
+    this.image,
+    this.chapter,
+    this.rating,
+    this.type,
+    this.isCompleted = false,
+    this.title,
+    this.linkId,
+  }) : super(key: key);
 
   final double width;
-  final String title, image, chapter, rating, type;
+  final String title, image, chapter, rating, type, linkId;
   final bool isCompleted;
 
   @override
@@ -101,19 +123,12 @@ class ItemCard extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () => Modular.to.pushNamed('/detailmanga', arguments: {
+              'image': image,
+              'title': title,
+              'linkId': linkId,
+            }),
             child: Container(
-              // decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(6),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         blurRadius: 1,
-              //         color: Colors.black.withOpacity(.02),
-              //         offset: Offset(0, 1),
-              //         spreadRadius: 1,
-              //       )
-              //     ]),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
