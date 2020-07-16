@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
 
@@ -15,19 +17,21 @@ class FavoriteTabPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SubHeader(text: 'last readed', width: width),
-            RecentList(width: width),
-            SubHeader(
-              text: 'your favorite',
-              width: width,
-              withNext: false,
-              action: Text(
-                '(20)',
-                style: GoogleFonts.heebo(
-                  color: Colors.blue,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+            BlocBuilder<HistoryBloc, List<Map>>(
+              builder: (context, state) =>
+                  RecentList(width: width, data: state),
             ),
+            SubHeader(
+                text: 'your favorite',
+                width: width,
+                withNext: false,
+                action: Text(
+                  '(20)',
+                  style: GoogleFonts.heebo(
+                    color: Colors.blue,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )),
             FavoriteList(width: width),
           ],
         ),
@@ -169,9 +173,11 @@ class RecentList extends StatelessWidget {
   const RecentList({
     Key key,
     @required this.width,
+    this.data,
   }) : super(key: key);
 
   final double width;
+  final List<Map> data;
 
   @override
   Widget build(BuildContext context) {
@@ -181,60 +187,47 @@ class RecentList extends StatelessWidget {
       child: ListView(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 5.0),
-            child: SingleSlider(
-              width: width,
-              image:
-                  'https://komikcast.com/wp-content/uploads/2019/08/394643123213da-e1565782699221.jpg',
-              title: 'Metropolitan Supremacy System',
-              chapterNum: '19',
-              type: 'Manhua',
-            ),
-          ),
-          SingleSlider(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2019/08/394643123213da-e1565782699221.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manhua',
-          ),
-          SingleSlider(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2019/08/394643123213da-e1565782699221.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manhua',
-          ),
-          SingleSlider(
-            width: width,
-            image:
-                'https://komikcast.com/wp-content/uploads/2019/08/394643123213da-e1565782699221.jpg',
-            title: 'Metropolitan Supremacy System',
-            chapterNum: '19',
-            type: 'Manhua',
-          ),
-        ],
+        reverse: true,
+        children: data
+            .asMap()
+            .map(
+              (i, e) {
+                print(i == 0);
+                return MapEntry(
+                  i,
+                  Container(
+                    margin: EdgeInsets.only(
+                      right: i == 0 ? 5.0 : 0.0,
+                      left: i == data.length - 1 ? 5.0 : 0.0,
+                    ),
+                    child: SingleSlider(
+                      width: width,
+                      image: e['image'],
+                      title: e['title'],
+                      chapterNum: e['chapterName'],
+                    ),
+                  ),
+                );
+              },
+            )
+            .values
+            .toList(),
       ),
     );
   }
 }
 
 class SingleSlider extends StatelessWidget {
-  const SingleSlider(
-      {Key key,
-      @required this.width,
-      this.chapterNum,
-      this.image,
-      this.title,
-      this.type})
-      : super(key: key);
+  const SingleSlider({
+    Key key,
+    @required this.width,
+    this.chapterNum,
+    this.image,
+    this.title,
+  }) : super(key: key);
 
   final double width;
-  final String image, title, chapterNum, type;
+  final String image, title, chapterNum;
 
   @override
   Widget build(BuildContext context) {

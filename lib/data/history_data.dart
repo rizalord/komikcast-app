@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
+import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/detail_chapter.dart';
 
@@ -16,6 +17,7 @@ class HistoryData {
     // Get Values
     // ============================
     List listHistory = db.get('history') != null ? db.get('history') : [];
+    listHistory = listHistory.cast<Map>();
 
     // Get detail komik parent
     // ============================
@@ -33,9 +35,9 @@ class HistoryData {
     listHistory.add(history);
     db.put('history', listHistory);
 
-    // // Store History to Bloc
-    // // ================================
-    // Modular.get<HistoryBloc>()
+    // Store History to Bloc
+    // ================================
+    Modular.get<HistoryBloc>().add(listHistory);
 
     // print('history-saved');
   }

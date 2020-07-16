@@ -41,7 +41,7 @@ class KomikcastSystem {
   }
 
   void historyInit({Box db}) {
-    var historyList = db.get('history') == null ? [] : db.get('history');
-    Modular.get<HistoryBloc>().add(historyList);
+    List historyList = db.get('history') == null ? [] : db.get('history');
+    Modular.get<HistoryBloc>().add(historyList.cast<Map>());
   }
 }
