@@ -6,6 +6,7 @@ import 'package:komikcast/bloc/blur_bloc.dart';
 import 'package:komikcast/bloc/reverse_chapter_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
+import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 
 class AppWidget extends StatelessWidget {
@@ -19,6 +20,7 @@ class AppWidget extends StatelessWidget {
         BlocProvider<BlurBloc>(create: (context) => Modular.get<BlurBloc>()),
         BlocProvider<ScrollBloc>(create: (context) => Modular.get<ScrollBloc>()),
         BlocProvider<ReverseChapterBloc>(create: (context) => Modular.get<ReverseChapterBloc>()),
+        BlocProvider<HistoryBloc>(create: (context) => Modular.get<HistoryBloc>()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeMode>(
         builder: (context, currentTheme) => MaterialApp(

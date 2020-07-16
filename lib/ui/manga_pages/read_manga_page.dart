@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/data/history_data.dart';
 import 'package:komikcast/models/detail_chapter.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
@@ -27,11 +28,10 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
     super.initState();
     mangaId = widget.mangaId;
     currentId = widget.currentId;
-
     getListData();
   }
 
-  void getListData() async {
+  getListData() async {
     final res = await ComicData.getChapterKomik(id: currentId);
     listChapter = res.selectChapter;
     listImage = res.images;
@@ -44,9 +44,12 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
       setState(() {
         isLoaded = true;
       });
+    
+    // Save history
+    return HistoryData.saveHistory(mangaId: mangaId, currentId: currentId, detailChapter: res );
   }
 
-  void changeChapter({id}) {
+  changeChapter({id}) {
     if (this.mounted) {
       setState(() {
         currentId = id;
@@ -57,7 +60,7 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
     }
   }
 
-  void setShowMenu(bool state) {
+  setShowMenu(bool state) {
     setState(() {
       showMenu = state;
     });

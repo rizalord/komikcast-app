@@ -5,6 +5,7 @@ import 'package:komikcast/bloc/reverse_chapter_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
+import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/ui/main_pages.dart';
 import 'package:komikcast/ui/main_setting.dart';
 import 'package:komikcast/ui/manga_pages/detail_manga_page.dart';
@@ -26,6 +27,7 @@ class AppModule extends MainModule {
         Bind((_) => BlurBloc()),
         Bind((_) => ScrollBloc()),
         Bind((_) => ReverseChapterBloc()),
+        Bind((_) => HistoryBloc()),
       ];
 
   @override
