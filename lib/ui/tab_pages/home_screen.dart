@@ -516,6 +516,7 @@ class ComicSlider extends StatelessWidget {
                 chapterNum: e.chapter.toString(),
                 type: e.type,
                 linkId: e.linkId,
+                rating: e.rating,
               ),
             );
           } else if (data.indexOf(e) == data.length - 1) {
@@ -528,6 +529,7 @@ class ComicSlider extends StatelessWidget {
                 chapterNum: e.chapter.toString(),
                 type: e.type,
                 linkId: e.linkId,
+                rating: e.rating,
               ),
             );
           } else {
@@ -538,6 +540,7 @@ class ComicSlider extends StatelessWidget {
               chapterNum: e.chapter.toString(),
               type: e.type,
               linkId: e.linkId,
+              rating: e.rating,
             );
           }
         }).toList(),
@@ -556,10 +559,11 @@ class SingleSlider extends StatelessWidget {
     this.title,
     this.type,
     this.linkId,
+    this.rating,
   }) : super(key: key);
 
   final double width;
-  final String image, title, chapterNum, type, linkId;
+  final String image, title, chapterNum, type, linkId, rating;
 
   @override
   Widget build(BuildContext context) {
@@ -632,7 +636,7 @@ class SingleSlider extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '8.00',
+                    rating != null ? rating : '-',
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Theme.of(context)

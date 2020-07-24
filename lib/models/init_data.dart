@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
+import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
 
@@ -28,10 +29,17 @@ class KomikcastSystem {
     // Initialize State
     this.themeInit(db: db);
     this.historyInit(db: db);
+    this.favoriteInit(db: db);
 
     // END CHECK
     Modular.to.pushReplacementNamed('/main');
   }
+
+  /**
+   * METHODS TO INITIALIZE DATA
+   * =============================================
+   * =============================================
+   */
 
   void themeInit({Box db}) {
     var theme = db.get('theme') == null ? 'light' : db.get('theme');
@@ -43,5 +51,10 @@ class KomikcastSystem {
   void historyInit({Box db}) {
     List historyList = db.get('history') == null ? [] : db.get('history');
     Modular.get<HistoryBloc>().add(historyList.cast<Map>());
+  }
+
+  void favoriteInit({Box db}) {
+    List favoriteList = db.get('favorite') == null ? [] : db.get('favorite');
+    Modular.get<FavoriteBloc>().add(favoriteList.cast<Map>());
   }
 }

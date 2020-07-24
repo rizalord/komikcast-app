@@ -9,9 +9,11 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
+import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
 import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/data/favorite_data.dart';
 import 'package:komikcast/models/detail_comic.dart';
 import 'package:komikcast/ui/manga_pages/tab_chapters.dart';
 import 'package:komikcast/ui/manga_pages/tab_overview.dart';
@@ -373,6 +375,8 @@ class SliverContent extends StatelessWidget {
         width: width,
         setState: setState,
         isLoaded: isLoaded,
+        detail: detail,
+        mangaId: mangaId,
       ),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
@@ -520,11 +524,15 @@ class TabContainer extends StatelessWidget {
     @required this.width,
     this.setState,
     this.isLoaded,
+    this.detail,
+    this.mangaId,
   }) : super(key: key);
 
   final double width;
   final Function setState;
   final bool isLoaded;
+  final DetailComic detail;
+  final String mangaId;
 
   @override
   Widget build(BuildContext context) {
@@ -581,9 +589,46 @@ class TabContainer extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(width),
                     child: Material(
-                      child: IconButton(
-                        icon: Icon(Icons.favorite_border),
-                        onPressed: () {},
+                      child: BlocBuilder<FavoriteBloc, List<Map>>(
+                        builder: (context, state) {
+                          var isFavorited = state
+                                  .where((element) =>
+                                      element['mangaId'] == mangaId)
+                                  .toList()
+                                  .length >
+                              0;
+
+                          print(isFavorited);
+
+                          return IconButton(
+                            icon: Icon(
+                              isFavorited
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorited
+                                  ? Colors.red
+                                  : Theme.of(context)
+                                      .textSelectionHandleColor
+                                      .withOpacity(.8),
+                            ),
+                            onPressed: () async {
+                              isFavorited
+                                  ? await FavoriteData.unsaveFavorite(
+                                      mangaId: mangaId,
+                                    )
+                                  : await FavoriteData.saveFavorite(
+                                      mangaId: mangaId,
+                                      currentId:
+                                          detail.listChapters.first.linkId,
+                                      detailChapter:
+                                          detail.listChapters.first.chapter,
+                                      image: detail.image,
+                                      title: detail.title,
+                                      type: detail.type,
+                                    );
+                            },
+                          );
+                        },
                       ),
                     ),
                   ),

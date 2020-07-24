@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
@@ -26,17 +27,20 @@ class FavoriteTabPage extends StatelessWidget {
               builder: (context, state) =>
                   RecentList(width: width, data: state),
             ),
-            SubHeader(
+            BlocBuilder<FavoriteBloc, List<Map>>(
+              builder: (context, state) => SubHeader(
                 text: 'your favorite',
                 width: width,
                 withNext: false,
                 action: Text(
-                  '(20)',
+                  '(${state.length})',
                   style: GoogleFonts.heebo(
                     color: Colors.blue,
                     fontStyle: FontStyle.italic,
                   ),
-                )),
+                ),
+              ),
+            ),
             FavoriteList(width: width),
           ],
         ),
@@ -52,47 +56,27 @@ class FavoriteList extends StatelessWidget {
   }) : super(key: key);
 
   final double width;
-  final List data = [
-    {
-      'image':
-          'https://kiryuu.co/wp-content/uploads/2020/06/An-Imperfect-Kiss.jpeg',
-      'type': 'manhwa',
-      'title': 'Imperfect Kisssssssss',
-      'chapter': '19'
-    },
-    {
-      'image': 'https://kiryuu.co/wp-content/uploads/2020/02/91SKB7gPy8L.jpg',
-      'type': 'manga',
-      'title': 'The Summoner Who Was Despised as "Shunned Child"',
-      'chapter': '3.2'
-    },
-    {
-      'image':
-          'https://kiryuu.co/wp-content/uploads/2020/06/An-Imperfect-Kiss.jpeg',
-      'type': 'manhwa',
-      'title': 'Imperfect Kisssssssss',
-      'chapter': '19'
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Wrap(
-        spacing: 8.0,
-        children: data
-            .map(
-              (e) => ListItem(
-                width: width,
-                image: e['image'],
-                type: e['type'],
-                title: e['title'],
-                chapter: e['chapter'],
-              ),
-            )
-            .toList(),
+      child: BlocBuilder<FavoriteBloc, List<Map>>(
+        builder: (context, state) => Wrap(
+          spacing: 8.0,
+          children: state
+              .map(
+                (e) => ListItem(
+                  width: width,
+                  image: e['image'],
+                  type: 'manga',
+                  title: e['title'],
+                  chapter: e['chapterName'],
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
