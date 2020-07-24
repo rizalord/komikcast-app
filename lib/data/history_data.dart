@@ -32,6 +32,11 @@ class HistoryData {
       'chapterId': currentId,
       'chapterName': detailChapter.chapter,
     };
+
+    if (listHistory.indexOf(history) >= 0) {
+      listHistory.removeAt(listHistory.indexOf(history));
+    }
+
     listHistory.add(history);
     db.put('history', listHistory);
 

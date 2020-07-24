@@ -9,12 +9,14 @@ class SubHeader extends StatelessWidget {
     this.width,
     this.withNext = true,
     this.action,
+    this.onPressed,
   }) : super(key: key);
 
   final String text;
   final double width;
   final bool withNext;
   final Widget action;
+  final Function onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class SubHeader extends StatelessWidget {
                           Icons.arrow_forward,
                           color: Colors.blue,
                         ),
-                        onPressed: () {},
+                        onPressed: onPressed,
                       )
                     : Container(),
               ],

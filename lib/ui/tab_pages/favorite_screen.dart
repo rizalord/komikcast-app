@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
@@ -16,7 +17,11 @@ class FavoriteTabPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SubHeader(text: 'last readed', width: width),
+            SubHeader(
+              text: 'last readed',
+              width: width,
+              onPressed: () => Modular.to.pushNamed('/lastreaded'),
+            ),
             BlocBuilder<HistoryBloc, List<Map>>(
               builder: (context, state) =>
                   RecentList(width: width, data: state),
@@ -181,6 +186,8 @@ class RecentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map> data =
+        this.data.length >= 10 ? this.data.sublist(0, 10) : this.data;
     return Container(
       width: width,
       height: width * .63,
@@ -192,7 +199,6 @@ class RecentList extends StatelessWidget {
             .asMap()
             .map(
               (i, e) {
-                print(i == 0);
                 return MapEntry(
                   i,
                   Container(
@@ -205,6 +211,8 @@ class RecentList extends StatelessWidget {
                       image: e['image'],
                       title: e['title'],
                       chapterNum: e['chapterName'],
+                      mangaId: e['mangaId'],
+                      chapterId: e['chapterId'],
                     ),
                   ),
                 );
@@ -224,20 +232,23 @@ class SingleSlider extends StatelessWidget {
     this.chapterNum,
     this.image,
     this.title,
+    this.mangaId,
+    this.chapterId,
   }) : super(key: key);
 
   final double width;
-  final String image, title, chapterNum;
+  final String image, title, chapterNum, mangaId, chapterId;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Modular.to.pushNamed('readmanga', arguments: {
+        "mangaId": mangaId,
+        "currentId": chapterId,
+      }),
       child: Container(
         margin: EdgeInsets.only(left: 5.0, right: 5.0),
         width: width * .32,
-        // height: width * .55,
-        // color: Colors.blue,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

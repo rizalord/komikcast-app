@@ -12,6 +12,7 @@ import 'package:komikcast/ui/manga_pages/detail_manga_page.dart';
 import 'package:komikcast/ui/manga_pages/download_manga_page.dart';
 import 'package:komikcast/ui/manga_pages/read_manga_page.dart';
 import 'package:komikcast/ui/other_pages/download_setting.dart';
+import 'package:komikcast/ui/other_pages/last_readed_page.dart';
 import 'package:komikcast/ui/other_pages/qna_page.dart';
 import 'package:komikcast/ui/other_pages/search_page.dart';
 import 'package:komikcast/ui/pro_screen.dart';
@@ -84,6 +85,10 @@ class AppModule extends MainModule {
           '/pro',
           child: (_, args) => ProScreen(),
           transition: TransitionType.rightToLeft,
+        ),
+        Router(
+          '/lastreaded',
+          child: (_, args) => LastReadedPage(),
         ),
       ];
 
