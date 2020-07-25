@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/data/chapter_readed_data.dart';
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/data/history_data.dart';
 import 'package:komikcast/models/detail_chapter.dart';
@@ -44,9 +45,13 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
       setState(() {
         isLoaded = true;
       });
+
+    // Save Chapter
+    ChapterReadedData.saveChapter(chapterId: currentId);
     
     // Save history
-    return HistoryData.saveHistory(mangaId: mangaId, currentId: currentId, detailChapter: res );
+    return HistoryData.saveHistory(
+        mangaId: mangaId, currentId: currentId, detailChapter: res);
   }
 
   changeChapter({id}) {
@@ -178,7 +183,6 @@ class _ContentState extends State<Content> {
                 itemBuilder: (ctx, idx) => CachedNetworkImage(
                   imageUrl: widget.images[idx].link,
                   fit: BoxFit.cover,
-                  
                 ),
               ),
             ),
