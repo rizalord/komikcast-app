@@ -1,16 +1,19 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
 
 class FavoriteData {
-  static saveFavorite({
+  static Future<void> saveFavorite({
     String mangaId,
     String currentId,
     String detailChapter,
     String image,
     String title,
     String type,
-  }) async {
+    BuildContext context,
+  }) {
     // Open DB
     // ============================
     var db = Hive.box('komikcast');
@@ -39,11 +42,15 @@ class FavoriteData {
     // Store Favorite to Bloc
     // ================================
     Modular.get<FavoriteBloc>().add(listFavorite);
+
+    // Show Snackbar
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('Ditambahkan ke Favorit')));
   }
 
   static unsaveFavorite({
     String mangaId,
-  }) async {
+  }) {
     // Open DB
     // ============================
     var db = Hive.box('komikcast');

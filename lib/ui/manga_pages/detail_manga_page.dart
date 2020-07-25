@@ -102,11 +102,12 @@ class _DetailMangaState extends State<DetailManga> {
                         return FlexibleSpaceBar(
                           title: Container(),
                           background: PageHeader(
-                              image: widget.image,
-                              title: widget.title,
-                              isLoaded: isLoaded,
-                              width: width,
-                              detail: detail),
+                            image: widget.image,
+                            title: widget.title,
+                            isLoaded: isLoaded,
+                            width: width,
+                            detail: detail,
+                          ),
                         );
                       },
                     ),
@@ -126,6 +127,7 @@ class _DetailMangaState extends State<DetailManga> {
                 width: width,
                 image: widget.image,
                 title: widget.title,
+                isLoaded: isLoaded,
               ),
               isLoaded
                   ? FloatingMenu(
@@ -245,11 +247,13 @@ class CustomAppBar extends StatelessWidget {
     @required this.width,
     this.image,
     this.title,
+    this.isLoaded,
   }) : super(key: key);
 
   final SliverBloc sliverBloc;
   final double width;
   final String image, title;
+  final bool isLoaded;
 
   @override
   Widget build(BuildContext context) {
@@ -307,15 +311,15 @@ class CustomAppBar extends StatelessWidget {
                       Icons.cloud_download,
                       color: Theme.of(context).brightness == Brightness.dark &&
                               state == true
-                          ? Colors.white
+                          ? Colors.white.withOpacity(isLoaded ? 1 : .4)
                           : Theme.of(context).brightness == Brightness.dark &&
                                   state == false
-                              ? Colors.white
+                              ? Colors.white.withOpacity(isLoaded ? 1 : .4)
                               : Theme.of(context).brightness ==
                                           Brightness.light &&
                                       state == true
-                                  ? Colors.black
-                                  : Colors.white,
+                                  ? Colors.black.withOpacity(isLoaded ? 1 : .4)
+                                  : Colors.white.withOpacity(isLoaded ? 1 : .4),
                     ),
                     onPressed: () => Modular.to.pushNamed(
                       '/downloadmanga',
@@ -605,8 +609,6 @@ class TabContainer extends StatelessWidget {
                                   .length >
                               0;
 
-                          print(isFavorited);
-
                           return IconButton(
                             icon: Icon(
                               isFavorited
@@ -632,6 +634,7 @@ class TabContainer extends StatelessWidget {
                                       image: detail.image,
                                       title: detail.title,
                                       type: detail.type,
+                                      context: context,
                                     );
                             },
                           );
