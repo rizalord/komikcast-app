@@ -25,7 +25,9 @@ class FavoriteData {
     var favorite = {
       'image': image,
       'title': title,
-      'mangaId': mangaId,
+      'mangaId': mangaId.substring(mangaId.length - 1) == '/'
+          ? mangaId.replaceAll('/', '')
+          : mangaId,
       'chapterId': currentId,
       'chapterName': detailChapter,
       'type': type,
@@ -52,8 +54,15 @@ class FavoriteData {
     listFavorite = listFavorite.cast<Map>();
 
     // Remove Saved Favorite
-    listFavorite =
-        listFavorite.where((element) => element['mangaId'] != mangaId).toList();
+    listFavorite = listFavorite
+        .where(
+          (element) =>
+              element['mangaId'] !=
+              (mangaId.substring(mangaId.length - 1) == '/'
+                  ? mangaId.replaceAll('/', '')
+                  : mangaId),
+        )
+        .toList();
     listFavorite = listFavorite.cast<Map>();
 
     // Restore to DB

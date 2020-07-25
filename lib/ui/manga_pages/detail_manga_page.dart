@@ -592,8 +592,15 @@ class TabContainer extends StatelessWidget {
                       child: BlocBuilder<FavoriteBloc, List<Map>>(
                         builder: (context, state) {
                           var isFavorited = state
-                                  .where((element) =>
-                                      element['mangaId'] == mangaId)
+                                  .where(
+                                    (element) =>
+                                        element['mangaId'] ==
+                                        (mangaId.substring(
+                                                    mangaId.length - 1) ==
+                                                '/'
+                                            ? mangaId.replaceAll('/', '')
+                                            : mangaId),
+                                  )
                                   .toList()
                                   .length >
                               0;

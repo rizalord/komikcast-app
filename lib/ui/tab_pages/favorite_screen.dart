@@ -73,6 +73,7 @@ class FavoriteList extends StatelessWidget {
                   type: 'manga',
                   title: e['title'],
                   chapter: e['chapterName'],
+                  mangaId: e['mangaId'],
                 ),
               )
               .toList(),
@@ -90,10 +91,11 @@ class ListItem extends StatelessWidget {
     this.title,
     this.type,
     this.chapter,
+    this.mangaId,
   }) : super(key: key);
 
   final double width;
-  final String image, type, title, chapter;
+  final String image, type, title, chapter, mangaId;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +103,11 @@ class ListItem extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () => Modular.to.pushNamed('/detailmanga', arguments: {
+              'image': image,
+              'title': title,
+              'linkId': mangaId,
+            }),
             child: Container(
               width: (width * .5) - 12.0,
               alignment: Alignment.center,
