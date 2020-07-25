@@ -33,9 +33,9 @@ class HistoryData {
       'chapterName': detailChapter.chapter,
     };
 
-    if (listHistory.indexOf(history) >= 0) {
-      listHistory.removeAt(listHistory.indexOf(history));
-    }
+    listHistory = listHistory
+        .where((element) => element['chapterId'] != currentId)
+        .toList();
 
     listHistory.add(history);
     db.put('history', listHistory);
