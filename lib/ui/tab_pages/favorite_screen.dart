@@ -8,7 +8,13 @@ import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
 
-class FavoriteTabPage extends StatelessWidget {
+class FavoriteTabPage extends StatefulWidget {
+  @override
+  _FavoriteTabPageState createState() => _FavoriteTabPageState();
+}
+
+class _FavoriteTabPageState extends State<FavoriteTabPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -47,6 +53,9 @@ class FavoriteTabPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class FavoriteList extends StatelessWidget {
@@ -123,6 +132,7 @@ class ListItem extends StatelessWidget {
                           fit: BoxFit.cover,
                           width: (width * .5) - 12.0,
                           height: width * .62,
+                          useOldImageOnUrlChange: true,
                         ),
                         Positioned(
                           bottom: 8.0,
@@ -184,8 +194,8 @@ class RecentList extends StatelessWidget {
       child: ListView(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        reverse: true,
-        children: data
+        children: data.reversed
+            .toList()
             .asMap()
             .map(
               (i, e) {
@@ -193,8 +203,8 @@ class RecentList extends StatelessWidget {
                   i,
                   Container(
                     margin: EdgeInsets.only(
-                      right: i == 0 ? 5.0 : 0.0,
-                      left: i == data.length - 1 ? 5.0 : 0.0,
+                      right: i == 0 ? 0.0 : 5.0,
+                      left: i == data.length - 1 ? 0.0 : 5.0,
                     ),
                     child: SingleSlider(
                       width: width,
@@ -247,6 +257,7 @@ class SingleSlider extends StatelessWidget {
               fit: BoxFit.cover,
               width: width * .32,
               height: width * .43,
+              useOldImageOnUrlChange: true,
             ),
             Padding(
               padding: EdgeInsets.only(top: 6),

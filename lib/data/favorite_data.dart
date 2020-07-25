@@ -48,6 +48,16 @@ class FavoriteData {
         .showSnackBar(SnackBar(content: Text('Ditambahkan ke Favorit')));
   }
 
+
+
+
+  /**
+   *  Unsave Favorite
+   * 
+   *  ==================================
+   * 
+   */
+
   static unsaveFavorite({
     String mangaId,
   }) {
