@@ -2,27 +2,35 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/models/detail_comic.dart';
 
 class DownloadMangaPage extends StatefulWidget {
-  DownloadMangaPage({this.image});
+  DownloadMangaPage({this.detail});
 
-  final String image;
+  final DetailComic detail;
 
   @override
   _DownloadMangaPageState createState() => _DownloadMangaPageState();
 }
 
 class _DownloadMangaPageState extends State<DownloadMangaPage> {
+  List<SingleChapterDetail> _checkedList = [];
+
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   }
 
-  @override
-  void dispose() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    super.dispose();
+  void checkAll() {
+    setState(() {
+      if (_checkedList == widget.detail.listChapters) {
+        _checkedList = [];
+      } else {
+        _checkedList = [];
+        _checkedList = widget.detail.listChapters;
+      }
+    });
   }
 
   @override
@@ -34,7 +42,7 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
         title: Text('0 dipilih'),
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: checkAll,
             child: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -52,24 +60,38 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
       body: Stack(
         children: [
           ListView.builder(
-            itemCount: 15,
+            itemCount: widget.detail.listChapters.length,
             padding: EdgeInsets.only(bottom: width * .21),
             itemBuilder: (context, idx) => InkWell(
               onTap: () {},
               child: CheckboxListTile(
-                title: Text(
-                  'Chapter $idx',
-                  style: GoogleFonts.heebo(),
-                ),
-                onChanged: (bool value) {},
-                value: idx == 0 ? true : false,
-              ),
+                  title: Text(
+                    'Chapter ${widget.detail.listChapters[idx].chapter}',
+                    style: GoogleFonts.heebo(),
+                  ),
+                  onChanged: (bool value) {
+                    setState(() {
+                      _checkedList.indexOf(widget.detail.listChapters[idx]) >= 0
+                          ? _checkedList.removeAt(_checkedList
+                              .indexOf(widget.detail.listChapters[idx]))
+                          : _checkedList.add(widget.detail.listChapters[idx]);
+                    });
+                  },
+                  value:
+                      _checkedList.indexOf(widget.detail.listChapters[idx]) >=
+                          0),
             ),
           ),
-          DownloadButton(width: width, widget: widget),
+          DownloadButton(width: width, detail: widget.detail),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    super.dispose();
   }
 }
 
@@ -77,11 +99,11 @@ class DownloadButton extends StatelessWidget {
   const DownloadButton({
     Key key,
     @required this.width,
-    @required this.widget,
+    @required this.detail,
   }) : super(key: key);
 
   final double width;
-  final DownloadMangaPage widget;
+  final DetailComic detail;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +126,7 @@ class DownloadButton extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(9),
               child: CachedNetworkImage(
-                imageUrl: widget.image,
+                imageUrl: detail.image,
                 fit: BoxFit.cover,
                 width: width * .145,
                 height: width * .145,
@@ -123,7 +145,7 @@ class DownloadButton extends StatelessWidget {
           subtitle: Padding(
             padding: EdgeInsets.only(top: 5.0),
             child: Text(
-              'The Savior\'s book cafe in another world',
+              detail.title,
               style: GoogleFonts.heebo(
                 color: Colors.white,
                 fontSize: 15,

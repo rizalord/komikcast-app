@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/chapter_readed_bloc.dart';
 import 'package:komikcast/bloc/reverse_chapter_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
-import 'package:komikcast/data/chapter_readed_data.dart';
 import 'package:komikcast/models/detail_comic.dart';
 
 class TabChapters extends StatefulWidget {

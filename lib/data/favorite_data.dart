@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
 
 class FavoriteData {
-  static Future<void> saveFavorite({
+  static saveFavorite({
     String mangaId,
     String currentId,
     String detailChapter,

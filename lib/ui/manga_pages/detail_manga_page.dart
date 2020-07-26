@@ -128,6 +128,7 @@ class _DetailMangaState extends State<DetailManga> {
                 image: widget.image,
                 title: widget.title,
                 isLoaded: isLoaded,
+                detail: detail,
               ),
               isLoaded
                   ? FloatingMenu(
@@ -248,12 +249,14 @@ class CustomAppBar extends StatelessWidget {
     this.image,
     this.title,
     this.isLoaded,
+    this.detail,
   }) : super(key: key);
 
   final SliverBloc sliverBloc;
   final double width;
   final String image, title;
   final bool isLoaded;
+  final DetailComic detail;
 
   @override
   Widget build(BuildContext context) {
@@ -324,7 +327,7 @@ class CustomAppBar extends StatelessWidget {
                     onPressed: () => Modular.to.pushNamed(
                       '/downloadmanga',
                       arguments: {
-                        "image": image,
+                        "detail": detail,
                       },
                     ),
                   ),

@@ -74,7 +74,7 @@ class AppModule extends MainModule {
         Router(
           '/downloadmanga',
           child: (_, args) => DownloadMangaPage(
-            image: args.data['image'],
+            detail: args.data['detail'],
           ),
         ),
         Router(
