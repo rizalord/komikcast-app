@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/data/download_data.dart';
 import 'package:komikcast/models/detail_comic.dart';
 
 class DownloadMangaPage extends StatefulWidget {
@@ -82,7 +83,11 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
                           0),
             ),
           ),
-          DownloadButton(width: width, detail: widget.detail),
+          DownloadButton(
+            width: width,
+            detail: widget.detail,
+            data: _checkedList,
+          ),
         ],
       ),
     );
@@ -100,10 +105,12 @@ class DownloadButton extends StatelessWidget {
     Key key,
     @required this.width,
     @required this.detail,
+    this.data,
   }) : super(key: key);
 
   final double width;
   final DetailComic detail;
+  final List<SingleChapterDetail> data;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +141,7 @@ class DownloadButton extends StatelessWidget {
             ),
           ),
           title: Text(
-            'Unduh 0 Chapter dari',
+            'Unduh ${data.length} Chapter dari',
             style: GoogleFonts.heebo(
               color: Colors.grey[300],
               fontSize: 11,
@@ -166,7 +173,10 @@ class DownloadButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () => DownloadData().downloadChapter(
+                  context: context,
+                  data: data,
+                ),
                 child: Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 14.0, vertical: 7.0),

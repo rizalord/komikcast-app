@@ -324,12 +324,15 @@ class CustomAppBar extends StatelessWidget {
                                   ? Colors.black.withOpacity(isLoaded ? 1 : .4)
                                   : Colors.white.withOpacity(isLoaded ? 1 : .4),
                     ),
-                    onPressed: () => Modular.to.pushNamed(
-                      '/downloadmanga',
-                      arguments: {
-                        "detail": detail,
-                      },
-                    ),
+                    onPressed: () {
+                      if (isLoaded)
+                        Modular.to.pushNamed(
+                          '/downloadmanga',
+                          arguments: {
+                            "detail": detail,
+                          },
+                        );
+                    },
                   ),
                 ),
               ],
