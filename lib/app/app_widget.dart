@@ -5,6 +5,7 @@ import 'package:komikcast/app/app_theme.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
 import 'package:komikcast/bloc/chapter_readed_bloc.dart';
 import 'package:komikcast/bloc/download_bloc.dart';
+import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/bloc/reverse_chapter_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
@@ -27,6 +28,7 @@ class AppWidget extends StatelessWidget {
         BlocProvider<FavoriteBloc>(create: (context) => Modular.get<FavoriteBloc>()),
         BlocProvider<ChapterReadedBloc>(create: (context) => Modular.get<ChapterReadedBloc>()),
         BlocProvider<DownloadBloc>(create: (context) => Modular.get<DownloadBloc>()),
+        BlocProvider<DownloadedBloc>(create: (context) => Modular.get<DownloadedBloc>()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeMode>(
         builder: (context, currentTheme) => MaterialApp(

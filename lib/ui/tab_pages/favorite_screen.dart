@@ -203,8 +203,8 @@ class RecentList extends StatelessWidget {
                   i,
                   Container(
                     margin: EdgeInsets.only(
-                      right: i == 0 ? 0.0 : 5.0,
-                      left: i == data.length - 1 ? 0.0 : 5.0,
+                      right: i == 0 ? 0.0 : i == data.length - 1 ? 5.0 : 0.0,
+                      left: i == 0 ? 5.0 : 0.0,
                     ),
                     child: SingleSlider(
                       width: width,

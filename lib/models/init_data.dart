@@ -1,27 +1,32 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:komikcast/bloc/chapter_readed_bloc.dart';
+import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 class KomikcastSystem {
   // This method called when app has not been initialized
   Future<void> initData(context) async {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        content: ListTile(
-          title: Text('Getting data...'),
-          leading: SizedBox(
-            height: 30,
-            width: 30,
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (_) => AlertDialog(
+    //     content: ListTile(
+    //       title: Text('Getting data...'),
+    //       leading: SizedBox(
+    //         height: 30,
+    //         width: 30,
+    //         child: CircularProgressIndicator(),
+    //       ),
+    //     ),
+    //   ),
+    // );
 
     // OPEN DB
     // ===============================
@@ -32,6 +37,7 @@ class KomikcastSystem {
     this.historyInit(db: db);
     this.favoriteInit(db: db);
     this.chapterReadedInit(db: db);
+    this.downloadsInit();
 
     // END CHECK
     Modular.to.pushReplacementNamed('/main');
@@ -64,5 +70,40 @@ class KomikcastSystem {
   void favoriteInit({Box db}) {
     List favoriteList = db.get('favorite') == null ? [] : db.get('favorite');
     Modular.get<FavoriteBloc>().add(favoriteList.cast<Map>());
+  }
+
+  void downloadsInit() async {
+    final directory = (await getExternalStorageDirectory()).path;
+    List<Map> tempAll = [];
+
+    // Get All Comic
+    Directory(directory).listSync().forEach((element) {
+      var tempComicFolder = {};
+
+      tempComicFolder['title'] = element.path
+          .replaceAll('$directory/', '')
+          .split('-')
+          .map((e) => e[0].toUpperCase() + e.substring(1))
+          .join(' ');
+
+      tempComicFolder['mangaId'] = element.path.replaceAll('$directory/', '');
+
+      tempComicFolder['folderPath'] = element.path;
+
+      // Get Last Chapter Folder
+      var lastChapterFolder =
+          Directory(Directory(element.path).listSync().last.path).listSync();
+      // var imageThumbnail =
+      //     lastChapterFolder[(lastChapterFolder.length - 1) ~/ 2].path;
+      var imageThumbnail = lastChapterFolder.first.path;
+
+      tempComicFolder['imagePath'] = imageThumbnail;
+      tempComicFolder['dateModified'] = DateFormat('d MMMM yyyy')
+          .format(Directory(element.path).listSync().last.statSync().modified);
+      tempAll.add(tempComicFolder);
+    });
+
+    // Save to BLOC
+    Modular.get<DownloadedBloc>().add(tempAll);
   }
 }
