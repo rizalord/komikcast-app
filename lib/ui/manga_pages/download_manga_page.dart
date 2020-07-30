@@ -175,7 +175,8 @@ class DownloadButton extends StatelessWidget {
               child: InkWell(
                 onTap: () => DownloadData().downloadChapter(
                   context: context,
-                  data: data,
+                  data: detail,
+                  listData: data,
                 ),
                 child: Container(
                   padding:

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -104,13 +103,6 @@ class ListItem extends StatelessWidget {
               height: width * .22,
               fit: BoxFit.cover,
             ),
-            // CachedNetworkImage(
-            //   imageUrl:
-            //       'https://komikcast.com/wp-content/uploads/2019/08/40dokuzura479-212x300.jpg',
-            // width: width * .22,
-            // height: width * .22,
-            // fit: BoxFit.cover,
-            // ),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -140,7 +132,7 @@ class ListItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'MITA, Yamamoto Yamii',
+                      data['author'],
                       style: GoogleFonts.heebo(
                         fontSize: 13,
                         color: Theme.of(context)

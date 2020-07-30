@@ -90,14 +90,24 @@ class KomikcastSystem {
 
       tempComicFolder['folderPath'] = element.path;
 
-      // Get Last Chapter Folder
-      var lastChapterFolder =
-          Directory(Directory(element.path).listSync().last.path).listSync();
-      // var imageThumbnail =
-      //     lastChapterFolder[(lastChapterFolder.length - 1) ~/ 2].path;
-      var imageThumbnail = lastChapterFolder.first.path;
+      // Get Image Thumbnail
+      var imageThumbnail = Directory(element.path)
+          .listSync()[Directory(element.path).listSync().length - 2]
+          .path;
+
+      // Read detail.txt
+      var detailTxtPath = Directory(element.path)
+          .listSync()[Directory(element.path).listSync().length - 1]
+          .path;
+      String author;
+
+      try {
+        final File file = File(detailTxtPath);
+        author = file.readAsStringSync();
+      } catch (e) {}
 
       tempComicFolder['imagePath'] = imageThumbnail;
+      tempComicFolder['author'] = author;
       tempComicFolder['dateModified'] = DateFormat('d MMMM yyyy')
           .format(Directory(element.path).listSync().last.statSync().modified);
       tempAll.add(tempComicFolder);
