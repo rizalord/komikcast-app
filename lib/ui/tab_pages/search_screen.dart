@@ -17,7 +17,7 @@ class _SearchTabPageState extends State<SearchTabPage>
     with AutomaticKeepAliveClientMixin {
   ScrollController _controller = ScrollController();
   bool _isLoading = false, _isLoaded = false;
-  int _count = 10, page = 1;
+  int page = 1;
   List<SearchResult> results = [];
 
   @override

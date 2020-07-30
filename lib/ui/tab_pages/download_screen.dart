@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 
 class DownloadTabPage extends StatelessWidget {
-  final int _itemCount = 10;
 
   @override
   Widget build(BuildContext context) {

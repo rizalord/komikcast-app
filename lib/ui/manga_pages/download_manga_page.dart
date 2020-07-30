@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/data/download_data.dart';
 import 'package:komikcast/models/detail_comic.dart';
 
@@ -60,28 +62,54 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
       ),
       body: Stack(
         children: [
-          ListView.builder(
-            itemCount: widget.detail.listChapters.length,
-            padding: EdgeInsets.only(bottom: width * .21),
-            itemBuilder: (context, idx) => InkWell(
-              onTap: () {},
-              child: CheckboxListTile(
-                  title: Text(
-                    'Chapter ${widget.detail.listChapters[idx].chapter}',
-                    style: GoogleFonts.heebo(),
-                  ),
-                  onChanged: (bool value) {
-                    setState(() {
-                      _checkedList.indexOf(widget.detail.listChapters[idx]) >= 0
-                          ? _checkedList.removeAt(_checkedList
-                              .indexOf(widget.detail.listChapters[idx]))
-                          : _checkedList.add(widget.detail.listChapters[idx]);
-                    });
-                  },
-                  value:
-                      _checkedList.indexOf(widget.detail.listChapters[idx]) >=
-                          0),
-            ),
+          BlocBuilder<DownloadedChapterBloc, List<Map>>(
+            builder: (ctx, state) {
+              return ListView.builder(
+                itemCount: widget.detail.listChapters.length,
+                padding: EdgeInsets.only(bottom: width * .21),
+                itemBuilder: (context, idx) => state
+                            .where((element) =>
+                                element['chapterId'] ==
+                                '/${widget.detail.listChapters[idx].linkId.replaceAll('/', '')}')
+                            .toList()
+                            .length ==
+                        0
+                    ? InkWell(
+                        onTap: () {},
+                        child: CheckboxListTile(
+                            title: Text(
+                              'Chapter ${widget.detail.listChapters[idx].chapter}',
+                              style: GoogleFonts.heebo(),
+                            ),
+                            onChanged: (bool value) {
+                              setState(() {
+                                _checkedList.indexOf(
+                                            widget.detail.listChapters[idx]) >=
+                                        0
+                                    ? _checkedList.removeAt(
+                                        _checkedList.indexOf(
+                                            widget.detail.listChapters[idx]))
+                                    : _checkedList
+                                        .add(widget.detail.listChapters[idx]);
+                              });
+                            },
+                            value: _checkedList
+                                    .indexOf(widget.detail.listChapters[idx]) >=
+                                0),
+                      )
+                    : Opacity(
+                        opacity: 0.4,
+                        child: CheckboxListTile(
+                          title: Text(
+                            'Chapter ${widget.detail.listChapters[idx].chapter}',
+                            style: GoogleFonts.heebo(),
+                          ),
+                          value: false,
+                          onChanged: (bool value) {},
+                        ),
+                      ),
+              );
+            },
           ),
           DownloadButton(
             width: width,

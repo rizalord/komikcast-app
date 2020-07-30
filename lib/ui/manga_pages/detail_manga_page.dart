@@ -18,6 +18,7 @@ import 'package:komikcast/models/detail_comic.dart';
 import 'package:komikcast/ui/manga_pages/tab_chapters.dart';
 import 'package:komikcast/ui/manga_pages/tab_overview.dart';
 
+// ignore: slash_for_doc_comments
 /**
  * PARAMETER
  * - image  ex: https://komikcast.com/wp-content/uploads/2018/06/00a-e1529951476666.jpg

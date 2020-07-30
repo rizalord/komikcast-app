@@ -51,6 +51,7 @@ class FavoriteData {
 
 
 
+  // ignore: slash_for_doc_comments
   /**
    *  Unsave Favorite
    * 

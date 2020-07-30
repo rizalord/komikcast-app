@@ -48,7 +48,7 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
 
     // Save Chapter
     ChapterReadedData.saveChapter(chapterId: currentId);
-    
+
     // Save history
     return HistoryData.saveHistory(
         mangaId: mangaId, currentId: currentId, detailChapter: res);
@@ -183,6 +183,19 @@ class _ContentState extends State<Content> {
                 itemBuilder: (ctx, idx) => CachedNetworkImage(
                   imageUrl: widget.images[idx].link,
                   fit: BoxFit.cover,
+                  placeholder: (context, text) => Container(
+                    color: Theme.of(context)
+                        .textSelectionHandleColor
+                        .withOpacity(.0),
+                    padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.width / 2.5),
+                    child: Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

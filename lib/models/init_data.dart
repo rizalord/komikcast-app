@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:komikcast/bloc/chapter_readed_bloc.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
+import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
@@ -43,6 +44,7 @@ class KomikcastSystem {
     Modular.to.pushReplacementNamed('/main');
   }
 
+  // ignore: slash_for_doc_comments
   /**
    * METHODS TO INITIALIZE DATA
    * =============================================
@@ -75,6 +77,7 @@ class KomikcastSystem {
   void downloadsInit() async {
     final directory = (await getExternalStorageDirectory()).path;
     List<Map> tempAll = [];
+    List<Map> allChapter = [];
 
     // Get All Comic
     Directory(directory).listSync().forEach((element) {
@@ -87,18 +90,43 @@ class KomikcastSystem {
           .join(' ');
 
       tempComicFolder['mangaId'] = element.path.replaceAll('$directory/', '');
-
       tempComicFolder['folderPath'] = element.path;
 
+      var chapterFolder = Directory(element.path).listSync();
+      chapterFolder = chapterFolder
+          .where((element) =>
+              element.path.contains('cover.jpg') == false &&
+              element.path.contains('detail.txt') == false)
+          .toList();
+
+      // Get All Chapter
+      for (var i = 0; i < chapterFolder.length; i++) {
+        var tempChapter = {};
+        tempChapter['chapterId'] =
+            chapterFolder[i].path.replaceAll(element.path, '');
+        tempChapter['chapterIdPath'] = chapterFolder[i].path;
+        tempChapter['images'] = Directory(chapterFolder[i].path)
+            .listSync()
+            .map((e) => e.path)
+            .toList()
+            .cast<String>();
+
+        allChapter.add(tempChapter);
+      }
+
+      var detailFolder = Directory(element.path).listSync();
+      detailFolder = detailFolder
+          .where((element) =>
+              element.path.contains('cover.jpg') ||
+              element.path.contains('detail.txt'))
+          .toList();
+
       // Get Image Thumbnail
-      var imageThumbnail = Directory(element.path)
-          .listSync()[Directory(element.path).listSync().length - 2]
-          .path;
+      var imageThumbnail = detailFolder[0].path;
 
       // Read detail.txt
-      var detailTxtPath = Directory(element.path)
-          .listSync()[Directory(element.path).listSync().length - 1]
-          .path;
+      var detailTxtPath = detailFolder.last.path;
+      
       String author;
 
       try {
@@ -115,5 +143,6 @@ class KomikcastSystem {
 
     // Save to BLOC
     Modular.get<DownloadedBloc>().add(tempAll);
+    Modular.get<DownloadedChapterBloc>().add(allChapter);
   }
 }
