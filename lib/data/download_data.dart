@@ -18,6 +18,7 @@ class DownloadData {
     BuildContext context,
     DetailComic data,
     List<SingleChapterDetail> listData,
+    Function onComplete,
   }) async {
     if (data.listChapters.length == 0)
       Modular.to.pop(context);
@@ -66,6 +67,7 @@ class DownloadData {
         context: context,
         author: data.author,
         imageDetail: data.image,
+        callback: onComplete,
       );
     }
   }
@@ -76,6 +78,7 @@ class DownloadData {
     int index = 0,
     String imageDetail,
     String author,
+    Function callback,
   }) async {
     Dio dio = Dio();
     var appDir = await getExternalStorageDirectory();
@@ -123,6 +126,8 @@ class DownloadData {
             );
 
             if (imageDownloaded == totalImage) {
+              callback();
+
               Future.delayed(Duration(milliseconds: 1500), () {
                 Navigator.pop(context);
                 Future.delayed(Duration(milliseconds: 1000), () {

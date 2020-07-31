@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/data/chapter_readed_data.dart';
 import 'package:komikcast/data/comic_data.dart';
@@ -394,7 +395,7 @@ class HeaderMenu extends StatelessWidget {
                         Icons.arrow_back,
                         color: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: () => Modular.to.pop(context),
                     ),
                   ),
                   SizedBox(width: 5),

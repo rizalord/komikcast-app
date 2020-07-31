@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/data/download_data.dart';
@@ -33,6 +34,12 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
         _checkedList = [];
         _checkedList = widget.detail.listChapters;
       }
+    });
+  }
+
+  void uncheckAll() {
+    setState(() {
+      _checkedList = [];
     });
   }
 
@@ -115,6 +122,7 @@ class _DownloadMangaPageState extends State<DownloadMangaPage> {
             width: width,
             detail: widget.detail,
             data: _checkedList,
+            uncheckAll: uncheckAll,
           ),
         ],
       ),
@@ -134,11 +142,13 @@ class DownloadButton extends StatelessWidget {
     @required this.width,
     @required this.detail,
     this.data,
+    this.uncheckAll,
   }) : super(key: key);
 
   final double width;
   final DetailComic detail;
   final List<SingleChapterDetail> data;
+  final Function uncheckAll;
 
   @override
   Widget build(BuildContext context) {
@@ -201,11 +211,17 @@ class DownloadButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: InkWell(
-                onTap: () => DownloadData().downloadChapter(
-                  context: context,
-                  data: detail,
-                  listData: data,
-                ),
+                onTap: () {
+                  if (data.length != 0)
+                    DownloadData().downloadChapter(
+                      context: context,
+                      data: detail,
+                      listData: data,
+                      onComplete: uncheckAll,
+                    );
+                  else
+                    Modular.to.pop(context);
+                },
                 child: Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 14.0, vertical: 7.0),
