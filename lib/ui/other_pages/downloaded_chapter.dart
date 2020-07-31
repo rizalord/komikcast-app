@@ -18,6 +18,8 @@ class DownloadedChapterScreen extends StatelessWidget {
         .listSync()
         .where((element) =>
             !element.path.contains('cover.jpg') &&
+            !element.path.contains('cover.jpeg') &&
+            !element.path.contains('cover.png') &&
             !element.path.contains('detail.txt'))
         .toList()
         .map((e) {

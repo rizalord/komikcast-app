@@ -187,15 +187,14 @@ class RecentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Map> data =
-        this.data.length >= 10 ? this.data.sublist(0, 10) : this.data;
+        this.data.length >= 10 ? this.data.reversed.toList().sublist(0, 10) : this.data;
     return Container(
       width: width,
       height: width * .63,
       child: ListView(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        children: data.reversed
-            .toList()
+        children: data
             .asMap()
             .map(
               (i, e) {

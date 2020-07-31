@@ -96,6 +96,8 @@ class KomikcastSystem {
       chapterFolder = chapterFolder
           .where((element) =>
               element.path.contains('cover.jpg') == false &&
+              element.path.contains('cover.jpeg') == false &&
+              element.path.contains('cover.png') == false &&
               element.path.contains('detail.txt') == false)
           .toList();
 
@@ -118,6 +120,8 @@ class KomikcastSystem {
       detailFolder = detailFolder
           .where((element) =>
               element.path.contains('cover.jpg') ||
+              element.path.contains('cover.jpeg') ||
+              element.path.contains('cover.png') ||
               element.path.contains('detail.txt'))
           .toList();
 
