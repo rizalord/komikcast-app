@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 
 class DownloadTabPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -90,7 +90,12 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Modular.to.pushNamed('/downloadedchapter', arguments: {
+          'title': data['title'],
+          'folderPath': data['folderPath'],
+        });
+      },
       child: Container(
         width: width,
         height: width * .22,
