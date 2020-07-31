@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,8 +11,13 @@ import 'package:zoom_widget/zoom_widget.dart';
 
 class ReadMangaPage extends StatefulWidget {
   final String mangaId, currentId;
+  final Map downloadData;
 
-  ReadMangaPage({this.mangaId, this.currentId});
+  ReadMangaPage({
+    this.mangaId,
+    this.currentId,
+    this.downloadData,
+  });
 
   @override
   _ReadMangaPageState createState() => _ReadMangaPageState();
@@ -23,13 +30,30 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
   String nextId, prevId, currentChapter;
   List<SelectChapter> listChapter = [];
   List<ImageChapter> listImage = [];
+  Map downloadData;
 
   @override
   void initState() {
     super.initState();
     mangaId = widget.mangaId;
     currentId = widget.currentId;
-    getListData();
+    downloadData = widget.downloadData;
+
+    if (downloadData == null)
+      getListData();
+    else
+      getDownloadedData(
+        title: downloadData['title'],
+        path: downloadData['downloadPath'],
+      );
+  }
+
+  getDownloadedData({String path, String title}) {
+    setState(() {
+      downloadData['images'] =
+          Directory(path).listSync().map((e) => e.path).toList().cast<String>();
+      isLoaded = true;
+    });
   }
 
   getListData() async {
@@ -87,6 +111,8 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
                     setShowMenu: setShowMenu,
                     showMenu: showMenu,
                     images: listImage,
+                    downloadedImages:
+                        downloadData == null ? null : downloadData['images'],
                   )
                 : Positioned.fill(
                     child: Center(
@@ -97,15 +123,19 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
               width: width,
               showMenu: showMenu,
               currentChapter: currentChapter,
+              titleDownloaded:
+                  downloadData == null ? null : downloadData['title'],
             ),
-            BottomMenu(
-              width: width,
-              showMenu: showMenu,
-              nextId: nextId,
-              prevId: prevId,
-              changeChapter: changeChapter,
-              isLoaded: isLoaded,
-            ),
+            downloadData == null
+                ? BottomMenu(
+                    width: width,
+                    showMenu: showMenu,
+                    nextId: nextId,
+                    prevId: prevId,
+                    changeChapter: changeChapter,
+                    isLoaded: isLoaded,
+                  )
+                : Container(),
           ],
         ),
       ),
@@ -119,11 +149,13 @@ class Content extends StatefulWidget {
     this.setShowMenu,
     this.showMenu,
     this.images,
+    this.downloadedImages,
   }) : super(key: key);
 
   final Function setShowMenu;
   final bool showMenu;
   final List<ImageChapter> images;
+  final List<String> downloadedImages;
 
   @override
   _ContentState createState() => _ContentState();
@@ -179,24 +211,32 @@ class _ContentState extends State<Content> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: widget.images.length,
-                itemBuilder: (ctx, idx) => CachedNetworkImage(
-                  imageUrl: widget.images[idx].link,
-                  fit: BoxFit.cover,
-                  placeholder: (context, text) => Container(
-                    color: Theme.of(context)
-                        .textSelectionHandleColor
-                        .withOpacity(.0),
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.width / 2.5),
-                    child: Center(
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
+                itemCount: widget.downloadedImages == null
+                    ? widget.images.length
+                    : widget.downloadedImages.length,
+                itemBuilder: (ctx, idx) => widget.downloadedImages == null
+                    ? CachedNetworkImage(
+                        imageUrl: widget.images[idx].link,
+                        fit: BoxFit.cover,
+                        placeholder: (context, text) => Container(
+                          color: Theme.of(context)
+                              .textSelectionHandleColor
+                              .withOpacity(.0),
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.width / 2.5),
+                          child: Center(
+                            child: SizedBox(
+                              height: 50,
+                              width: 50,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Image.file(
+                        File(widget.downloadedImages[idx]),
+                        fit: BoxFit.cover,
                       ),
-                    ),
-                  ),
-                ),
               ),
             ),
           ),
@@ -311,11 +351,12 @@ class HeaderMenu extends StatelessWidget {
     @required this.width,
     this.showMenu,
     this.currentChapter,
+    this.titleDownloaded,
   }) : super(key: key);
 
   final double width;
   final bool showMenu;
-  final String currentChapter;
+  final String currentChapter, titleDownloaded;
 
   @override
   Widget build(BuildContext context) {
@@ -357,27 +398,36 @@ class HeaderMenu extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 5),
-                  Text(
-                    'Chapter $currentChapter',
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      color: Colors.white,
+                  Flexible(
+                    child: Container(
+                      child: Text(
+                        titleDownloaded == null
+                            ? 'Chapter $currentChapter'
+                            : titleDownloaded,
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Material(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(width),
-              child: IconButton(
-                icon: Icon(
-                  Icons.format_list_bulleted,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
-              ),
-            ),
+            titleDownloaded == null
+                ? Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(width),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.format_list_bulleted,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),

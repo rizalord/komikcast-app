@@ -89,6 +89,7 @@ class AppModule extends MainModule {
           child: (_, args) => ReadMangaPage(
             mangaId: args.data['mangaId'],
             currentId: args.data['currentId'],
+            downloadData: args.data['downloadData'],
           ),
           transition: TransitionType.rightToLeft,
         ),

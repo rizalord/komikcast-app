@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class DownloadedChapterScreen extends StatelessWidget {
   DownloadedChapterScreen({
@@ -44,7 +45,15 @@ class DownloadedChapterScreen extends StatelessWidget {
                       ),
                       trailing: Icon(Icons.check_circle, color: Colors.green),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Modular.to.pushNamed('/readmanga', arguments: {
+                        'downloadData': {
+                          'downloadPath': e['folderPath'],
+                          'title':
+                              'Chapter ' + e['title'] + ' Bahasa Indonesia',
+                        }
+                      });
+                    },
                   ),
                 ))
             .toList(),
