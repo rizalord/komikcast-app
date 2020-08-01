@@ -128,13 +128,21 @@ class ListItemGrid extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        CachedNetworkImage(
-                          imageUrl: image,
-                          fit: BoxFit.cover,
-                          width: (width * .5) - 12.0,
-                          height: width * .62,
-                          useOldImageOnUrlChange: true,
-                        ),
+                        image == null
+                            ? Container(
+                                width: (width * .5) - 12.0,
+                                height: width * .62,
+                                color: Theme.of(context)
+                                    .textSelectionHandleColor
+                                    .withOpacity(.2),
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: image,
+                                fit: BoxFit.cover,
+                                width: (width * .5) - 12.0,
+                                height: width * .62,
+                                useOldImageOnUrlChange: true,
+                              ),
                         Positioned(
                           bottom: 8.0,
                           left: 8.0,

@@ -54,8 +54,8 @@ class AppModule extends MainModule {
           transition: TransitionType.rightToLeftWithFade,
         ),
         Router(
-          '/search/:query',
-          child: (_, args) => SearchPage(query: args.params['query']),
+          '/search',
+          child: (_, args) => SearchPage(),
           transition: TransitionType.rightToLeftWithFade,
         ),
         Router(

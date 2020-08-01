@@ -39,7 +39,7 @@ class _SearchingAppBarState extends State<SearchingAppBar> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              appBarController.stream.add(true);
+              Modular.to.pushNamed('/search');
             },
           )
         ],

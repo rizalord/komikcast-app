@@ -70,7 +70,6 @@ class _SearchTabPageState extends State<SearchTabPage>
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Wrap(
-                      alignment: WrapAlignment.center,
                       spacing: 8.0,
                       children: results
                           .map(

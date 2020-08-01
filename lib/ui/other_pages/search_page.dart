@@ -3,15 +3,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/components/custom/search_bar/app_bar_controller.dart';
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/search_result.dart';
+import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
 import 'package:komikcast/ui/tab_pages/search_screen.dart';
 
 class SearchPage extends StatefulWidget {
-  final String query;
-
-  SearchPage({
-    @required this.query,
-  });
-
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -19,17 +14,15 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final AppBarController appBarController = AppBarController();
   ScrollController _controller = ScrollController();
-  bool _isLoading = false, _isGettingData = true;
+  bool _isLoading = false, _isGettingData = true, _firstLoaded = false;
   int page = 1;
-  TextEditingController _textController;
+  TextEditingController _textController = TextEditingController();
   List<SearchResult> results = [];
   String currentSearchKeyword = '';
 
   @override
   void initState() {
-    _textController = TextEditingController(text: widget.query);
     listenScroll();
-    getData();
     super.initState();
     Future.delayed(Duration.zero, hideKeyboard);
   }
@@ -62,12 +55,13 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void getData() async {
-    results =
-        await ComicData.getSpecificComic(keyword: widget.query, page: page);
+    results = await ComicData.getSpecificComic(
+        keyword: currentSearchKeyword, page: page);
     if (this.mounted)
       setState(() {
-        currentSearchKeyword = widget.query;
+        currentSearchKeyword = currentSearchKeyword;
         _isGettingData = false;
+        _firstLoaded = true;
       });
   }
 
@@ -75,6 +69,7 @@ class _SearchPageState extends State<SearchPage> {
     if (this.mounted) {
       setState(() {
         page = 1;
+        _firstLoaded = true;
         _isGettingData = true;
         currentSearchKeyword = keyword;
         Future.delayed(Duration.zero, () async {
@@ -126,44 +121,69 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: _isGettingData
+      body: _firstLoaded == false
           ? Center(
-              child: CircularProgressIndicator(),
+              child: Image.asset('assets/images/web-search.png'),
             )
-          : results.length != 0
-              ? SingleChildScrollView(
-                  controller: _controller,
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        padding:
-                            EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                        itemCount: results.length,
-                        itemBuilder: (context, index) => ItemCard(
-                          width: width,
-                          chapter: results[index].chapter,
-                          type: results[index].type,
-                          rating: results[index].rating,
-                          image: results[index].image,
-                          isCompleted: results[index].isCompleted,
-                          title: results[index].title,
-                          linkId: results[index].linkId,
-                        ),
-                      ),
-                      _isLoading
-                          ? Container(
-                              margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
-                              child: CircularProgressIndicator(),
-                            )
-                          : Container(),
-                    ],
-                  ),
+          : _isGettingData
+              ? Center(
+                  child: CircularProgressIndicator(),
                 )
-              : Center(
-                  child: Text('Comic Not Found'),
-                ),
+              : results.length != 0
+                  ? SingleChildScrollView(
+                      controller: _controller,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 12.0),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Wrap(
+                              spacing: 8.0,
+                              children: results
+                                  .map(
+                                    (e) => ListItemGrid(
+                                      width: width,
+                                      image: e.image,
+                                      title: e.title,
+                                      mangaId: e.linkId,
+                                      type: e.type,
+                                      chapter: e.chapter,
+                                      rating: e.rating ?? null,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                          // ListView.builder(
+                          //   shrinkWrap: true,
+                          //   physics: NeverScrollableScrollPhysics(),
+                          //   padding: EdgeInsets.only(
+                          //       left: 10.0, right: 10.0, top: 10.0),
+                          //   itemCount: results.length,
+                          //   itemBuilder: (context, index) => ItemCard(
+                          //     width: width,
+                          //     chapter: results[index].chapter,
+                          //     type: results[index].type,
+                          //     rating: results[index].rating,
+                          //     image: results[index].image,
+                          //     isCompleted: results[index].isCompleted,
+                          //     title: results[index].title,
+                          //     linkId: results[index].linkId,
+                          //   ),
+                          // ),
+                          _isLoading
+                              ? Container(
+                                  margin:
+                                      EdgeInsets.only(top: 5.0, bottom: 20.0),
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: Text('Comic Not Found'),
+                    ),
     );
   }
 }
