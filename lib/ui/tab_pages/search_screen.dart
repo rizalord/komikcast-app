@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/search_result.dart';
+import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
 
 class SearchTabPage extends StatefulWidget {
   @override
@@ -63,27 +64,49 @@ class _SearchTabPageState extends State<SearchTabPage>
           ? SingleChildScrollView(
               controller: _controller,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding:
-                        EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                    itemCount: results.length,
-                    itemBuilder: (context, index) => ItemCard(
-                      width: width,
-                      chapter: results[index].chapter,
-                      type: results[index].type,
-                      rating: results[index].rating,
-                      image: results[index].image,
-                      isCompleted: results[index].isCompleted,
-                      title: results[index].title,
-                      linkId: results[index].linkId,
+                  SizedBox(height: 12.0),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8.0,
+                      children: results
+                          .map(
+                            (e) => ListItemGrid(
+                              width: width,
+                              image: e.image,
+                              title: e.title,
+                              mangaId: e.linkId,
+                              type: e.type,
+                              chapter: e.chapter,
+                              rating: e.rating ?? null,
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   physics: NeverScrollableScrollPhysics(),
+                  //   padding:
+                  //       EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                  //   itemCount: results.length,
+                  //   itemBuilder: (context, index) => ItemCard(
+                  //     width: width,
+                  //     chapter: results[index].chapter,
+                  //     type: results[index].type,
+                  //     rating: results[index].rating,
+                  //     image: results[index].image,
+                  //     isCompleted: results[index].isCompleted,
+                  //     title: results[index].title,
+                  //     linkId: results[index].linkId,
+                  //   ),
+                  // ),
                   _isLoading
                       ? Container(
-                          margin: EdgeInsets.only(top: 5.0, bottom: 20.0),
+                          margin: EdgeInsets.only(top: 8.0, bottom: 20.0),
                           child: CircularProgressIndicator(),
                         )
                       : Container(),

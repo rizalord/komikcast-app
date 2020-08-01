@@ -76,7 +76,7 @@ class FavoriteList extends StatelessWidget {
           spacing: 8.0,
           children: state
               .map(
-                (e) => ListItem(
+                (e) => ListItemGrid(
                   width: width,
                   image: e['image'],
                   type: 'manga',
@@ -92,8 +92,8 @@ class FavoriteList extends StatelessWidget {
   }
 }
 
-class ListItem extends StatelessWidget {
-  const ListItem({
+class ListItemGrid extends StatelessWidget {
+  const ListItemGrid({
     Key key,
     @required this.width,
     this.image,
@@ -101,10 +101,11 @@ class ListItem extends StatelessWidget {
     this.type,
     this.chapter,
     this.mangaId,
+    this.rating,
   }) : super(key: key);
 
   final double width;
-  final String image, type, title, chapter, mangaId;
+  final String image, type, title, chapter, mangaId, rating;
 
   @override
   Widget build(BuildContext context) {
@@ -153,14 +154,43 @@ class ListItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Text(
-                      'Ch.$chapter',
-                      style: GoogleFonts.heebo(
-                        fontSize: 13,
-                        height: 1.5,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Ch.$chapter',
+                          style: GoogleFonts.heebo(
+                            fontSize: 13,
+                            height: 1.5,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        rating != null
+                            ? Container(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.yellow,
+                                      size: 18,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      rating,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Theme.of(context)
+                                            .textSelectionHandleColor
+                                            .withOpacity(.6),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ],
                     ),
                   ],
                 ),
@@ -186,8 +216,9 @@ class RecentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> data =
-        this.data.length >= 10 ? this.data.reversed.toList().sublist(0, 10) : this.data;
+    List<Map> data = this.data.length >= 10
+        ? this.data.reversed.toList().sublist(0, 10)
+        : this.data;
     return Container(
       width: width,
       height: width * .63,
