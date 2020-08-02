@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:komikcast/bloc/chapter_readed_bloc.dart';
+import 'package:komikcast/bloc/download_setting_bloc.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
@@ -40,6 +41,7 @@ class KomikcastSystem {
     this.favoriteInit(db: db);
     this.chapterReadedInit(db: db);
     this.proInit(db: db);
+    this.downloadPermInit(db: db);
     this.downloadsInit();
 
     // END CHECK
@@ -155,7 +157,12 @@ class KomikcastSystem {
   void proInit({Box db}) {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
-
     Modular.get<ProBloc>().add(expiredTime > currentTime);
+    // Modular.get<ProBloc>().add(false);
+  }
+
+  void downloadPermInit({Box db}) {
+    Modular.get<DownloadSettingBloc>()
+        .add(db.get('is_download_permanent', defaultValue: false));
   }
 }

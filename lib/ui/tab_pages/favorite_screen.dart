@@ -7,6 +7,7 @@ import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
+import 'package:komikcast/data/pro_data.dart';
 
 class FavoriteTabPage extends StatefulWidget {
   @override
@@ -39,9 +40,11 @@ class _FavoriteTabPageState extends State<FavoriteTabPage>
                 width: width,
                 withNext: false,
                 action: Text(
-                  '(${state.length})',
+                  '[${state.length}]',
                   style: GoogleFonts.heebo(
-                    color: Colors.blue,
+                    color: state.length >= 10 && ProData().isPro() == false
+                        ? Colors.red
+                        : Colors.blue,
                     fontStyle: FontStyle.italic,
                   ),
                 ),

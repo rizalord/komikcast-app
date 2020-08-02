@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:komikcast/bloc/download_setting_bloc.dart';
+import 'package:komikcast/data/pro_data.dart';
 
 class MainSettingPage extends StatelessWidget {
   @override
@@ -117,12 +122,29 @@ class MainSettingPage extends StatelessWidget {
                     leading: Icon(Icons.timer),
                     title: Text('Expired'),
                     subtitle: Text('Masa berlaku download'),
-                    trailing: DropdownButton(
-                      items: [
-                        DropdownMenuItem(child: Text('30 hari')),
-                        DropdownMenuItem(child: Text('Permanen')),
-                      ],
-                      onChanged: (value) {},
+                    trailing: BlocBuilder<DownloadSettingBloc, bool>(
+                      builder: (_, state) => DropdownButton(
+                        items: [
+                          DropdownMenuItem(
+                            child: Text('15 hari'),
+                            value: false,
+                          ),
+                          DropdownMenuItem(
+                            child: Text('Permanen'),
+                            value: true,
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (ProData().isPro() == false && value == true)
+                            Modular.to.pushNamed('/pro');
+                          else {
+                            Modular.get<DownloadSettingBloc>().add(value);
+                            Hive.box('komikcast')
+                                .put('is_download_permanent', value);
+                          }
+                        },
+                        value: state,
+                      ),
                     ),
                   ),
                 ),

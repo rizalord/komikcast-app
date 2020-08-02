@@ -9,6 +9,7 @@ import 'package:komikcast/components/appbar/download_appbar.dart';
 import 'package:komikcast/components/appbar/favorite_appbar.dart';
 import 'package:komikcast/components/appbar/home_appbar.dart';
 import 'package:komikcast/components/appbar/search_appbar.dart';
+import 'package:komikcast/data/pro_data.dart';
 import 'package:komikcast/env.dart';
 import 'package:komikcast/models/email_feedback.dart';
 import 'package:komikcast/ui/tab_pages/download_screen.dart';
@@ -169,10 +170,15 @@ class _MainPageState extends State<MainPage> {
                                 ),
                           ),
                           onPressed: () {
-                            Modular.get<ThemeBloc>().add(
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? ThemeMode.light
-                                    : ThemeMode.dark);
+                            if (ProData().isPro() == true) {
+                              Modular.get<ThemeBloc>().add(
+                                  Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? ThemeMode.light
+                                      : ThemeMode.dark);
+                            }else{
+                              Modular.to.pushNamed('/pro');
+                            }
                           },
                         ),
                         IconButton(

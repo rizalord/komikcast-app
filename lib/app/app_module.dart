@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
 import 'package:komikcast/bloc/chapter_readed_bloc.dart';
 import 'package:komikcast/bloc/download_bloc.dart';
+import 'package:komikcast/bloc/download_setting_bloc.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
@@ -42,6 +43,7 @@ class AppModule extends MainModule {
         Bind((_) => DownloadedBloc()),
         Bind((_) => DownloadedChapterBloc()),
         Bind((_) => ProBloc()),
+        Bind((_) => DownloadSettingBloc()),
       ];
 
   @override
