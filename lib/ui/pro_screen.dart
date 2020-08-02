@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/data/pro_data.dart';
 
 class ProScreen extends StatelessWidget {
   @override
@@ -232,7 +233,7 @@ class ButtonCustom extends StatelessWidget {
             borderRadius: BorderRadius.circular(width),
           ),
           child: InkWell(
-            onTap: () {},
+            onTap: () => ProData().getSevenDaysTrial(context),
             child: Container(
               width: width * .9,
               height: 50,

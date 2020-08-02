@@ -6,6 +6,7 @@ import 'package:komikcast/bloc/download_bloc.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
+import 'package:komikcast/bloc/pro_bloc.dart';
 import 'package:komikcast/bloc/reverse_chapter_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
@@ -40,6 +41,7 @@ class AppModule extends MainModule {
         Bind((_) => DownloadBloc()),
         Bind((_) => DownloadedBloc()),
         Bind((_) => DownloadedChapterBloc()),
+        Bind((_) => ProBloc()),
       ];
 
   @override

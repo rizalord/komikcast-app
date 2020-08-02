@@ -45,6 +45,7 @@ dependencies:
   percent_indicator: ^2.1.5
   dio: ^3.0.9
   intl: ^0.16.1
+  fluttertoast: ^4.0.1
 
 dependency_overrides:
   path: ^1.6.4

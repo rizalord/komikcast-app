@@ -9,7 +9,7 @@ import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/detail_chapter.dart';
 import 'package:komikcast/models/detail_comic.dart';
 import 'package:komikcast/models/download_status.dart';
-import 'package:komikcast/models/init_data.dart';
+import 'package:komikcast/data/init_data.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 

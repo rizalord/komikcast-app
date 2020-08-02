@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:komikcast/models/init_data.dart';
+import 'package:komikcast/data/init_data.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

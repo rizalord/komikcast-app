@@ -8,6 +8,7 @@ import 'package:komikcast/bloc/chapter_readed_bloc.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
+import 'package:komikcast/bloc/pro_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,6 +39,7 @@ class KomikcastSystem {
     this.historyInit(db: db);
     this.favoriteInit(db: db);
     this.chapterReadedInit(db: db);
+    this.proInit(db: db);
     this.downloadsInit();
 
     // END CHECK
@@ -130,7 +132,7 @@ class KomikcastSystem {
 
       // Read detail.txt
       var detailTxtPath = detailFolder.last.path;
-      
+
       String author;
 
       try {
@@ -148,5 +150,12 @@ class KomikcastSystem {
     // Save to BLOC
     Modular.get<DownloadedBloc>().add(tempAll);
     Modular.get<DownloadedChapterBloc>().add(allChapter);
+  }
+
+  void proInit({Box db}) {
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
+    int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
+
+    Modular.get<ProBloc>().add(expiredTime > currentTime);
   }
 }
