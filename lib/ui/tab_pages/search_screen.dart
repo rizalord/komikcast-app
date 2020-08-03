@@ -86,23 +86,6 @@ class _SearchTabPageState extends State<SearchTabPage>
                           .toList(),
                     ),
                   ),
-                  // ListView.builder(
-                  //   shrinkWrap: true,
-                  //   physics: NeverScrollableScrollPhysics(),
-                  //   padding:
-                  //       EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                  //   itemCount: results.length,
-                  //   itemBuilder: (context, index) => ItemCard(
-                  //     width: width,
-                  //     chapter: results[index].chapter,
-                  //     type: results[index].type,
-                  //     rating: results[index].rating,
-                  //     image: results[index].image,
-                  //     isCompleted: results[index].isCompleted,
-                  //     title: results[index].title,
-                  //     linkId: results[index].linkId,
-                  //   ),
-                  // ),
                   _isLoading
                       ? Container(
                           margin: EdgeInsets.only(top: 8.0, bottom: 20.0),

@@ -55,9 +55,23 @@ class _HomeTabPageState extends State<HomeTabPage>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ComicSlider(width: width, data: _listV1),
-                    SubHeader(text: 'update project komikcast', width: width),
+                    SubHeader(
+                      text: 'update project komikcast',
+                      width: width,
+                      onPressed: () => Modular.to.pushNamed(
+                        '/homeother',
+                        arguments: {'title': 'Update Project'},
+                      ),
+                    ),
                     ComicUpdateProject(width: width, data: _listV2),
-                    SubHeader(text: 'chapter terbaru', width: width),
+                    SubHeader(
+                      text: 'chapter terbaru',
+                      width: width,
+                      onPressed: () => Modular.to.pushNamed(
+                        '/homeother',
+                        arguments: {'title': 'Chapter Terbaru'},
+                      ),
+                    ),
                     ComicLatestChapter(width: width, data: _listV3),
                   ],
                 ),

@@ -7,6 +7,7 @@ import 'package:komikcast/models/comic_v2.dart';
 import 'package:komikcast/models/comic_v3.dart';
 import 'package:komikcast/models/detail_chapter.dart';
 import 'package:komikcast/models/detail_comic.dart';
+import 'package:komikcast/models/other_comic.dart';
 import 'package:komikcast/models/search_result.dart';
 
 class ComicData {
@@ -66,5 +67,22 @@ class ComicData {
     } catch (e) {}
 
     return response.map<SearchResult>((e) => SearchResult.fromJson(e)).toList();
+  }
+
+  // Get Others
+  static getChapterTerbaru({int page}) async {
+    final List response = json.decode(
+        (await http.get('${Env.apiUrl}daftar-komik?page=$page&order=update'))
+            .body)['daftar_komik'];
+
+    return response.map<OtherComic>((e) => OtherComic.fromJson(e)).toList();
+  }
+
+  static getProjectTerbaru({int page}) async {
+    final List response = json.decode(
+        (await http.get('${Env.apiUrl}project-list?page=$page'))
+            .body)['daftar_komik'];
+
+    return response.map<OtherComic>((e) => OtherComic.fromJson(e)).toList();
   }
 }

@@ -20,6 +20,7 @@ import 'package:komikcast/ui/manga_pages/download_manga_page.dart';
 import 'package:komikcast/ui/manga_pages/read_manga_page.dart';
 import 'package:komikcast/ui/other_pages/download_setting.dart';
 import 'package:komikcast/ui/other_pages/downloaded_chapter.dart';
+import 'package:komikcast/ui/other_pages/home_other_page.dart';
 import 'package:komikcast/ui/other_pages/last_readed_page.dart';
 import 'package:komikcast/ui/other_pages/qna_page.dart';
 import 'package:komikcast/ui/other_pages/search_page.dart';
@@ -111,6 +112,12 @@ class AppModule extends MainModule {
           child: (_, args) => DownloadedChapterScreen(
             title: args.data['title'],
             folderPath: args.data['folderPath'],
+          ),
+        ),
+        Router(
+          '/homeother',
+          child: (_, args) => HomeOtherScreen(
+            appBarTitle: args.data['title'],
           ),
         ),
       ];
