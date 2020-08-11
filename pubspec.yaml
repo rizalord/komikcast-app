@@ -46,6 +46,8 @@ dependencies:
   dio: ^3.0.9
   intl: ^0.16.1
   fluttertoast: ^4.0.1
+  url_launcher: ^5.5.0
+  shimmer: ^1.1.1
 
 dependency_overrides:
   path: ^1.6.4
@@ -53,13 +55,12 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  
+
   hive_generator: ^0.7.0+2
   build_runner: ^1.10.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
   # The following line ensures that the Material Icons font is
@@ -93,3 +94,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+

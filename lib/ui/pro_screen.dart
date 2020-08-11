@@ -39,7 +39,7 @@ class ProScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.only(top: 50),
                 alignment: Alignment.center,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,50 +141,50 @@ class ProScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 25),
-              Container(
-                height: 50,
-                width: width * .9,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            // labelText: 'Masukkan kode',
-                            hintText: 'Masukkan kode',
-                          ),
-                        ),
-                      ),
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(width),
-                      child: Material(
-                        child: Ink(
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(width),
-                          ),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              child: Text(
-                                'Activate',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   height: 50,
+              //   width: width * .9,
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         child: Container(
+              //           padding: EdgeInsets.symmetric(horizontal: 10),
+              //           child: TextField(
+              //             keyboardType: TextInputType.number,
+              //             decoration: InputDecoration(
+              //               // labelText: 'Masukkan kode',
+              //               hintText: 'Masukkan kode',
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //       ClipRRect(
+              //         borderRadius: BorderRadius.circular(width),
+              //         child: Material(
+              //           child: Ink(
+              //             decoration: BoxDecoration(
+              //               color: Colors.lightBlue,
+              //               borderRadius: BorderRadius.circular(width),
+              //             ),
+              //             child: InkWell(
+              //               onTap: () {},
+              //               child: Container(
+              //                 padding: EdgeInsets.symmetric(
+              //                   horizontal: 12,
+              //                   vertical: 8,
+              //                 ),
+              //                 child: Text(
+              //                   'Activate',
+              //                   style: TextStyle(color: Colors.white),
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(height: 30),
               ButtonBuy(width: width),
               SizedBox(height: 15),

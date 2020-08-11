@@ -36,11 +36,11 @@ class KomikcastSystem {
     var db = Hive.box('komikcast');
 
     // Initialize State
+    this.proInit(db: db);
     this.themeInit(db: db);
     this.historyInit(db: db);
     this.favoriteInit(db: db);
     this.chapterReadedInit(db: db);
-    this.proInit(db: db);
     this.downloadPermInit(db: db);
     this.downloadsInit();
 
@@ -157,8 +157,8 @@ class KomikcastSystem {
   void proInit({Box db}) {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
-    Modular.get<ProBloc>().add(expiredTime > currentTime);
-    // Modular.get<ProBloc>().add(false);
+    // Modular.get<ProBloc>().add(expiredTime > currentTime);
+    Modular.get<ProBloc>().add(false);
   }
 
   void downloadPermInit({Box db}) {

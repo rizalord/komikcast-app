@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:komikcast/bloc/download_setting_bloc.dart';
+import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/data/pro_data.dart';
 
 class MainSettingPage extends StatelessWidget {
@@ -37,37 +38,42 @@ class MainSettingPage extends StatelessWidget {
                       context: context,
                       builder: (_) => AlertDialog(
                         title: Text('Pilih Tema'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              title: Text('Terang'),
-                              leading: Radio(
-                                value: true,
-                                groupValue: true,
-                                onChanged: (val) {},
+                        content: BlocBuilder<ThemeBloc, ThemeMode>(
+                          builder: (_, state) => Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                title: Text('Terang'),
+                                leading: Radio(
+                                  value: state == ThemeMode.light,
+                                  groupValue: true,
+                                  onChanged: (_) {
+                                    Modular.get<ThemeBloc>()
+                                        .add(ThemeMode.light);
+                                    Hive.box('komikcast').put('theme', 'light');
+                                  },
+                                ),
                               ),
-                            ),
-                            ListTile(
-                              title: Text('Gelap'),
-                              leading: Radio(
-                                value: false,
-                                groupValue: true,
-                                onChanged: (val) {},
+                              ListTile(
+                                title: Text('Gelap'),
+                                leading: Radio(
+                                  value: state == ThemeMode.dark,
+                                  groupValue: true,
+                                  onChanged: (_) {
+                                    if (ProData().isPro() == false)
+                                      Modular.to.pushNamed('/pro');
+                                    else {
+                                      Modular.get<ThemeBloc>()
+                                          .add(ThemeMode.dark);
+                                      Hive.box('komikcast')
+                                          .put('theme', 'dark');
+                                    }
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        // actions: [
-                        //   ListTile(
-                        //     title: Text('Terang'),
-                        //     leading: Radio(
-                        //       value: true,
-                        //       groupValue: true,
-                        //       onChanged: (val) {},
-                        //     ),
-                        //   )
-                        // ],
                       ),
                       barrierDismissible: true,
                     );
@@ -118,7 +124,6 @@ class MainSettingPage extends StatelessWidget {
                 child: InkWell(
                   onTap: () {},
                   child: ListTile(
-                    focusColor: Colors.red,
                     leading: Icon(Icons.timer),
                     title: Text('Expired'),
                     subtitle: Text('Masa berlaku download'),

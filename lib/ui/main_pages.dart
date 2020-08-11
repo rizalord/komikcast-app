@@ -17,6 +17,7 @@ import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
 import 'package:komikcast/ui/tab_pages/home_screen.dart';
 import 'package:komikcast/ui/tab_pages/search_screen.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -79,6 +80,15 @@ class _MainPageState extends State<MainPage> {
   void navigateToQna() {
     Modular.to.pop(context);
     Modular.to.pushNamed('/qna');
+  }
+
+  void openWebVersion() async {
+    const url = 'https://komikcast.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -176,7 +186,7 @@ class _MainPageState extends State<MainPage> {
                                           Brightness.dark
                                       ? ThemeMode.light
                                       : ThemeMode.dark);
-                            }else{
+                            } else {
                               Modular.to.pushNamed('/pro');
                             }
                           },
@@ -186,7 +196,7 @@ class _MainPageState extends State<MainPage> {
                               color: Theme.of(context)
                                   .textSelectionHandleColor
                                   .withOpacity(.4)),
-                          onPressed: () {},
+                          onPressed: openWebVersion,
                         ),
                       ],
                     ),

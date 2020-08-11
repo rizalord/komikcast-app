@@ -68,8 +68,10 @@ class _SearchTabPageState extends State<SearchTabPage>
                 children: [
                   SizedBox(height: 12.0),
                   Container(
+                    width: width,
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Wrap(
+                      alignment: WrapAlignment.start,
                       spacing: 8.0,
                       children: results
                           .map(
