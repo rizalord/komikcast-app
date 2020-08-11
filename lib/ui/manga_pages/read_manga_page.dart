@@ -134,6 +134,9 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
               currentChapter: currentChapter,
               titleDownloaded:
                   downloadData == null ? null : downloadData['title'],
+              rootContext: context,
+              listChapter: listChapter,
+              changeChapter: changeChapter,
             ),
             downloadData == null
                 ? BottomMenu(
@@ -335,9 +338,7 @@ class BottomMenu extends StatelessWidget {
                   return IconButton(
                     icon: Icon(
                       isFavorited ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorited
-                          ? Colors.red
-                          : Colors.white,
+                      color: isFavorited ? Colors.red : Colors.white,
                     ),
                     onPressed: () async {
                       if (detail != null) {
@@ -401,11 +402,38 @@ class HeaderMenu extends StatelessWidget {
     this.showMenu,
     this.currentChapter,
     this.titleDownloaded,
+    this.rootContext,
+    this.listChapter,
+    this.changeChapter,
   }) : super(key: key);
 
   final double width;
   final bool showMenu;
   final String currentChapter, titleDownloaded;
+  final BuildContext rootContext;
+  final List<SelectChapter> listChapter;
+  final Function changeChapter;
+
+  void showListChapter() {
+    showDialog(
+      context: rootContext,
+      builder: (ctx) => AlertDialog(
+        title: Text('Select Chapter'),
+        content: Container(
+          child: ListView.builder(
+            itemCount: listChapter.length,
+            itemBuilder: (ctx, idx) => ListTile(
+              title: Text(listChapter[idx].text),
+              onTap: () {
+                Modular.to.pop();
+                changeChapter(id: listChapter[idx].linkId);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -473,7 +501,7 @@ class HeaderMenu extends StatelessWidget {
                         Icons.format_list_bulleted,
                         color: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: showListChapter,
                     ),
                   )
                 : Container(),
