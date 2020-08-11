@@ -167,66 +167,70 @@ class FloatingMenu extends StatelessWidget {
         height: kToolbarHeight,
         padding: EdgeInsets.only(right: 10.0, left: 2.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).textSelectionColor,
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Theme.of(context).textSelectionHandleColor.withOpacity(.2)
-                  : Colors.grey[700],
-            ),
-          ),
+          color: Theme.of(context).textSelectionColor.withOpacity(0),
+          // border: Border(
+          //   top: BorderSide(
+          //     color: Theme.of(context).brightness == Brightness.light
+          //         ? Theme.of(context).textSelectionHandleColor.withOpacity(.2)
+          //         : Colors.grey[700],
+          //   ),
+          // ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(kToolbarHeight),
-              child: Material(
-                borderRadius: BorderRadius.circular(kToolbarHeight),
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    width: kToolbarHeight,
-                    height: kToolbarHeight,
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    child: FaIcon(
-                      FontAwesomeIcons.commentAlt,
-                      color: Theme.of(context)
-                          .textSelectionHandleColor
-                          .withOpacity(.5),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 5),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(kToolbarHeight),
+            //   child: Material(
+            //     borderRadius: BorderRadius.circular(kToolbarHeight),
+            //     color: Colors.transparent,
+            //     child: InkWell(
+            //       onTap: () {},
+            //       child: Container(
+            //         width: kToolbarHeight,
+            //         height: kToolbarHeight,
+            //         color: Colors.transparent,
+            //         alignment: Alignment.center,
+            //         child: FaIcon(
+            //           FontAwesomeIcons.commentAlt,
+            //           color: Theme.of(context)
+            //               .textSelectionHandleColor
+            //               .withOpacity(.5),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(width: 5),
             Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(width),
-                child: Material(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(width),
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(width),
-                    ),
-                    child: InkWell(
-                      onTap: () => Modular.to.pushNamed(
-                        '/readmanga',
-                        arguments: {
-                          'mangaId': mangaId,
-                          'currentId': chapter.linkId,
-                        },
+                  child: Material(
+                    borderRadius: BorderRadius.circular(width),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(width),
                       ),
-                      child: Container(
-                        height: kToolbarHeight - 10,
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Baca Chapter Pertama',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
+                      child: InkWell(
+                        onTap: () => Modular.to.pushNamed(
+                          '/readmanga',
+                          arguments: {
+                            'mangaId': mangaId,
+                            'currentId': chapter.linkId,
+                          },
+                        ),
+                        child: Container(
+                          height: kToolbarHeight - 10,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Baca Chapter Pertama',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),

@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/bloc/favorite_bloc.dart';
 import 'package:komikcast/data/chapter_readed_data.dart';
 import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/data/favorite_data.dart';
 import 'package:komikcast/data/history_data.dart';
 import 'package:komikcast/models/detail_chapter.dart';
+import 'package:komikcast/models/detail_comic.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
 class ReadMangaPage extends StatefulWidget {
@@ -31,6 +35,7 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
   String nextId, prevId, currentChapter;
   List<SelectChapter> listChapter = [];
   List<ImageChapter> listImage = [];
+  DetailComic detail;
   Map downloadData;
 
   @override
@@ -41,7 +46,7 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
     downloadData = widget.downloadData;
 
     if (downloadData == null)
-      getListData();
+      getListData(withDetail: true);
     else
       getDownloadedData(
         title: downloadData['title'],
@@ -57,7 +62,10 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
     });
   }
 
-  getListData() async {
+  getListData({withDetail = false}) async {
+    if (withDetail == true)
+      detail = await ComicData.getDetailKomik(id: mangaId);
+
     final res = await ComicData.getChapterKomik(id: currentId);
     listChapter = res.selectChapter;
     listImage = res.images;
@@ -135,6 +143,8 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
                     prevId: prevId,
                     changeChapter: changeChapter,
                     isLoaded: isLoaded,
+                    mangaId: mangaId,
+                    detail: detail,
                   )
                 : Container(),
           ],
@@ -256,12 +266,15 @@ class BottomMenu extends StatelessWidget {
     this.prevId,
     this.changeChapter,
     this.isLoaded,
+    this.mangaId,
+    this.detail,
   }) : super(key: key);
 
   final double width;
   final bool showMenu, isLoaded;
-  final String prevId, nextId;
+  final String prevId, nextId, mangaId;
   final Function changeChapter;
+  final DetailComic detail;
 
   @override
   Widget build(BuildContext context) {
@@ -305,25 +318,60 @@ class BottomMenu extends StatelessWidget {
             Material(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(width),
-              child: IconButton(
-                icon: Icon(
-                  Icons.favorite_border,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
+              child: BlocBuilder<FavoriteBloc, List<Map>>(
+                builder: (ctx, state) {
+                  var isFavorited = state
+                          .where(
+                            (element) =>
+                                element['mangaId'] ==
+                                (mangaId.substring(mangaId.length - 1) == '/'
+                                    ? mangaId.replaceAll('/', '')
+                                    : mangaId),
+                          )
+                          .toList()
+                          .length >
+                      0;
+
+                  return IconButton(
+                    icon: Icon(
+                      isFavorited ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorited
+                          ? Colors.red
+                          : Colors.white,
+                    ),
+                    onPressed: () async {
+                      if (detail != null) {
+                        isFavorited
+                            ? await FavoriteData.unsaveFavorite(
+                                mangaId: mangaId,
+                              )
+                            : await FavoriteData.saveFavorite(
+                                mangaId: mangaId,
+                                currentId: detail.listChapters.first.linkId,
+                                detailChapter:
+                                    detail.listChapters.first.chapter,
+                                image: detail.image,
+                                title: detail.title,
+                                type: detail.type,
+                                context: context,
+                              );
+                      }
+                    },
+                  );
+                },
               ),
             ),
-            Material(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(width),
-              child: IconButton(
-                icon: Icon(
-                  Icons.comment,
-                  color: Colors.white,
-                ),
-                onPressed: () {},
-              ),
-            ),
+            // Material(
+            //   color: Colors.transparent,
+            //   borderRadius: BorderRadius.circular(width),
+            //   child: IconButton(
+            //     icon: Icon(
+            //       Icons.comment,
+            //       color: Colors.white,
+            //     ),
+            //     onPressed: () {},
+            //   ),
+            // ),
             Material(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(width),
