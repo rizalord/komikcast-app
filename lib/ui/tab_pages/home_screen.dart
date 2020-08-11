@@ -11,7 +11,6 @@ import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/comic_v1.dart';
 import 'package:komikcast/models/comic_v2.dart';
 import 'package:komikcast/models/comic_v3.dart';
-import 'package:shimmer/shimmer.dart';
 
 class HomeTabPage extends StatefulWidget {
   @override
@@ -46,6 +45,7 @@ class _HomeTabPageState extends State<HomeTabPage>
   Future<void> onRefresh() async => getData();
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(

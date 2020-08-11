@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -174,7 +175,20 @@ class MainSettingPage extends StatelessWidget {
             Container(
               child: Material(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Fluttertoast.showToast(
+                      msg: "Coming Soon",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Theme.of(context)
+                          .textSelectionHandleColor
+                          .withOpacity(.7),
+                      textColor:
+                          Theme.of(context).textSelectionColor.withOpacity(.8),
+                      fontSize: 16.0,
+                    );
+                  },
                   child: ListTile(
                     focusColor: Colors.red,
                     leading: Icon(Icons.bug_report),
@@ -191,7 +205,20 @@ class MainSettingPage extends StatelessWidget {
             Container(
               child: Material(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Fluttertoast.showToast(
+                      msg: "Coming Soon",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Theme.of(context)
+                          .textSelectionHandleColor
+                          .withOpacity(.7),
+                      textColor:
+                          Theme.of(context).textSelectionColor.withOpacity(.8),
+                      fontSize: 16.0,
+                    );
+                  },
                   child: ListTile(
                     focusColor: Colors.red,
                     leading: Icon(Icons.stars),
@@ -208,7 +235,20 @@ class MainSettingPage extends StatelessWidget {
             Container(
               child: Material(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Fluttertoast.showToast(
+                      msg: "Coming Soon",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Theme.of(context)
+                          .textSelectionHandleColor
+                          .withOpacity(.7),
+                      textColor:
+                          Theme.of(context).textSelectionColor.withOpacity(.8),
+                      fontSize: 16.0,
+                    );
+                  },
                   child: ListTile(
                     focusColor: Colors.red,
                     leading: Icon(Icons.verified_user),
@@ -254,7 +294,20 @@ class MainSettingPage extends StatelessWidget {
             Container(
               child: Material(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Fluttertoast.showToast(
+                      msg: "Coming Soon",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Theme.of(context)
+                          .textSelectionHandleColor
+                          .withOpacity(.7),
+                      textColor:
+                          Theme.of(context).textSelectionColor.withOpacity(.8),
+                      fontSize: 16.0,
+                    );
+                  },
                   child: ListTile(
                     focusColor: Colors.red,
                     leading: Icon(Icons.info_outline),

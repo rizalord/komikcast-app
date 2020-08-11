@@ -9,7 +9,6 @@ import 'dart:math' as math;
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/search_result.dart';
 import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
-import 'package:shimmer/shimmer.dart';
 
 class SearchTabPage extends StatefulWidget {
   @override
@@ -59,6 +58,7 @@ class _SearchTabPageState extends State<SearchTabPage>
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(

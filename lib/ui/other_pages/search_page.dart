@@ -4,7 +4,6 @@ import 'package:komikcast/components/custom/search_bar/app_bar_controller.dart';
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/search_result.dart';
 import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
-import 'package:komikcast/ui/tab_pages/search_screen.dart';
 
 class SearchPage extends StatefulWidget {
   @override

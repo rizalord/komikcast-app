@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
+import 'package:komikcast/bloc/favorite_sort_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/image_shimmer.dart';
@@ -18,6 +19,7 @@ class FavoriteTabPage extends StatefulWidget {
 class _FavoriteTabPageState extends State<FavoriteTabPage>
     with AutomaticKeepAliveClientMixin {
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
 
@@ -43,9 +45,7 @@ class _FavoriteTabPageState extends State<FavoriteTabPage>
                 action: Text(
                   '[${state.length}]',
                   style: GoogleFonts.heebo(
-                    color: state.length >= 10 && ProData().isPro() == false
-                        ? Colors.red
-                        : Colors.blue,
+                    color: Colors.blue,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -75,21 +75,26 @@ class FavoriteList extends StatelessWidget {
     return Container(
       width: width,
       padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: BlocBuilder<FavoriteBloc, List<Map>>(
-        builder: (context, state) => Wrap(
-          spacing: 8.0,
-          children: state
-              .map(
-                (e) => ListItemGrid(
-                  width: width,
-                  image: e['image'],
-                  type: 'manga',
-                  title: e['title'],
-                  chapter: e['chapterName'],
-                  mangaId: e['mangaId'],
-                ),
-              )
-              .toList(),
+      child: BlocBuilder<FavoriteSortBloc, String>(
+        builder: (ctx, sort) => BlocBuilder<FavoriteBloc, List<Map>>(
+          builder: (context, state) {
+            state = sort == 'desc' ? state.reversed.toList() : state;
+            return Wrap(
+              spacing: 8.0,
+              children: state
+                  .map(
+                    (e) => ListItemGrid(
+                      width: width,
+                      image: e['image'],
+                      type: 'manga',
+                      title: e['title'],
+                      chapter: e['chapterName'],
+                      mangaId: e['mangaId'],
+                    ),
+                  )
+                  .toList(),
+            );
+          },
         ),
       ),
     );

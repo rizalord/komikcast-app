@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
@@ -68,7 +67,9 @@ class _DetailMangaState extends State<DetailManga> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+    // ignore: close_sinks
     final sliverBloc = Modular.get<SliverBloc>();
+    // ignore: close_sinks
     final blurBloc = Modular.get<BlurBloc>();
 
     return Scaffold(

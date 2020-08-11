@@ -36,12 +36,13 @@ class KomikcastSystem {
     var db = Hive.box('komikcast');
 
     // Initialize State
-    this.proInit(db: db);
-    this.themeInit(db: db);
+    var isPro = this.proInit(db: db);
+
+    this.themeInit(db: db, isPro: isPro);
     this.historyInit(db: db);
     this.favoriteInit(db: db);
     this.chapterReadedInit(db: db);
-    this.downloadPermInit(db: db);
+    this.downloadPermInit(db: db, isPro: isPro);
     this.downloadsInit();
 
     // END CHECK
@@ -55,7 +56,8 @@ class KomikcastSystem {
    * =============================================
    */
 
-  void themeInit({Box db}) {
+  void themeInit({Box db, bool isPro = false}) {
+    if (isPro == false) db.put('theme', 'light');
     var theme = db.get('theme') == null ? 'light' : db.get('theme');
     db.put('theme', theme);
     Modular.get<ThemeBloc>()
@@ -154,14 +156,16 @@ class KomikcastSystem {
     Modular.get<DownloadedChapterBloc>().add(allChapter);
   }
 
-  void proInit({Box db}) {
+  bool proInit({Box db}) {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
-    // Modular.get<ProBloc>().add(expiredTime > currentTime);
-    Modular.get<ProBloc>().add(false);
+    Modular.get<ProBloc>().add(expiredTime > currentTime);
+    // Modular.get<ProBloc>().add(true);
+    return expiredTime > currentTime;
   }
 
-  void downloadPermInit({Box db}) {
+  void downloadPermInit({Box db, bool isPro = false}) {
+    if (isPro == false) db.put('is_download_permanent', false);
     Modular.get<DownloadSettingBloc>()
         .add(db.get('is_download_permanent', defaultValue: false));
   }

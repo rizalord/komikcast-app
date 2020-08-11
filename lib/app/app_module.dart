@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Router;
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:komikcast/bloc/blur_bloc.dart';
 import 'package:komikcast/bloc/chapter_readed_bloc.dart';
@@ -7,6 +7,7 @@ import 'package:komikcast/bloc/download_setting_bloc.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
+import 'package:komikcast/bloc/favorite_sort_bloc.dart';
 import 'package:komikcast/bloc/pro_bloc.dart';
 import 'package:komikcast/bloc/reverse_chapter_bloc.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
@@ -45,6 +46,7 @@ class AppModule extends MainModule {
         Bind((_) => DownloadedChapterBloc()),
         Bind((_) => ProBloc()),
         Bind((_) => DownloadSettingBloc()),
+        Bind((_) => FavoriteSortBloc()),
       ];
 
   @override

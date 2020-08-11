@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:komikcast/bloc/favorite_sort_bloc.dart';
 
 class FavoriteAppBar extends StatefulWidget implements PreferredSizeWidget {
   FavoriteAppBar({Key key})
@@ -18,12 +21,18 @@ class _FavoriteAppBarState extends State<FavoriteAppBar> {
     return AppBar(
       title: Text("Favorite"),
       actions: <Widget>[
-        PopupMenuButton(
-          icon: Icon(Icons.sort),
-          itemBuilder: (BuildContext context) => [
-            PopupMenuItem(child: Text('Asc')),
-            PopupMenuItem(child: Text('Desc')),
-          ],
+        BlocBuilder<FavoriteSortBloc, String>(
+          builder: (ctx, state) => PopupMenuButton(
+            icon: Icon(Icons.sort),
+            initialValue: state,
+            onSelected: (val) {
+              Modular.get<FavoriteSortBloc>().add(val);
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(child: Text('Asc'), value: 'asc'),
+              PopupMenuItem(child: Text('Desc'), value: 'desc'),
+            ],
+          ),
         )
       ],
     );
