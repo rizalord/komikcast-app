@@ -5,11 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 
 import 'package:komikcast/components/card/comictype.dart';
+import 'package:komikcast/components/image_shimmer.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/comic_v1.dart';
 import 'package:komikcast/models/comic_v2.dart';
 import 'package:komikcast/models/comic_v3.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeTabPage extends StatefulWidget {
   @override
@@ -182,6 +184,11 @@ class ItemLatest extends StatelessWidget {
                                   fit: BoxFit.cover,
                                   width: width * .32,
                                   height: width * .44,
+                                  placeholder: (_, __) =>
+                                      ImageShimmerPlaceHolder(
+                                    width: width * .32,
+                                    height: width * .44,
+                                  ),
                                 ),
                                 isHot
                                     ? Positioned(
@@ -435,6 +442,10 @@ class SingleProject extends StatelessWidget {
                   fit: BoxFit.cover,
                   width: width * .32,
                   height: width * .44,
+                  placeholder: (_, __) => ImageShimmerPlaceHolder(
+                    width: width * .32,
+                    height: width * .44,
+                  ),
                 ),
                 isHot
                     ? Positioned(
@@ -604,6 +615,10 @@ class SingleSlider extends StatelessWidget {
                     fit: BoxFit.cover,
                     width: width * .4,
                     height: width * .55,
+                    placeholder: (_, __) => ImageShimmerPlaceHolder(
+                      width: width * .4,
+                      height: width * .55,
+                    ),
                   ),
                 ),
                 Positioned(

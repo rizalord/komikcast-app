@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/components/card/comictype.dart';
+import 'package:komikcast/components/image_shimmer.dart';
 import 'dart:math' as math;
 
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/models/search_result.dart';
 import 'package:komikcast/ui/tab_pages/favorite_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SearchTabPage extends StatefulWidget {
   @override
@@ -146,6 +148,10 @@ class ItemCard extends StatelessWidget {
                         fit: BoxFit.cover,
                         width: width * .22,
                         height: width * .3,
+                        placeholder: (_, __) => ImageShimmerPlaceHolder(
+                          width: width * .22,
+                          height: width * .3,
+                        ),
                       ),
                       Positioned(
                         bottom: 6.0,
