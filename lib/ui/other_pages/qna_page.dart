@@ -12,36 +12,36 @@ class QnAPage extends StatelessWidget {
           ListItem(
             title: 'Mengapa saya perlu aplikasi ini?',
             subtitle:
-                'Komikcast adalah aplikasi untuk membaca komik online bahasa indonesia secara gratis dengan fitur-fitur yang bejibun.',
+                'Komikcast adalah aplikasi untuk membaca komik online bahasa indonesia secara gratis dengan banyaknya fitur yang disediakan.',
           ),
           ListItem(
-            title: 'Cara menggunakan Komikcast?',
-            subtitle: 'Tinggal baca bangsat!',
+            title: 'Cara membaca di Komikcast?',
+            subtitle: 'Anda bisa membaca melalui website asli komikcast (https://komikcast.com) atau bisa langsung membaca melalui aplikasi ini.',
           ),
           ListItem(
-            title: 'Bagaimana cara mendownload manga secara permanen?',
+            title: 'Apakah ada batasan dalam mendownload manga?',
             subtitle:
-                'Untuk bisa mendownload manga secara permanen dan tanpa batasan jumlah download, anda perlu membeli versi Pro dari aplikasi ini.',
+                'Selama penyimpanan di perangkat anda belum penuh, anda bebas mendownload manga tanpa batasan download.',
           ),
           ListItem(
             title: 'Bagaimana cara mengaktifkan dark mode?',
             subtitle:
-                'Untuk bisa mengaktifkan dark mode, anda perlu membeli versi Pro dari aplikasi ini.',
+                'Untuk bisa mengaktifkan dark mode, anda bisa buka tab setting atau bisa langsung tekan tombol (Matahari) di bagian Navigation Drawer/Sidebar.',
           ),
           ListItem(
-            title: 'Apakah versi Pro bisa dibagikan ke perangkat lain?',
+            title: 'Apakah ada harga untuk menggunakan aplikasi ini?',
             subtitle:
-                'Versi Pro hanya bisa digunakan untuk satu perangkat saja, ini berguna untuk melindungi aplikasi kami dari program-program berbahaya seperti Lucky Patcher, Game Guardian, dsb.',
+                'Tidak, aplikasi kami 100% gratis untuk semua kalangan.',
           ),
           ListItem(
-            title: 'Bagaimana cara kerja versi Pro?',
+            title: 'Bagaimana cara aplikasi ini biar tetap hidup?',
             subtitle:
-                'Ketika anda dialihkan ke halaman pembayaran dan mengisi form yang telah disediakan, anda secara otomatis akan mendapatkan kode aktivasi melalui Email. Setelah anda melakukan aktivasi, server akan menyimpan unique id dari perangkat anda, sehingga ketika anda akan melakukan aktivasi dari perangkat lain akan kami blokir demi keamanan bersama.',
+                'Aplikasi Komikcast bisa tetap hidup dengan adanya iklan dan donasi dari teman-teman semua.',
           ),
           ListItem(
-            title: 'Apakah versi Pro memiliki durasi?',
+            title: 'Bagaimana cara kita donasi?',
             subtitle:
-                'Tidak, setelah anda membeli versi Pro anda bebas menggunakan aplikasi beserta fitur pro-nya seumur hidup tanpa batasan apapun.',
+                'Anda bisa donasi ke kami melalui saweria (https://saweria.co/donate/rizalord). Berapun donasi teman-teman kami akan sangat berterimakasih atas hal itu.',
           ),
         ],
       ),
