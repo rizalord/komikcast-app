@@ -94,7 +94,7 @@ class _TabOverviewState extends State<TabOverview> {
                   ),
                   SizedBox(height: 25.0),
                   Text(
-                    'Latest Chapter: Chapter 665',
+                    'Latest Chapter: Chapter ' + widget.detail.listChapters.first.chapter,
                     style: GoogleFonts.heebo(
                       fontSize: 17.0,
                       fontWeight: FontWeight.w600,
