@@ -1,4 +1,5 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -67,8 +68,9 @@ class _MainPageState extends State<MainPage> {
 
   void shareFriend() {
     Share.share(
-        'Komikcast - Tempatnya Baca Komik Online Bahasa Indonesia ${Env.webpage}',
-        subject: 'Download Aplikasi Komikcast Gratis');
+        Env.appName +
+            ' - Tempatnya Baca Komik Online Bahasa Indonesia ${Env.webpage}',
+        subject: 'Download Aplikasi ' + Env.appName + ' Gratis');
     Modular.to.pop(context);
   }
 
@@ -83,11 +85,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   void openWebVersion() async {
-    const url = 'https://komikcast.com';
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunch(Env.webpage)) {
+      await launch(Env.webpage);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch ' + Env.webpage;
     }
   }
 
@@ -101,15 +102,17 @@ class _MainPageState extends State<MainPage> {
           mainAxisSize: MainAxisSize.max,
           children: [
             DrawerHeader(
-              child: Image.asset('assets/images/watermark.png'),
+              child: CachedNetworkImage(
+                imageUrl: Env.navigationDrawerImageUrl,
+              ),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Env.primaryColor,
               ),
             ),
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.commentAlt,
-                color: Colors.blue,
+                color: Env.primaryColor,
               ),
               title: Text('Masukan'),
               onTap: sendFeedback,
@@ -117,7 +120,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.facebook,
-                color: Colors.blue,
+                color: Env.primaryColor,
               ),
               title: Text('Sukai kami'),
               onTap: likeFanpage,
@@ -125,7 +128,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.share,
-                color: Colors.blue,
+                color: Env.primaryColor,
               ),
               title: Text('Beri tahu teman anda'),
               onTap: shareFriend,
@@ -133,7 +136,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.cog,
-                color: Colors.blue,
+                color: Env.primaryColor,
               ),
               title: Text('Pengaturan'),
               onTap: navigateToSetting,
@@ -141,7 +144,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.solidQuestionCircle,
-                color: Colors.blue,
+                color: Env.primaryColor,
               ),
               title: Text('Tanya Jawab'),
               onTap: navigateToQna,
@@ -220,22 +223,22 @@ class _MainPageState extends State<MainPage> {
           BottomNavyBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
-            activeColor: Colors.blue,
+            activeColor: Env.primaryColor,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.search),
             title: Text('Search'),
-            activeColor: Colors.blue,
+            activeColor: Env.primaryColor,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.favorite),
             title: Text('Favorite'),
-            activeColor: Colors.blue,
+            activeColor: Env.primaryColor,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.file_download),
             title: Text('Downloads'),
-            activeColor: Colors.blue,
+            activeColor: Env.primaryColor,
           ),
         ],
       ),

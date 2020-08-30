@@ -6,6 +6,8 @@ import 'package:hive/hive.dart';
 import 'package:komikcast/bloc/download_setting_bloc.dart';
 import 'package:komikcast/data/pro_data.dart';
 
+import '../../env.dart';
+
 class DownloadSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class DownloadSetting extends StatelessWidget {
                   focusColor: Colors.red,
                   leading: Icon(Icons.save),
                   title: Text('Lokasi Penyimpanan'),
-                  subtitle: Text('/storage/emulated/0/komikcast'),
+                  subtitle: Text('/storage/emulated/0/${Env.appName.toLowerCase().trim()}'),
                 ),
               ),
               color: Colors.transparent,

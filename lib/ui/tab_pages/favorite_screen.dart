@@ -9,6 +9,7 @@ import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/image_shimmer.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
+import 'package:komikcast/env.dart';
 
 class FavoriteTabPage extends StatefulWidget {
   @override
@@ -44,7 +45,7 @@ class _FavoriteTabPageState extends State<FavoriteTabPage>
                 action: Text(
                   '[${state.length}]',
                   style: GoogleFonts.heebo(
-                    color: Colors.blue,
+                    color: Env.primaryColor,
                     fontStyle: FontStyle.italic,
                   ),
                 ),

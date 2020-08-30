@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:komikcast/env.dart';
 
 class QnAPage extends StatelessWidget {
   @override
@@ -12,11 +13,11 @@ class QnAPage extends StatelessWidget {
           ListItem(
             title: 'Mengapa saya perlu aplikasi ini?',
             subtitle:
-                'Komikcast adalah aplikasi untuk membaca komik online bahasa indonesia secara gratis dengan banyaknya fitur yang disediakan.',
+                Env.appName + ' adalah aplikasi untuk membaca komik online bahasa indonesia secara gratis dengan banyaknya fitur yang disediakan.',
           ),
           ListItem(
-            title: 'Cara membaca di Komikcast?',
-            subtitle: 'Anda bisa membaca melalui website asli komikcast (https://komikcast.com) atau bisa langsung membaca melalui aplikasi ini.',
+            title: 'Cara membaca di ${Env.appName}?',
+            subtitle: 'Anda bisa membaca melalui website asli ' + Env.appName + ' (' + Env.webpage + ') atau bisa langsung membaca melalui aplikasi ini.',
           ),
           ListItem(
             title: 'Apakah ada batasan dalam mendownload manga?',
@@ -36,12 +37,12 @@ class QnAPage extends StatelessWidget {
           ListItem(
             title: 'Bagaimana cara aplikasi ini biar tetap hidup?',
             subtitle:
-                'Aplikasi Komikcast bisa tetap hidup dengan adanya iklan dan donasi dari teman-teman semua.',
+                'Aplikasi ${Env.appName} bisa tetap hidup dengan adanya iklan dan donasi dari teman-teman semua.',
           ),
           ListItem(
             title: 'Bagaimana cara kita donasi?',
             subtitle:
-                'Anda bisa donasi ke kami melalui saweria (https://saweria.co/donate/rizalord). Berapun donasi teman-teman kami akan sangat berterimakasih atas hal itu.',
+                'Anda bisa donasi ke kami melalui saweria (' + Env.donateUrl +'). Berapun donasi teman-teman kami akan sangat berterimakasih atas hal itu.',
           ),
         ],
       ),

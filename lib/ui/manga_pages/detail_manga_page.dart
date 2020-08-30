@@ -13,6 +13,7 @@ import 'package:komikcast/bloc/scroll_bloc.dart';
 import 'package:komikcast/bloc/sliver_bloc.dart';
 import 'package:komikcast/data/comic_data.dart';
 import 'package:komikcast/data/favorite_data.dart';
+import 'package:komikcast/env.dart';
 import 'package:komikcast/models/detail_comic.dart';
 import 'package:komikcast/ui/manga_pages/tab_chapters.dart';
 import 'package:komikcast/ui/manga_pages/tab_overview.dart';
@@ -213,7 +214,7 @@ class FloatingMenu extends StatelessWidget {
                     borderRadius: BorderRadius.circular(width),
                     child: Ink(
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Env.primaryColor,
                         borderRadius: BorderRadius.circular(width),
                       ),
                       child: InkWell(

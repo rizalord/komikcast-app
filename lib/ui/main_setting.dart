@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:komikcast/bloc/download_setting_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/data/pro_data.dart';
+import 'package:komikcast/env.dart';
 
 class MainSettingPage extends StatelessWidget {
   @override
@@ -114,7 +115,7 @@ class MainSettingPage extends StatelessWidget {
                     focusColor: Colors.red,
                     leading: Icon(Icons.save),
                     title: Text('Lokasi Penyimpanan'),
-                    subtitle: Text('/storage/emulated/0/komikcast'),
+                    subtitle: Text('/storage/emulated/0/${Env.appName.toLowerCase().trim()}'),
                   ),
                 ),
                 color: Colors.transparent,
@@ -285,7 +286,7 @@ class MainSettingPage extends StatelessWidget {
                     focusColor: Colors.red,
                     leading: FaIcon(FontAwesomeIcons.appStore),
                     title: Text('Versi'),
-                    subtitle: Text('Komikcast - v1.0.0'),
+                    subtitle: Text('${Env.appName} - v1.0.0'),
                   ),
                 ),
                 color: Colors.transparent,
@@ -314,7 +315,7 @@ class MainSettingPage extends StatelessWidget {
                   child: ListTile(
                     focusColor: Colors.red,
                     leading: Icon(Icons.info_outline),
-                    title: Text('Tentang Komikcast'),
+                    title: Text('Tentang ${Env.appName}'),
                   ),
                 ),
                 color: Colors.transparent,

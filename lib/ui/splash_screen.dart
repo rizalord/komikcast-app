@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:komikcast/data/init_data.dart';
+import 'package:komikcast/env.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Env.primaryColor,
       body: Center(
         child: Container(
           decoration: BoxDecoration(boxShadow: [

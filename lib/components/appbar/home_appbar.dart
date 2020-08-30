@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:komikcast/bloc/pro_bloc.dart';
+import 'package:komikcast/env.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_modular/flutter_modular.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:komikcast/bloc/pro_bloc.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   HomeAppBar({Key key})
@@ -10,7 +11,7 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
         super(key: key);
 
   @override
-  final Size preferredSize; // default is 56.0
+  final Size preferredSize; 
 
   @override
   _HomeAppBarState createState() => _HomeAppBarState();
@@ -21,7 +22,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      title: Text('Komikcast'),
+      title: Text(Env.appName),
       actions: [
         // IconButton(
         //   icon: FaIcon(

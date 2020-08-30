@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komikcast/env.dart';
 
 // SUB HEADER
 class SubHeader extends StatelessWidget {
@@ -35,14 +36,14 @@ class SubHeader extends StatelessWidget {
                   style: GoogleFonts.heebo(
                     fontSize: 17,
                     fontWeight: FontWeight.w500,
-                    color: Colors.blue,
+                    color: Env.primaryColor,
                   ),
                 ),
                 withNext
                     ? IconButton(
                         icon: Icon(
                           Icons.arrow_forward,
-                          color: Colors.blue,
+                          color: Env.primaryColor,
                         ),
                         onPressed: () {},
                       )
@@ -59,14 +60,14 @@ class SubHeader extends StatelessWidget {
                   style: GoogleFonts.heebo(
                     fontSize: 17,
                     fontWeight: FontWeight.w500,
-                    color: Colors.blue,
+                    color: Env.primaryColor,
                   ),
                 ),
                 withNext
                     ? IconButton(
                         icon: Icon(
                           Icons.arrow_forward,
-                          color: Colors.blue,
+                          color: Env.primaryColor
                         ),
                         onPressed: onPressed,
                       )

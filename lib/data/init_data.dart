@@ -157,8 +157,8 @@ class KomikcastSystem {
   }
 
   bool proInit({Box db}) {
-    int currentTime = DateTime.now().millisecondsSinceEpoch;
-    int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
+    // int currentTime = DateTime.now().millisecondsSinceEpoch;
+    // int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
     // Modular.get<ProBloc>().add(expiredTime > currentTime);
     Modular.get<ProBloc>().add(true);
     // return expiredTime > currentTime;

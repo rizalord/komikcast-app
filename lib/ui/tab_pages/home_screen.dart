@@ -12,6 +12,8 @@ import 'package:komikcast/models/comic_v1.dart';
 import 'package:komikcast/models/comic_v2.dart';
 import 'package:komikcast/models/comic_v3.dart';
 
+import '../../env.dart';
+
 class HomeTabPage extends StatefulWidget {
   @override
   _HomeTabPageState createState() => _HomeTabPageState();
@@ -58,7 +60,7 @@ class _HomeTabPageState extends State<HomeTabPage>
                   children: [
                     ComicSlider(width: width, data: _listV1),
                     SubHeader(
-                      text: 'update project komikcast',
+                      text: 'update project ' + Env.appName,
                       width: width,
                       onPressed: () => Modular.to.pushNamed(
                         '/homeother',
@@ -498,7 +500,7 @@ class SingleProject extends StatelessWidget {
               style: GoogleFonts.heebo(
                 fontSize: 15,
                 height: 1.5,
-                color: Colors.blue,
+                color: Env.primaryColor,
                 fontWeight: FontWeight.w500,
               ),
               maxLines: 1,

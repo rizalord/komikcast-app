@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komikcast/bloc/scroll_bloc.dart';
+import 'package:komikcast/env.dart';
 import 'package:komikcast/models/detail_comic.dart';
 
 class TabOverview extends StatefulWidget {
@@ -98,7 +99,7 @@ class _TabOverviewState extends State<TabOverview> {
                     style: GoogleFonts.heebo(
                       fontSize: 17.0,
                       fontWeight: FontWeight.w600,
-                      color: Colors.blue,
+                      color: Env.primaryColor,
                     ),
                   ),
                   SizedBox(height: 16.0),
