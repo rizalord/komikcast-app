@@ -9,7 +9,6 @@ import 'package:komikcast/bloc/history_bloc.dart';
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/image_shimmer.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
-import 'package:komikcast/data/pro_data.dart';
 
 class FavoriteTabPage extends StatefulWidget {
   @override
@@ -242,7 +241,7 @@ class RecentList extends StatelessWidget {
         : this.data;
     return Container(
       width: width,
-      height: width * .63,
+      height: this.data.length > 0 ? width * .63 : 0,
       child: ListView(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,

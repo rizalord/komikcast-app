@@ -23,34 +23,41 @@ class _HomeAppBarState extends State<HomeAppBar> {
       elevation: 0,
       title: Text('Komikcast'),
       actions: [
-        BlocBuilder<ProBloc, bool>(
-          builder: (ctx, isPro) => isPro == true
-              ? Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.yellow, width: 2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'PRO',
-                      style: TextStyle(
-                        color: Colors.yellow,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                )
-              : IconButton(
-                  icon: FaIcon(
-                    FontAwesomeIcons.crown,
-                    size: 20,
-                  ),
-                  onPressed: () => Modular.to.pushNamed('/pro'),
-                ),
-        ),
+        // IconButton(
+        //   icon: FaIcon(
+        //     FontAwesomeIcons.crown,
+        //     size: 20,
+        //   ),
+        //   onPressed: () {},
+        // ),
+        // BlocBuilder<ProBloc, bool>(
+        //   builder: (ctx, isPro) => isPro == true
+        //       ? Container(
+        //           alignment: Alignment.center,
+        //           padding: EdgeInsets.symmetric(horizontal: 10),
+        //           child: Container(
+        //             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        //             decoration: BoxDecoration(
+        //               border: Border.all(color: Colors.yellow, width: 2),
+        //               borderRadius: BorderRadius.circular(8),
+        //             ),
+        //             child: Text(
+        //               'PRO',
+        //               style: TextStyle(
+        //                 color: Colors.yellow,
+        //                 fontWeight: FontWeight.w500,
+        //               ),
+        //             ),
+        //           ),
+        //         )
+        //       : IconButton(
+        //           icon: FaIcon(
+        //             FontAwesomeIcons.crown,
+        //             size: 20,
+        //           ),
+        //           onPressed: () => Modular.to.pushNamed('/pro'),
+        //         ),
+        // ),
       ],
     );
   }
