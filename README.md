@@ -47,7 +47,7 @@ I saw on the Komikcast website that there were so many ads, every time I tap, I 
 - [x] Save History
 - [x] Search Manga
 - [x] Download Manga
-- [x] Dark Mode Support (Pro Only)
+- [x] Dark Mode Support
 
 ## Screenshots
 
