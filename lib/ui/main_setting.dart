@@ -52,6 +52,7 @@ class MainSettingPage extends StatelessWidget {
                                     Modular.get<ThemeBloc>()
                                         .add(ThemeMode.light);
                                     Hive.box('komikcast').put('theme', 'light');
+                                    Modular.to.pop();
                                   },
                                 ),
                               ),
@@ -69,6 +70,8 @@ class MainSettingPage extends StatelessWidget {
                                       Hive.box('komikcast')
                                           .put('theme', 'dark');
                                     }
+
+                                    Modular.to.pop();
                                   },
                                 ),
                               ),

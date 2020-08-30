@@ -41,9 +41,9 @@ class ProData {
   }
 
   bool isPro() {
-    int currentTime = DateTime.now().millisecondsSinceEpoch;
-    int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
-    // return true;
-    return expiredTime > currentTime;
+    // int currentTime = DateTime.now().millisecondsSinceEpoch;
+    // int expiredTime = db.get('pro_expired_date', defaultValue: currentTime);
+    return true;
+    // return expiredTime > currentTime;
   }
 }
