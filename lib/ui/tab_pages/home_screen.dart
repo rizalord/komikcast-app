@@ -2,12 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'dart:math' as math;
 
 import 'package:komikcast/components/card/comictype.dart';
 import 'package:komikcast/components/image_shimmer.dart';
 import 'package:komikcast/components/text/sub_header_text.dart';
 import 'package:komikcast/data/comic_data.dart';
+import 'package:komikcast/data/init_data.dart';
 import 'package:komikcast/models/comic_v1.dart';
 import 'package:komikcast/models/comic_v2.dart';
 import 'package:komikcast/models/comic_v3.dart';
@@ -38,6 +40,10 @@ class _HomeTabPageState extends State<HomeTabPage>
     _listV1 = resData['hotComic'];
     _listV2 = resData['projectComic'];
     _listV3 = resData['latestChapter'];
+
+    // set notification last chapter
+    KomikcastSystem()
+        .setLastChapterId(_listV3.first.linkId, db: Hive.box('komikcast'));
     setState(() {
       _isLoaded = true;
     });

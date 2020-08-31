@@ -35,7 +35,7 @@ class DownloadSetting extends StatelessWidget {
                   focusColor: Colors.red,
                   leading: Icon(Icons.save),
                   title: Text('Lokasi Penyimpanan'),
-                  subtitle: Text('/storage/emulated/0/${Env.appName.toLowerCase().trim()}'),
+                  subtitle: Text('/storage/emulated/0/' + Env.appName.toLowerCase().trim()),
                 ),
               ),
               color: Colors.transparent,

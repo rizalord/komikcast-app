@@ -48,6 +48,8 @@ dependencies:
   fluttertoast: ^4.0.1
   url_launcher: ^5.5.0
   shimmer: ^1.1.1
+  background_fetch: '^0.5.1'
+  flutter_local_notifications: ^1.4.4+4
 
 dependency_overrides:
   path: ^1.6.4

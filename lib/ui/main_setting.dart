@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:komikcast/bloc/download_setting_bloc.dart';
+import 'package:komikcast/bloc/notification_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/data/pro_data.dart';
 import 'package:komikcast/env.dart';
@@ -95,6 +96,40 @@ class MainSettingPage extends StatelessWidget {
                   ? Theme.of(context).primaryColor
                   : Colors.grey[100],
             ),
+            // Sub 0.5
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              child: Text(
+                'Notifikasi',
+                style: GoogleFonts.heebo(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            Container(
+              child: Material(
+                child: InkWell(
+                  onTap: () {},
+                  child: BlocBuilder<NotificationBloc, bool>(
+                    builder: (ctx, state) => CheckboxListTile(
+                      onChanged: (value) {
+                        Modular.get<NotificationBloc>().add(value);
+                        Hive.box('komikcast').put('isNotification', value);
+                      },
+                      value: state,
+                      secondary: Icon(Icons.notifications),
+                      title: Text('Beranda'),
+                      subtitle: Text('Semua chapter terbaru'),
+                    ),
+                  ),
+                ),
+                color: Colors.transparent,
+              ),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey[100],
+            ),
             // Sub 1
             Container(
               margin: EdgeInsets.only(top: 8.0),
@@ -115,7 +150,8 @@ class MainSettingPage extends StatelessWidget {
                     focusColor: Colors.red,
                     leading: Icon(Icons.save),
                     title: Text('Lokasi Penyimpanan'),
-                    subtitle: Text('/storage/emulated/0/${Env.appName.toLowerCase().trim()}'),
+                    subtitle: Text('/storage/emulated/0/' +
+                        Env.appName.toLowerCase().trim()),
                   ),
                 ),
                 color: Colors.transparent,

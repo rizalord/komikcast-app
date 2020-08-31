@@ -1,6 +1,8 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:komikcast/data/init_data.dart';
 import 'package:komikcast/env.dart';
+import 'package:komikcast/services/notification_service.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -10,8 +12,33 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    navigateToHome();
     super.initState();
+    initPlatformState();
+    // NotificationService();
+    navigateToHome();
+  }
+
+  Future<void> initPlatformState() async {
+    BackgroundFetch.configure(
+        BackgroundFetchConfig(
+            minimumFetchInterval: 15,
+            stopOnTerminate: false,
+            enableHeadless: true,
+            requiresBatteryNotLow: false,
+            requiresCharging: false,
+            requiresStorageNotLow: false,
+            requiresDeviceIdle: false,
+            requiredNetworkType: NetworkType.NONE), (String taskId) async {
+      // This is the fetch-event callback.
+      print("[BackgroundFetch] Event received $taskId");
+      BackgroundFetch.finish(taskId);
+    }).then((int status) {
+      print('[BackgroundFetch] configure success: $status');
+    }).catchError((e) {
+      print('[BackgroundFetch] configure ERROR: $e');
+    });
+
+    if (!mounted) return;
   }
 
   void navigateToHome() {

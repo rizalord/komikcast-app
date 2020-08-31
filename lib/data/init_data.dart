@@ -9,6 +9,7 @@ import 'package:komikcast/bloc/download_setting_bloc.dart';
 import 'package:komikcast/bloc/downloaded_bloc.dart';
 import 'package:komikcast/bloc/downloaded_chapter_bloc.dart';
 import 'package:komikcast/bloc/favorite_bloc.dart';
+import 'package:komikcast/bloc/notification_bloc.dart';
 import 'package:komikcast/bloc/pro_bloc.dart';
 import 'package:komikcast/bloc/theme_bloc.dart';
 import 'package:komikcast/bloc/history_bloc.dart';
@@ -44,6 +45,7 @@ class KomikcastSystem {
     this.chapterReadedInit(db: db);
     this.downloadPermInit(db: db, isPro: isPro);
     this.downloadsInit();
+    this.notificationInit(db: db);
 
     // END CHECK
     Modular.to.pushReplacementNamed('/main');
@@ -170,4 +172,20 @@ class KomikcastSystem {
     Modular.get<DownloadSettingBloc>()
         .add(db.get('is_download_permanent', defaultValue: false));
   }
+
+  void notificationInit({Box db}) {
+    bool isNotification = db.get('isNotification', defaultValue: true);
+    db.put('isNotification', isNotification);
+
+    Modular.get<NotificationBloc>().add(isNotification);
+  }
+
+  String getLastChapterId({Box db}) {
+    String id = db.get('lastNotificationId',
+        defaultValue: 'konyakusha-wa-watashi-no-imouto-ni-koi-o-suru/');
+    return id;
+  }
+
+  void setLastChapterId(String id, {Box db}) =>
+      db.put('lastNotificationId', id);
 }
