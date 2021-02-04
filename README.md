@@ -1,3 +1,8 @@
+# **DEPRECATED** - no longer actively maintained
+
+---
+
+
 <p align="center">
 <img alt="GitHub issues" src="https://img.shields.io/github/issues/rizalord/komikcast-app">
 <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/rizalord/komikcast-app">
